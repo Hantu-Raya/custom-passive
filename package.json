@@ -1,0 +1,29 @@
+{
+  "name": "custom-passive",
+  "private": true,
+  "type": "module",
+  "author": "Hantu-Raya",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "generate:data": "node scripts/generate-custom-passive-data.mjs",
+    "generate:presets": "node scripts/generate-preset-templates.mjs",
+    "sync:gamebanana": "node scripts/sync-gamebanana-mod.mjs",
+    "test": "node --test",
+    "test:e2e": "playwright test",
+    "check": "npm run generate:data && npm run generate:presets && npm test && npm run build && npm run test:e2e"
+  },
+  "dependencies": {
+    "@bokuweb/zstd-wasm": "^0.0.27",
+    "7z-wasm": "^1.2.0",
+    "preact": "^10.29.2",
+    "xxhash-wasm": "^1.1.0"
+  },
+  "devDependencies": {
+    "@astrojs/preact": "^5.1.5",
+    "@playwright/test": "^1.60.0",
+    "astro": "^6.4.7"
+  }
+}

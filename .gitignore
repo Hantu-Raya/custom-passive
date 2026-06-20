@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.tmp/
+test-results/
+.fallow/
+.agents/
+.tmp-*.png
+custom-passive/
+*.log
+.DS_Store

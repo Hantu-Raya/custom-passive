@@ -356,7 +356,7 @@ code { font-family: var(--font-mono); color: var(--shard); font-size: 0.9em; }
   font-size: 0.78rem;
   font-weight: 800;
 }
-.build-actions { display: grid; gap: 8px; margin-top: auto; }
+.build-actions { flex: 0 0 auto; display: grid; gap: 8px; margin-top: auto; }
 .build-actions button,
 .search-row button {
   min-height: 40px;
@@ -395,6 +395,9 @@ a:focus-visible {
   padding-top: 14px;
   border-top: 1px solid #ffefd71a;
   color: var(--shard) !important;
+  flex: 0 0 auto;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 .page-footer {
   margin-top: auto;
@@ -404,6 +407,7 @@ a:focus-visible {
   font-size: 0.78rem;
   font-weight: 700;
   line-height: 1.5;
+  flex: 0 0 auto;
 }
 .page-footer p {
   margin: 0;

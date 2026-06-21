@@ -467,6 +467,34 @@ test('keeps the game shop board usable on compact desktop viewports', async ({ p
   expect(geometry.tabsLeft - geometry.panelRight).toBeLessThanOrEqual(32);
 });
 
+test('keeps build status and footer readable on low-dpi desktop panel', async ({ page }) => {
+  await seedTemplateVerification(page, Date.now() + TEMPLATE_VERIFICATION_TTL_MS);
+  await page.setViewportSize({ width: 1000, height: 875 });
+  await page.goto('/custom-passive/');
+  await expect(page.getByRole('status')).toContainText('Verified saved');
+
+  const metrics = await page.evaluate(() => {
+    const readableBox = (selector) => {
+      const element = document.querySelector(selector);
+      return {
+        clientHeight: element.clientHeight,
+        scrollHeight: element.scrollHeight
+      };
+    };
+    const status = document.querySelector('.build-status').getBoundingClientRect();
+    const footer = document.querySelector('.page-footer').getBoundingClientRect();
+    return {
+      status: readableBox('.build-status'),
+      footer: readableBox('.page-footer'),
+      statusFooterGap: footer.top - status.bottom
+    };
+  });
+
+  expect(metrics.status.scrollHeight).toBeLessThanOrEqual(metrics.status.clientHeight + 1);
+  expect(metrics.footer.scrollHeight).toBeLessThanOrEqual(metrics.footer.clientHeight + 1);
+  expect(metrics.statusFooterGap).toBeGreaterThanOrEqual(10);
+});
+
 test('renders active and imbue badges as in-game card strips', async ({ page }) => {
   await page.goto('/custom-passive/');
   await waitForHydration(page, PRESET_TEMPLATE_IDS.PASSIVE_AND_ACTIVE);

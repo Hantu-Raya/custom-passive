@@ -275,13 +275,16 @@ function referencedShopSurfacePaths() {
   const paths = new Set([
     'panorama/images/shop/card_backer_png.png',
     'panorama/images/shop/catalog/backer_star_test_png.png',
+    'panorama/images/shop/catalog/catalog_shop_builds_bg_psd.png',
     'panorama/images/shop/catalog/catalog_shop_bg_spirit_psd.png',
     'panorama/images/shop/catalog/catalog_shop_bg_vitality_psd.png',
     'panorama/images/shop/catalog/catalog_shop_bg_weapon_psd.png',
     'panorama/images/shop/catalog/catalog_shop_generic_bg_psd.png',
+    'panorama/images/shop/catalog/catalog_shop_tab_icon_builds_psd.png',
     'panorama/images/shop/catalog/catalog_shop_tab_icon_spirit_psd.png',
     'panorama/images/shop/catalog/catalog_shop_tab_icon_vitality_psd.png',
     'panorama/images/shop/catalog/catalog_shop_tab_icon_weapon_psd.png',
+    'panorama/images/shop/catalog/catalog_shop_tab_search_showing_sm_psd.png',
     'panorama/images/shop/catalog/catalog_tooltip_header_spirit_psd.png',
     'panorama/images/shop/catalog/catalog_tooltip_header_vitality_psd.png',
     'panorama/images/shop/catalog/catalog_tooltip_header_weapon_psd.png'

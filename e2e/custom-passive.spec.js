@@ -383,7 +383,30 @@ test('embeds search only inside the search shop tab', async ({ page }) => {
   await expect(page.getByTestId('item-card-upgrade_toxic_bullets')).toBeVisible();
 });
 
-test('shows selected search and all tabs as tiered item lists', async ({ page }) => {
+test('keeps the search hint expanded on desktop', async ({ page }) => {
+  await page.setViewportSize({ width: 1569, height: 912 });
+  await page.goto('/custom-passive/');
+  await waitForHydration(page);
+  await page.getByTestId('tab-search').click();
+
+  const hintMetrics = await page.locator('.search-hint').evaluate((hint) => {
+    const box = hint.getBoundingClientRect();
+    const style = getComputedStyle(hint);
+    return {
+      clientWidth: hint.clientWidth,
+      height: box.height,
+      lineHeight: parseFloat(style.lineHeight),
+      scrollWidth: hint.scrollWidth,
+      whiteSpace: style.whiteSpace,
+    };
+  });
+
+  expect(hintMetrics.whiteSpace).toBe('nowrap');
+  expect(Math.ceil(hintMetrics.scrollWidth)).toBeLessThanOrEqual(Math.ceil(hintMetrics.clientWidth));
+  expect(hintMetrics.height).toBeLessThan(hintMetrics.lineHeight * 1.25);
+});
+
+test('shows selected and search tabs as tiered item lists', async ({ page }) => {
   await page.goto('/custom-passive/');
   await waitForHydration(page, PRESET_TEMPLATE_IDS.PASSIVE_AND_ACTIVE);
   await page.getByTestId('tab-search').click();
@@ -393,16 +416,33 @@ test('shows selected search and all tabs as tiered item lists', async ({ page })
   await page.getByTestId('tab-selected').click();
   await expect(page.locator('.catalog-list-board')).toHaveCount(1);
   await expect(page.locator('.list-tier-section')).not.toHaveCount(0);
-  for (const tab of ['all', 'search']) {
-    await page.getByTestId(`tab-${tab}`).click();
-    await expect(page.locator('.catalog-list-board')).toHaveCount(1);
-    await expect(page.getByTestId('item-card-upgrade_close_range')).toBeVisible();
-    await expect(page.getByTestId('item-card-upgrade_health')).toBeVisible();
-    await expect(page.getByTestId('item-card-upgrade_extra_charge')).toBeVisible();
-  }
+  await page.getByTestId('tab-search').click();
+  await expect(page.locator('.catalog-list-board')).toHaveCount(1);
+  await expect(page.getByTestId('item-card-upgrade_close_range')).toBeVisible();
+  await expect(page.getByTestId('item-card-upgrade_health')).toBeVisible();
+  await expect(page.getByTestId('item-card-upgrade_extra_charge')).toBeVisible();
 
   await searchForToxic(page);
   await expect(page.getByTestId('item-card-upgrade_close_range')).not.toBeVisible();
+});
+
+test('keeps selected and category card scale stable across tab switches', async ({ page }) => {
+  await page.goto('/custom-passive/');
+  await waitForHydration(page, PRESET_TEMPLATE_IDS.PASSIVE_AND_ACTIVE);
+  await page.getByTestId('clear-selection').click();
+  await page.getByTestId('tab-weapon').click();
+  await page.getByRole('button', { name: 'Select visible' }).click();
+  await expect(page.getByTestId('selected-count')).toHaveText('53');
+
+  const readCloseRangeWidth = () => page.getByTestId('item-card-upgrade_close_range').evaluate((card) => card.getBoundingClientRect().width);
+  const weaponWidth = await readCloseRangeWidth();
+  await page.getByTestId('tab-selected').click();
+  const selectedWidth = await readCloseRangeWidth();
+  await page.getByTestId('tab-weapon').click();
+  const weaponAfterSelectedWidth = await readCloseRangeWidth();
+
+  expect(Math.abs(selectedWidth - weaponWidth)).toBeLessThan(1);
+  expect(Math.abs(weaponAfterSelectedWidth - weaponWidth)).toBeLessThan(0.5);
 });
 
 test('places the shop catalog close to the builder panel on desktop', async ({ page }) => {

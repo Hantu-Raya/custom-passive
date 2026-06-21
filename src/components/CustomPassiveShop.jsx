@@ -11,20 +11,21 @@ const TEMPLATE_VERIFICATION_TTL_MS = 12 * 60 * 60 * 1000;
 const SHOP_IMAGE_BASE = `${import.meta.env.BASE_URL}assets/deadlock/panorama/images/shop/`;
 const SHOP_ASSET_BASE = `${SHOP_IMAGE_BASE}catalog/`;
 const TAB_ICONS = Object.freeze({
-  selected: '★',
+  selected: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_builds_psd.webp`,
   weapon: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_weapon_psd.webp`,
   vitality: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_vitality_psd.webp`,
   spirit: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_spirit_psd.webp`,
-  search: '⌕',
-  all: '▦'
+  search: `${SHOP_ASSET_BASE}catalog_shop_tab_search_showing_sm_psd.webp`
 });
 const SHOP_BG_TABS = new Set(['weapon', 'vitality', 'spirit']);
 const SHOP_BACKGROUNDS = Object.freeze({
   generic: `${SHOP_ASSET_BASE}catalog_shop_generic_bg_psd.webp`,
+  selected: `${SHOP_ASSET_BASE}catalog_shop_builds_bg_psd.webp`,
   weapon: `${SHOP_ASSET_BASE}catalog_shop_bg_weapon_psd.webp`,
   vitality: `${SHOP_ASSET_BASE}catalog_shop_bg_vitality_psd.webp`,
   spirit: `${SHOP_ASSET_BASE}catalog_shop_bg_spirit_psd.webp`
 });
+const SHOP_ICON_URLS = Object.freeze([...new Set(DEADLOCK_ITEMS.map((item) => item.iconUrl).filter(Boolean))].map((path) => `${import.meta.env.BASE_URL}${path}`));
 const SHOP_CARD_ASSET_BASE = `${SHOP_ASSET_BASE}cards/`;
 const SHOP_TOOLTIP_STAR = `${SHOP_ASSET_BASE}backer_star_test_png.webp`;
 const TABS = Object.freeze([
@@ -32,12 +33,17 @@ const TABS = Object.freeze([
   { id: 'weapon', label: 'Weapon' },
   { id: 'vitality', label: 'Vitality' },
   { id: 'spirit', label: 'Spirit' },
-  { id: 'search', label: 'Search' },
-  { id: 'all', label: 'All' }
+  { id: 'search', label: 'Search' }
 ]);
 const CATEGORY_GLYPHS = Object.freeze({ weapon: '✦', vitality: '✚', spirit: '⬡' });
 const SHOP_CATEGORIES = Object.freeze(['weapon', 'vitality', 'spirit']);
-const CATEGORY_LABELS = Object.freeze({ selected: 'Selected', weapon: 'Weapon', vitality: 'Vitality', spirit: 'Spirit', search: 'Search all', all: 'All categories' });
+const SHOP_ITEM_IDS_BY_CATEGORY = Object.freeze(Object.fromEntries(
+  SHOP_CATEGORIES.map((category) => [
+    category,
+    Object.freeze(DEADLOCK_ITEMS.filter((item) => item.category === category).map((item) => item.id))
+  ])
+));
+const CATEGORY_LABELS = Object.freeze({ selected: 'Selected', weapon: 'Weapon', vitality: 'Vitality', spirit: 'Spirit', search: 'Search all' });
 const TIER_COLUMNS = Object.freeze({
   generic: { 1: 5, 2: 6, 3: 7, 4: 4 },
   weapon: { 1: 5, 2: 6, 3: 7, 4: 4 },
@@ -68,7 +74,6 @@ const DEFAULT_GUIDE_BOXES = Object.freeze({
   vitality: VITALITY_GUIDE_BOXES,
   spirit: SPIRIT_GUIDE_BOXES
 });
-const CARD_SCALE_DEFAULT = 107;
 const VALID_ITEM_IDS = new Set(DEADLOCK_ITEMS.map((item) => item.id));
 const DUAL_BADGE_ITEM_IDS = new Set(['upgrade_ability_power_shard']);
 const PREDICTIVE_HOVER_MIN_SPEED = 0.08;
@@ -79,6 +84,94 @@ const PREDICTIVE_HOVER_BASE_HALF_WIDTH = 6;
 const PREDICTIVE_HOVER_MAX_HIT_PADDING = 14;
 const PREDICTIVE_HOVER_MAX_ENTRY_DISTANCE = 36;
 const PREDICTIVE_HOVER_VELOCITY_ALPHA = 0.32;
+const SCALE_DEBUG_QUERY_VALUES = new Set(['icon-scale', 'tab-scale', 'tab-transition-scale']);
+
+function isScaleDebugEnabled() {
+  if (typeof window === 'undefined') return false;
+  const params = new URLSearchParams(window.location.search);
+  return params.has('debugScale') || SCALE_DEBUG_QUERY_VALUES.has(params.get('debug'));
+}
+
+function scaleDebugSelectionCategory() {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  const category = params.get('debugSelected') || params.get('debugSelection');
+  return SHOP_CATEGORIES.includes(category) ? category : null;
+}
+
+function roundedMetric(value) {
+  return Number.isFinite(value) ? Math.round(value * 100) / 100 : null;
+}
+
+function elementRect(element) {
+  if (!element) return null;
+  const rect = element.getBoundingClientRect();
+  return {
+    x: roundedMetric(rect.x),
+    y: roundedMetric(rect.y),
+    width: roundedMetric(rect.width),
+    height: roundedMetric(rect.height),
+    right: roundedMetric(rect.right),
+    bottom: roundedMetric(rect.bottom)
+  };
+}
+
+function readScaleDebugMetrics({ activeTab, selectedCount, visibleCount, label }) {
+  if (typeof document === 'undefined') return null;
+  const board = document.querySelector('.catalog-board, .catalog-list-board');
+  const cards = board ? [...board.querySelectorAll('.item-card')] : [];
+  const firstCard = cards[0] || null;
+  const firstIcon = firstCard?.querySelector('.item-icon') || null;
+  const firstImage = firstCard?.querySelector('.item-icon img') || null;
+  const boardRect = elementRect(board);
+  const overflowCards = board && boardRect
+    ? cards.filter((card) => {
+      const rect = card.getBoundingClientRect();
+      return rect.left < boardRect.x - 1 || rect.right > boardRect.right + 1 || rect.top < boardRect.y - 1 || rect.bottom > boardRect.bottom + 1;
+    })
+    : [];
+  return {
+    label,
+    activeTab,
+    selectedCount,
+    visibleCount,
+    boardClass: board?.className || null,
+    board: boardRect,
+    cardCount: cards.length,
+    firstCard: elementRect(firstCard),
+    firstIcon: elementRect(firstIcon),
+    firstImage: elementRect(firstImage),
+    firstImageComplete: firstImage ? firstImage.complete : null,
+    css: board ? {
+      cardWidth: getComputedStyle(board).getPropertyValue('--shop-card-width').trim(),
+      gridGap: getComputedStyle(board).getPropertyValue('--shop-grid-gap').trim(),
+      overflow: getComputedStyle(board).overflow,
+      containerType: getComputedStyle(board).containerType
+    } : null,
+    firstCards: cards.slice(0, 8).map((card) => {
+      const image = card.querySelector('.item-icon img');
+      return {
+        id: card.dataset.itemId,
+        card: elementRect(card),
+        icon: elementRect(card.querySelector('.item-icon')),
+        image: elementRect(image),
+        imageComplete: image ? image.complete : null
+      };
+    }),
+    overflowCount: overflowCards.length,
+    overflowIds: overflowCards.slice(0, 12).map((card) => card.dataset.itemId)
+  };
+}
+
+function logScaleDebugMetrics(metrics) {
+  if (!metrics) return;
+  const message = `[custom-passive:scale] ${metrics.label} tab=${metrics.activeTab} cards=${metrics.cardCount} selected=${metrics.selectedCount} visible=${metrics.visibleCount}`;
+  console.groupCollapsed(message);
+  console.log(metrics);
+  if (metrics.firstCards.length > 0) console.table(metrics.firstCards);
+  console.groupEnd();
+}
+
 const PREDICTIVE_HOVER_SWITCH_MARGIN = 14;
 const PREDICTIVE_HOVER_LOCK_MS = 70;
 const PREDICTIVE_HOVER_MIN_DIRECTION_DOT = 0.65;
@@ -160,7 +253,7 @@ const RELATED_ITEM_IDS_BY_ID = ITEM_UPGRADE_LINKS.reduce((map, [fromId, toId]) =
 }, new Map());
 
 function createDefaultSelection() {
-  return new Set();
+  return new Set(getPresetTemplate(PRESET_TEMPLATE_IDS.PASSIVE_ONLY).presetItemIds);
 }
 
 function isRequiredTemplateSha256(hash) {
@@ -250,11 +343,6 @@ function guideBoxStyle(box) {
     top: `${box.top}%`,
     width: `${box.width}%`,
     height: `${box.height}%`
-  };
-}
-function cardSizingStyle() {
-  return {
-    '--shop-card-width': `calc(${(80 * CARD_SCALE_DEFAULT) / 100} / 1150 * 100cqw)`
   };
 }
 
@@ -422,7 +510,16 @@ function pointerSampleFromEvent(event, nextPrediction, itemId, lockUntil) {
 
 
 function ShopShell({ children, hoveringItem, onMouseMove, onMouseLeave }) {
-  return <main class={`shop-shell ${hoveringItem ? 'is-item-hovered' : ''}`} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>{children}</main>;
+  return (
+    <main
+      class={`shop-shell ${hoveringItem ? 'is-item-hovered' : ''}`}
+      style={{ '--shop-ambient-bg': `url("${SHOP_BACKGROUNDS.generic}")` }}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+    >
+      {children}
+    </main>
+  );
 }
 
 function ShopTabs({ activeTab, onTabChange }) {
@@ -449,9 +546,10 @@ function ShopTabs({ activeTab, onTabChange }) {
 
 function SearchBox({ query, onQueryChange }) {
   return (
-    <div class="catalog-search" role="search">
+    <div class="catalog-search search-box" role="search">
+      <label htmlFor="shop-search">Search items</label>
+      <p class="search-hint">Try searching by Item Name or by stat such as Ammo, Lifesteal or Spirit Power</p>
       <div class="search-row">
-        <label htmlFor="shop-search">Search items</label>
         <input
           id="shop-search"
           data-testid="search-input"
@@ -479,6 +577,8 @@ function BuildDownloadPanel({
   onBuild,
   status
 }) {
+  const [showPresetDetails, setShowPresetDetails] = useState(false);
+
   return (
     <aside class="build-panel" aria-label="Build panel">
       <div class="build-panel-heading">
@@ -522,7 +622,17 @@ function BuildDownloadPanel({
           ))}
         </select>
         <p>{selectedPresetTemplate.description} Preset selects {selectedPresetTemplate.presetItemIds.length} item{selectedPresetTemplate.presetItemIds.length === 1 ? '' : 's'}.</p>
-        <dl class="preset-template-details">
+        <button
+          type="button"
+          class="preset-template-toggle"
+          data-testid="preset-template-details-toggle"
+          aria-expanded={showPresetDetails}
+          aria-controls="preset-template-details"
+          onClick={() => setShowPresetDetails((isShown) => !isShown)}
+        >
+          {showPresetDetails ? 'Hide details' : 'Show details'}
+        </button>
+        <dl id="preset-template-details" class="preset-template-details" hidden={!showPresetDetails}>
           <div>
             <dt>Required archive</dt>
             <dd>{REQUIRED_GAMEBANANA_TEMPLATE.fileName}</dd>
@@ -553,6 +663,15 @@ function BuildDownloadPanel({
         <button type="button" class="primary-build" data-testid="build-download" onClick={onBuild} disabled={!templateReady}>Build / download archive</button>
       </div>
       <p class="build-status" role="status">{status}</p>
+      <footer class="page-footer" aria-label="Project notices">
+        <p>
+          Unofficial fan-made tool. Not affiliated with Valve. Runs locally; archives are not uploaded. Built by{' '}
+          <a href="https://github.com/Hantu-Raya" target="_blank" rel="noreferrer">Hantu-Raya</a>.
+          {' '}Source on{' '}
+          <a href="https://github.com/Hantu-Raya/custom-passive" target="_blank" rel="noreferrer">GitHub</a>.
+          {' '}Apache-2.0 licensed; see LICENSE and NOTICE.
+        </p>
+      </footer>
     </aside>
   );
 }
@@ -709,7 +828,7 @@ function ItemCard({ item, index, selected, predictedHover, relatedHover, onToggl
           </span>
         )}
         <span class="item-icon" aria-hidden="true">
-          {item.iconUrl ? <img src={`${import.meta.env.BASE_URL}${item.iconUrl}`} alt="" loading="lazy" /> : <span><b>{CATEGORY_GLYPHS[item.category]}</b><em>{itemInitials(item.label)}</em></span>}
+          {item.iconUrl ? <img src={`${import.meta.env.BASE_URL}${item.iconUrl}`} alt="" loading="eager" decoding="async" /> : <span><b>{CATEGORY_GLYPHS[item.category]}</b><em>{itemInitials(item.label)}</em></span>}
         </span>
         <span class="item-name">{item.label}</span>
         <span class="item-state">{selected ? 'Selected passive' : 'Not selected'}</span>
@@ -719,7 +838,8 @@ function ItemCard({ item, index, selected, predictedHover, relatedHover, onToggl
 }
 
 export default function CustomPassiveShop() {
-  const [selectedIds, setSelectedIds] = useState(loadStoredSelection);
+  const [selectedIds, setSelectedIds] = useState(createDefaultSelection);
+  const [selectionStorageReady, setSelectionStorageReady] = useState(false);
   const [activeTab, setActiveTab] = useState('selected');
   const [query, setQuery] = useState('');
   const [presetTemplateId, setPresetTemplateId] = useState(PRESET_TEMPLATE_IDS.PASSIVE_ONLY);
@@ -736,13 +856,42 @@ export default function CustomPassiveShop() {
   const supportedItemIds = useMemo(() => new Set(selectedPresetTemplate.supportedItemIds), [selectedPresetTemplate]);
 
   useEffect(() => {
+    setSelectedIds(loadStoredSelection());
+    setSelectionStorageReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!selectionStorageReady) return;
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify([...selectedIds].sort()));
-  }, [selectedIds]);
+  }, [selectedIds, selectionStorageReady]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.Image !== 'function') return;
+    const preloadedImages = SHOP_ICON_URLS.map((src) => {
+      const image = new window.Image();
+      image.decoding = 'async';
+      image.src = src;
+      return image;
+    });
+    return () => {
+      for (const image of preloadedImages) image.src = '';
+    };
+  }, []);
 
   useEffect(() => {
     if (!templateLinked || templateState.status !== 'needed') return;
     activatePresetTemplate(selectedPresetTemplate, { applyPreset: false });
   }, [selectedPresetTemplate, templateLinked, templateState.status]);
+
+  useEffect(() => {
+    if (!selectionStorageReady || !isScaleDebugEnabled()) return;
+    const debugSelectionCategory = scaleDebugSelectionCategory();
+    if (!debugSelectionCategory) return;
+    const debugSelectedIds = SHOP_ITEM_IDS_BY_CATEGORY[debugSelectionCategory];
+    setSelectedIds(new Set(debugSelectedIds));
+    setActiveTab('selected');
+    setStatus(`Scale debug selected ${debugSelectedIds.length} ${CATEGORY_LABELS[debugSelectionCategory]} items.`);
+  }, [selectionStorageReady]);
 
   const normalizedQuery = query.trim().toLowerCase();
   const visibleItems = useMemo(() => {
@@ -767,6 +916,58 @@ export default function CustomPassiveShop() {
     for (const item of sortListItems(visibleItems)) groups.get(item.tier).push(item);
     return groups;
   }, [activeTab, visibleItems]);
+
+  useEffect(() => {
+    if (!isScaleDebugEnabled()) return;
+
+    let isCancelled = false;
+    const rafIds = [];
+    const timeoutIds = [];
+    const logSnapshot = (label) => {
+      if (isCancelled) return;
+      logScaleDebugMetrics(readScaleDebugMetrics({
+        activeTab,
+        selectedCount: selectedIds.size,
+        visibleCount: visibleItems.length,
+        label
+      }));
+    };
+
+    const selectCategory = (category = activeTab === 'selected' ? 'weapon' : activeTab) => {
+      if (!SHOP_CATEGORIES.includes(category)) throw new Error(`Unknown shop category for scale debug: ${category}`);
+      const debugSelectedIds = SHOP_ITEM_IDS_BY_CATEGORY[category];
+      setSelectedIds(new Set(debugSelectedIds));
+      setActiveTab('selected');
+      setStatus(`Scale debug selected ${debugSelectedIds.length} ${CATEGORY_LABELS[category]} items.`);
+      return { category, selectedCount: debugSelectedIds.length, ids: [...debugSelectedIds] };
+    };
+
+    const debugSnapshot = () => {
+      const metrics = readScaleDebugMetrics({
+        activeTab,
+        selectedCount: selectedIds.size,
+        visibleCount: visibleItems.length,
+        label: 'manual'
+      });
+      logScaleDebugMetrics(metrics);
+      return metrics;
+    };
+    debugSnapshot.selectCategory = selectCategory;
+    window.customPassiveScaleDebug = debugSnapshot;
+
+    rafIds.push(window.requestAnimationFrame(() => {
+      logSnapshot('commit+1raf');
+      rafIds.push(window.requestAnimationFrame(() => logSnapshot('commit+2raf')));
+    }));
+    timeoutIds.push(window.setTimeout(() => logSnapshot('commit+160ms'), 160));
+
+    return () => {
+      isCancelled = true;
+      for (const rafId of rafIds) window.cancelAnimationFrame(rafId);
+      for (const timeoutId of timeoutIds) window.clearTimeout(timeoutId);
+      if (window.customPassiveScaleDebug) delete window.customPassiveScaleDebug;
+    };
+  }, [activeTab, selectedIds.size, visibleItems.length]);
 
   function updateQuery(value) {
     setQuery(value);
@@ -964,7 +1165,7 @@ export default function CustomPassiveShop() {
         <ShopTabs activeTab={activeTab} onTabChange={changeTab} />
         <div class={`catalog-content ${isCategoryTab ? '' : 'catalog-content-list'}`}>
           {isCategoryTab ? (
-            <div class={`catalog-board catalog-board-${catalogBackground}`} style={{ '--catalog-bg': `url("${SHOP_BACKGROUNDS[catalogBackground]}")`, ...cardSizingStyle() }}>
+            <div key={`board-${catalogBackground}`} class={`catalog-board catalog-board-${catalogBackground}`} style={{ '--catalog-bg': `url("${SHOP_BACKGROUNDS[catalogBackground]}")` }}>
               <div class="tiers">
                 {[1, 2, 3, 4].map((tier) => (
                   <TierSection key={tier} tier={tier} columns={tierColumns[tier]} box={guideBoxes[tier]} slots={itemsByTier.get(tier)} selectedIds={selectedIds} predictedHoverItemId={predictedHoverItemId} relatedHoverIds={relatedHoverIds} onToggle={toggleItem} />
@@ -972,7 +1173,7 @@ export default function CustomPassiveShop() {
               </div>
             </div>
           ) : (
-            <div class="catalog-list-board" style={cardSizingStyle()}>
+            <div key={`list-${activeTab}`} class={`catalog-list-board catalog-list-board-${activeTab}`} style={{ '--catalog-selected-bg': `url("${SHOP_BACKGROUNDS.selected}")` }}>
               {activeTab === 'search' && <SearchBox query={query} onQueryChange={updateQuery} />}
               <div class="list-tiers">
                 {[1, 2, 3, 4].map((tier) => (

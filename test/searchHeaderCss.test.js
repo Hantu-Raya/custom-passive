@@ -16,5 +16,5 @@ test('search list topbar scrolls with the search header instead of the list view
 
   assert.doesNotMatch(listBoardRule, /#2a2a24\s+0\s+76px/);
   assert.match(searchBoxRule, /background:/);
-  assert.match(searchBoxRule, /margin:\s*calc\(var\(--catalog-list-pad\)\s*\*\s*-1\)/);
+  assert.match(searchBoxRule, /margin:\s*0\s+calc\(var\(--catalog-list-pad\)\s*\*\s*-1\)/);
 });

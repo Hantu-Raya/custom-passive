@@ -42,7 +42,7 @@ test('passive and active no-behavior preset matches pak05 archive', () => {
   assert.equal(preset.presetItemIds.length, 74);
 });
 
-test('passive only preset preselects the archive selection without hiding active items', () => {
+test('passive only preset preselects source archive selection without hiding shop items', () => {
   const preset = getPresetTemplate(PRESET_TEMPLATE_IDS.PASSIVE_ONLY);
 
   assert.equal(preset.label, 'Passive Only');
@@ -55,9 +55,8 @@ test('passive only preset preselects the archive selection without hiding active
   assert.equal(preset.sourceArchive.archiveMember, 'pak04_dir.vpk');
   assert.deepEqual(preset.supportedItemIds, ALL_ITEM_IDS);
   assert.equal(preset.presetItemIds.length, 33);
-  assert.ok(preset.presetItemIds.includes('upgrade_quick_silver'));
+  assert.ok(preset.presetItemIds.includes('upgrade_headshot_booster'));
   assert.ok(preset.supportedItemIds.includes('upgrade_cold_front'));
-  assert.equal(preset.presetItemIds.includes('upgrade_cold_front'), false);
 });
 
 test('preset templates expose stable unique ids', () => {

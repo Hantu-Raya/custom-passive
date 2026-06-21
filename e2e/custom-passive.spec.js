@@ -431,7 +431,7 @@ test('keeps selected and category card scale stable across tab switches', async 
   await waitForHydration(page, PRESET_TEMPLATE_IDS.PASSIVE_AND_ACTIVE);
   await page.getByTestId('clear-selection').click();
   await page.getByTestId('tab-weapon').click();
-  await page.getByRole('button', { name: 'Select visible' }).click();
+  await page.getByRole('button', { name: 'Select all shown' }).click();
   await expect(page.getByTestId('selected-count')).toHaveText('53');
 
   const readCloseRangeWidth = () => page.getByTestId('item-card-upgrade_close_range').evaluate((card) => card.getBoundingClientRect().width);

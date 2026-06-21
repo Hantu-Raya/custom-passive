@@ -659,7 +659,7 @@ function BuildDownloadPanel({
       <div class="build-actions">
         <button type="button" data-testid="reset-defaults" onClick={onReset}>Reset selection</button>
         <button type="button" data-testid="clear-selection" onClick={onClear}>Clear all</button>
-        <button type="button" onClick={onSelectVisible} disabled={visibleCount === 0}>Select visible</button>
+        <button type="button" onClick={onSelectVisible} disabled={visibleCount === 0}>Select all shown</button>
         <button type="button" class="primary-build" data-testid="build-download" onClick={onBuild} disabled={!templateReady}>Build / download archive</button>
       </div>
       <p class="build-status" role="status">{status}</p>

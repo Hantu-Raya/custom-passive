@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path, { dirname } from 'node:path';
+import { setTimeout as sleep } from 'node:timers/promises';
 import { pathToFileURL } from 'node:url';
 import { zstdDecompressSync } from 'node:zlib';
 import { DEADLOCK_ITEMS } from '../src/data/deadlockItems.generated.js';
@@ -49,6 +50,10 @@ const PRESET_SPECS = Object.freeze({
 });
 
 const REQUIRED_FILTER_KEYS = Object.freeze(['passiveOnly', 'passiveAndActive', 'passiveAndActiveNoBehavior']);
+
+const REQUIRED_TEMPLATE_ARCHIVE_MEMBER = 'pak02_dir.vpk';
+const DEFAULT_DOWNLOAD_ATTEMPTS = 4;
+const RETRYABLE_DOWNLOAD_STATUSES = new Set([408, 425, 429, 500, 502, 503, 504, 522, 523, 524]);
 
 function fail(message) {
   throw new Error(message);
@@ -166,19 +171,55 @@ async function fetchJson(url) {
   return await response.json();
 }
 
-async function downloadFile(file, options = {}) {
+function downloadRetryDelayMs(attempt, options = {}) {
+  if (Number.isFinite(options.retryDelayMs)) return Math.max(0, Number(options.retryDelayMs));
+  return 500 * (2 ** Math.max(0, attempt - 1));
+}
+
+function isRetryableDownloadError(error) {
+  if (error?.nonRetryable) return false;
+  if (!Number.isInteger(error?.status)) return true;
+  return RETRYABLE_DOWNLOAD_STATUSES.has(error.status);
+}
+
+export async function downloadFile(file, options = {}) {
   if (!file.downloadUrl) fail(`${file.fileName} has no download URL`);
-  const response = await fetch(file.downloadUrl);
-  if (!response.ok) fail(`Could not download ${file.fileName}: HTTP ${response.status}`);
-  const bytes = new Uint8Array(await response.arrayBuffer());
-  const md5 = hash(bytes, 'md5');
-  if (file.md5 && md5 !== file.md5) fail(`${file.fileName} MD5 mismatch: got ${md5}, expected ${file.md5}`);
-  const cachePath = path.join(CACHE_ROOT, file.id || 'unknown', file.fileName);
-  if (!options.dryRun) {
-    await mkdir(dirname(cachePath), { recursive: true });
-    await writeFile(cachePath, bytes);
+  const configuredAttempts = Number(options.downloadAttempts ?? DEFAULT_DOWNLOAD_ATTEMPTS);
+  const attempts = Number.isFinite(configuredAttempts) ? Math.max(1, Math.floor(configuredAttempts)) : DEFAULT_DOWNLOAD_ATTEMPTS;
+  let lastError = null;
+
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      const response = await fetch(file.downloadUrl);
+      if (!response.ok) {
+        const error = new Error(`Could not download ${file.fileName}: HTTP ${response.status}`);
+        error.status = response.status;
+        throw error;
+      }
+
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      const md5 = hash(bytes, 'md5');
+      if (file.md5 && md5 !== file.md5) {
+        const error = new Error(`${file.fileName} MD5 mismatch: got ${md5}, expected ${file.md5}`);
+        error.nonRetryable = true;
+        throw error;
+      }
+
+      const cachePath = path.join(CACHE_ROOT, file.id || 'unknown', file.fileName);
+      if (!options.dryRun) {
+        await mkdir(dirname(cachePath), { recursive: true });
+        await writeFile(cachePath, bytes);
+      }
+      return Object.freeze({ bytes, md5, sha256: hash(bytes, 'sha256'), cachePath });
+    } catch (error) {
+      lastError = error;
+      if (attempt >= attempts || !isRetryableDownloadError(error)) break;
+      console.warn(`[warn] ${error?.message || error}; retrying (${attempt + 1}/${attempts})...`);
+      await sleep(downloadRetryDelayMs(attempt, options));
+    }
   }
-  return Object.freeze({ bytes, md5, sha256: hash(bytes, 'sha256'), cachePath });
+
+  fail(lastError?.message || `Could not download ${file.fileName}`);
 }
 
 function vdataFromVpk(vpkBytes, archiveName) {
@@ -193,21 +234,45 @@ async function templateFromArchive(archiveBytes, source) {
   return uncompressSource2Resource(vdataBytes, { decompressZstd: zstdDecompressSync });
 }
 
-async function patchableTemplateBytes(candidateBytes, spec, sourceFileName, sourceDateTag) {
+function assertPatchableTemplateBytes(templateBytes) {
+  const parsed = readPassiveFlagTemplate(templateBytes, CANDIDATE_ITEM_IDS);
+  assertCompletePassiveFlagOffsets(parsed.offsets, CANDIDATE_ITEM_IDS);
+  return parsed;
+}
+
+export async function patchableTemplateBytes(candidateBytes, spec, sourceFileName, sourceDateTag, options = {}) {
   try {
-    const parsed = readPassiveFlagTemplate(candidateBytes, CANDIDATE_ITEM_IDS);
-    assertCompletePassiveFlagOffsets(parsed.offsets, CANDIDATE_ITEM_IDS);
+    assertPatchableTemplateBytes(candidateBytes);
     return { bytes: candidateBytes, shouldWrite: true };
-  } catch (error) {
-    if (sourceDateTag !== currentBatchDateTag()) {
-      fail(`${sourceFileName} cannot be used as a full patch template for every shop item. Run npm run generate:presets with updated local Deadlock files before deploying batch ${sourceDateTag}.`);
+  } catch (candidateError) {
+    const fallbackCandidates = [];
+    if (options.fallbackTemplateBytes) {
+      fallbackCandidates.push(Object.freeze({
+        bytes: options.fallbackTemplateBytes,
+        label: options.fallbackTemplateName || 'required GameBanana template',
+        shouldWrite: true
+      }));
     }
-    const fallbackPath = path.join('public', spec.templatePath);
-    const fallbackBytes = new Uint8Array(await readFile(fallbackPath));
-    const parsed = readPassiveFlagTemplate(fallbackBytes, CANDIDATE_ITEM_IDS);
-    assertCompletePassiveFlagOffsets(parsed.offsets, CANDIDATE_ITEM_IDS);
-    console.warn(`[warn] ${sourceFileName} uses non-boolean passive flag values; keeping generated patchable template ${spec.templatePath}. Run npm run generate:presets after local source files update.`);
-    return { bytes: fallbackBytes, shouldWrite: false };
+    const generatedFallbackPath = path.join('public', spec.templatePath);
+    fallbackCandidates.push(Object.freeze({
+      bytes: new Uint8Array(await readFile(generatedFallbackPath)),
+      label: `generated ${spec.templatePath}`,
+      shouldWrite: false
+    }));
+
+    let fallbackError = null;
+    for (const fallback of fallbackCandidates) {
+      try {
+        assertPatchableTemplateBytes(fallback.bytes);
+        console.warn(`[warn] ${sourceFileName} is not a complete patchable template (${candidateError.message}); using ${fallback.label}.`);
+        return { bytes: fallback.bytes, shouldWrite: fallback.shouldWrite };
+      } catch (error) {
+        fallbackError = error;
+      }
+    }
+
+    const fallbackDetails = fallbackError ? ` Fallback template also failed: ${fallbackError.message}` : '';
+    fail(`${sourceFileName} cannot be used as a full patch template for every shop item.${fallbackDetails} Run npm run generate:presets with updated local Deadlock files before deploying batch ${sourceDateTag}.`);
   }
 }
 
@@ -261,12 +326,21 @@ function assertNoDowngrade(selectedDateTag, allowDowngrade) {
 }
 
 async function buildMetadata(selection, options = {}) {
-  const requiredTemplate = selection.requiredTemplate
-    ? generatedFileRecord(selection.requiredTemplate, await downloadFile(selection.requiredTemplate, options), {
+  let requiredTemplate = CURRENT_REQUIRED_TEMPLATE_SOURCE;
+  let requiredTemplateBytes = null;
+
+  if (selection.requiredTemplate) {
+    const requiredFile = Object.freeze({
+      ...selection.requiredTemplate,
+      archiveMember: REQUIRED_TEMPLATE_ARCHIVE_MEMBER
+    });
+    const requiredDownloaded = await downloadFile(requiredFile, options);
+    requiredTemplate = generatedFileRecord(requiredFile, requiredDownloaded, {
       role: 'required-template',
-      archiveMember: 'pak02_dir.vpk'
-    })
-    : CURRENT_REQUIRED_TEMPLATE_SOURCE;
+      archiveMember: REQUIRED_TEMPLATE_ARCHIVE_MEMBER
+    });
+    requiredTemplateBytes = await templateFromArchive(requiredDownloaded.bytes, requiredFile);
+  }
 
   const presetSources = {};
   for (const key of REQUIRED_FILTER_KEYS) {
@@ -275,7 +349,10 @@ async function buildMetadata(selection, options = {}) {
     const downloaded = await downloadFile(file, options);
     const archiveTemplateBytes = await templateFromArchive(downloaded.bytes, file);
     const selectedItemIds = readPassiveFlagSelectedItemIds(archiveTemplateBytes, CANDIDATE_ITEM_IDS);
-    const template = await patchableTemplateBytes(archiveTemplateBytes, spec, file.fileName, file.dateTag);
+    const template = await patchableTemplateBytes(archiveTemplateBytes, spec, file.fileName, file.dateTag, {
+      fallbackTemplateBytes: requiredTemplateBytes,
+      fallbackTemplateName: requiredTemplate.fileName
+    });
     const templateSha256 = hash(template.bytes, 'sha256');
     const outputPath = path.join('public', spec.templatePath);
     if (!options.dryRun && template.shouldWrite) {

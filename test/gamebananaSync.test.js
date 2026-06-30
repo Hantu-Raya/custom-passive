@@ -1,9 +1,12 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import {
   classifyGameBananaFile,
+  downloadFile,
   metadataModuleContent,
   normalizeGameBananaFiles,
+  patchableTemplateBytes,
   selectLatestGameBananaFiles
 } from '../scripts/sync-gamebanana-mod.mjs';
 
@@ -87,6 +90,54 @@ test('requires a matching template unless explicitly relaxed', () => {
   });
   assert.throws(() => selectLatestGameBananaFiles(files), /no required template archive/);
   assert.equal(selectLatestGameBananaFiles(files, { requireTemplate: false }).batchDateTag, '06_20');
+});
+
+test('uses the matching GameBanana template when a newer filter archive is not patchable', async () => {
+  const fallbackBytes = new Uint8Array(await readFile('public/templates/gamebanana/passive-only/scripts/abilities.vdata_c.template'));
+  const result = await patchableTemplateBytes(new Uint8Array(), {
+    templatePath: 'templates/gamebanana/passive-only/scripts/abilities.vdata_c.template'
+  }, 'filter_for_passive_items_07_01.7z', '07_01', {
+    fallbackTemplateBytes: fallbackBytes,
+    fallbackTemplateName: 'templete_07_01.7z'
+  });
+
+  assert.equal(result.shouldWrite, true);
+  assert.equal(result.bytes, fallbackBytes);
+});
+
+test('keeps the generated patchable template when GameBanana archives are incomplete', async () => {
+  const result = await patchableTemplateBytes(new Uint8Array(), {
+    templatePath: 'templates/gamebanana/passive-only/scripts/abilities.vdata_c.template'
+  }, 'filter_for_passive_items_07_01.7z', '07_01', {
+    fallbackTemplateBytes: new Uint8Array(),
+    fallbackTemplateName: 'templete_07_01.7z'
+  });
+
+  assert.equal(result.shouldWrite, false);
+  assert.ok(result.bytes.byteLength > 0);
+});
+
+test('retries transient GameBanana download errors', async (t) => {
+  let calls = 0;
+  t.mock.method(globalThis, 'fetch', async () => {
+    calls += 1;
+    if (calls === 1) return new Response('', { status: 522 });
+    return new Response(new Uint8Array([1, 2, 3]));
+  });
+
+  const downloaded = await downloadFile({
+    id: 'fixture',
+    fileName: 'templete_07_01.7z',
+    downloadUrl: 'https://gamebanana.com/dl/fixture',
+    md5: '5289df737df57326fcdd22597afb1fac'
+  }, {
+    dryRun: true,
+    downloadAttempts: 2,
+    retryDelayMs: 0
+  });
+
+  assert.equal(calls, 2);
+  assert.equal(downloaded.bytes.byteLength, 3);
 });
 
 test('renders static generated metadata without runtime API dependency', () => {

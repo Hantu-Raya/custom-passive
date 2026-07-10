@@ -165,8 +165,17 @@ export function selectLatestGameBananaFiles(files, options = {}) {
   });
 }
 
+export function buildGameBananaApiRequestUrl(url, timestamp = Date.now()) {
+  const requestUrl = new URL(url);
+  requestUrl.searchParams.set('_sync', String(timestamp));
+  return requestUrl;
+}
+
 async function fetchJson(url) {
-  const response = await fetch(url);
+  const response = await fetch(buildGameBananaApiRequestUrl(url), {
+    cache: 'no-store',
+    headers: { 'Cache-Control': 'no-cache' }
+  });
   if (!response.ok) fail(`GameBanana API returned HTTP ${response.status}`);
   return await response.json();
 }

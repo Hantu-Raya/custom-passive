@@ -5,8 +5,8 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    # Keep the static Pages artifact in sync with GameBanana after balance patches.
-    - cron: "17 */6 * * *"
+    # Poll hourly so a GameBanana upload is picked up on the next run.
+    - cron: "17 * * * *"
 
 permissions:
   contents: read

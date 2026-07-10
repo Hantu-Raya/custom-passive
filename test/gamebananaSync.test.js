@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import {
+  buildGameBananaApiRequestUrl,
   classifyGameBananaFile,
   downloadFile,
   metadataModuleContent,
@@ -90,6 +91,26 @@ test('requires a matching template unless explicitly relaxed', () => {
   });
   assert.throws(() => selectLatestGameBananaFiles(files), /no required template archive/);
   assert.equal(selectLatestGameBananaFiles(files, { requireTemplate: false }).batchDateTag, '06_20');
+});
+
+test('selects the latest complete 07_10 batch and template', () => {
+  const files = normalizeGameBananaFiles({
+    'Files().aFiles()': {
+      9: gamebananaFile(9, 'filter_for_passive_items_07_10.7z', { dateAdded: 10 }),
+      10: gamebananaFile(10, 'filter_for_passive_and_active_items_yesbehaviour_07_10.7z', { dateAdded: 10 }),
+      11: gamebananaFile(11, 'filter_for_passive_and_active_items_07_10.7z', { dateAdded: 10 }),
+      12: gamebananaFile(12, 'templete_07_10.7z', { dateAdded: 11 })
+    }
+  });
+
+  const selected = selectLatestGameBananaFiles(files);
+  assert.equal(selected.batchDateTag, '07_10');
+  assert.equal(selected.requiredTemplate.fileName, 'templete_07_10.7z');
+});
+
+test('cache-busts GameBanana API requests', () => {
+  const requestUrl = buildGameBananaApiRequestUrl('https://api.gamebanana.com/Core/Item/Data?format=json_min', 123);
+  assert.equal(requestUrl.searchParams.get('_sync'), '123');
 });
 
 test('uses the matching GameBanana template when a newer filter archive is not patchable', async () => {

@@ -161,6 +161,29 @@ test('retries transient GameBanana download errors', async (t) => {
   assert.equal(downloaded.bytes.byteLength, 3);
 });
 
+test('retries HTTP 530 download errors from GameBanana', async (t) => {
+  let calls = 0;
+  t.mock.method(globalThis, 'fetch', async () => {
+    calls += 1;
+    if (calls === 1) return new Response('', { status: 530 });
+    return new Response(new Uint8Array([1, 2, 3]));
+  });
+
+  const downloaded = await downloadFile({
+    id: 'fixture',
+    fileName: 'filter_for_passive_and_active_items_07_10.7z',
+    downloadUrl: 'https://gamebanana.com/dl/fixture',
+    md5: '5289df737df57326fcdd22597afb1fac'
+  }, {
+    dryRun: true,
+    downloadAttempts: 2,
+    retryDelayMs: 0
+  });
+
+  assert.equal(calls, 2);
+  assert.equal(downloaded.bytes.byteLength, 3);
+});
+
 test('renders static generated metadata without runtime API dependency', () => {
   const content = metadataModuleContent({
     modSource: {

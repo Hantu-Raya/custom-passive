@@ -53,7 +53,7 @@ const REQUIRED_FILTER_KEYS = Object.freeze(['passiveOnly', 'passiveAndActive', '
 
 const REQUIRED_TEMPLATE_ARCHIVE_MEMBER = 'pak02_dir.vpk';
 const DEFAULT_DOWNLOAD_ATTEMPTS = 4;
-const RETRYABLE_DOWNLOAD_STATUSES = new Set([408, 425, 429, 500, 502, 503, 504, 522, 523, 524]);
+const RETRYABLE_DOWNLOAD_STATUSES = new Set([408, 425, 429, 500, 502, 503, 504, 520, 522, 523, 524, 530]);
 
 function fail(message) {
   throw new Error(message);

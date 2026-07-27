@@ -6,9 +6,9 @@ Hosted app: <https://hantu-raya.github.io/custom-passive/>
 
 ## What it does
 
-- Requires the verified `templete_06_19.7z` template archive before building.
+- Requires the verified GameBanana template archive identified by generated metadata.
 - Caches template verification locally for 12 hours.
-- Supports Passive Only, Passive + Actives, and Passive + Actives (No Behavior) presets from the 06/19 GameBanana filter archives.
+- Supports Passive Only, Passive + Actives, and Passive + Actives (No Behavior) presets from the generated GameBanana source metadata.
 - Defers preset template download until the user clicks Build.
 - Lets users add or remove any shop item from the selected passive list.
 - Patches `m_bShowInPassiveItemsArea` inside compiled `abilities.vdata_c` bytes.
@@ -19,15 +19,7 @@ Hosted app: <https://hantu-raya.github.io/custom-passive/>
 
 ## Supported inputs
 
-Required startup template:
-
-- `templete_06_19.7z`
-
-Preset sources verified by the build tooling:
-
-- `filter_for_passive_items_06_19.7z`
-- `filter_for_passive_and_active_items_yesBehaviour_06_19.7z`
-- `filter_for_passive_and_active_items_06_19.7z`
+Required template and preset sources are generated from the latest compatible GameBanana batch. Use the template filename shown in the app, not a previously documented filename.
 
 Filenames are only hints. SHA-256 metadata in `src/data/gamebananaSources.generated.js` decides compatibility.
 
@@ -67,13 +59,17 @@ npm run generate:presets
 
 Both commands depend on local Deadlock/tool paths configured in `scripts/` and may not run on a fresh machine without those files.
 
-Sync latest GameBanana file metadata and preset templates when the mod publishes a new complete batch:
+Sync the latest complete GameBanana batch:
 
 ```bash
 npm run sync:gamebanana
 ```
 
-The sync script uses the GameBanana API at build time only. It downloads archives, verifies MD5 from GameBanana, computes SHA-256 locally, extracts preset VPKs, writes static metadata, and updates `public/templates/gamebanana/`. It refuses to downgrade from the current generated batch unless you pass `-- --allow-downgrade`. If GameBanana has not published the required `templete_MM_DD.7z`, it fails by default; use `-- --allow-missing-template` only when keeping the current template is intentional.
+The sync script cache-busts GameBanana API requests, retries transient HTTP failures and truncated JSON, verifies archive MD5 values, computes SHA-256 locally, extracts preset VPKs, and writes static metadata. It refuses to downgrade from the current generated batch unless you pass `-- --allow-downgrade`.
+
+If GameBanana's API remains unavailable, the command fails after its retries. GitHub Pages runs the same command with `-- --allow-stale-metadata`: it deploys the existing verified metadata and templates instead of failing. That fallback never writes new metadata; the next hourly run retries the live sync. Do not use it for a manual metadata update when the latest archive must be captured immediately.
+
+GameBanana filters that omit passive flags for catalog items cannot replace browser patch templates. The sync keeps the current complete generated template in that case while still recording the latest preset archive metadata.
 
 ## Verification
 
@@ -91,7 +87,7 @@ npm run build
 npm run test:e2e
 ```
 
-Playwright uses `http://127.0.0.1:4321/custom-passive/` and expects the local `templete_06_19.7z` fixture at the configured `G:/SteamLibrary/.../addons/` path.
+Playwright uses `http://127.0.0.1:4321/custom-passive/` and expects the local template archive at the configured `G:/SteamLibrary/.../addons/` path. Keep that fixture aligned with the current generated metadata.
 
 ## Deployment
 
@@ -102,7 +98,7 @@ Astro is configured with:
 
 Build output is written to `dist/`.
 
-GitHub Pages deploys from `.github/workflows/deploy.yml`. The workflow runs every 6 hours and on pushes to `main`; each run syncs GameBanana metadata before tests/build. If a new GameBanana batch cannot provide a full patchable template for every shop item, the workflow fails instead of deploying stale abilities.
+GitHub Pages deploys from `.github/workflows/deploy.yml`. The workflow runs hourly and on pushes to `main`. Each run retries cache-busted GameBanana API requests, syncs fresh metadata when possible, then runs tests and builds. If the API remains unavailable, it deploys the last verified generated metadata and tries the live sync again on the next hourly run.
 
 ## License
 

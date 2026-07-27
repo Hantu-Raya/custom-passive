@@ -52,8 +52,9 @@ const PRESET_SPECS = Object.freeze({
 const REQUIRED_FILTER_KEYS = Object.freeze(['passiveOnly', 'passiveAndActive', 'passiveAndActiveNoBehavior']);
 
 const REQUIRED_TEMPLATE_ARCHIVE_MEMBER = 'pak02_dir.vpk';
+const DEFAULT_API_ATTEMPTS = 4;
 const DEFAULT_DOWNLOAD_ATTEMPTS = 4;
-const RETRYABLE_DOWNLOAD_STATUSES = new Set([408, 425, 429, 500, 502, 503, 504, 520, 522, 523, 524, 530]);
+const RETRYABLE_GAMEBANANA_STATUSES = new Set([408, 425, 429, 500, 502, 503, 504, 520, 522, 523, 524, 530]);
 
 function fail(message) {
   throw new Error(message);
@@ -171,30 +172,52 @@ export function buildGameBananaApiRequestUrl(url, timestamp = Date.now()) {
   return requestUrl;
 }
 
-async function fetchJson(url) {
-  const response = await fetch(buildGameBananaApiRequestUrl(url), {
-    cache: 'no-store',
-    headers: { 'Cache-Control': 'no-cache' }
-  });
-  if (!response.ok) fail(`GameBanana API returned HTTP ${response.status}`);
-  return await response.json();
-}
-
-function downloadRetryDelayMs(attempt, options = {}) {
+function retryDelayMs(attempt, options = {}) {
   if (Number.isFinite(options.retryDelayMs)) return Math.max(0, Number(options.retryDelayMs));
   return 500 * (2 ** Math.max(0, attempt - 1));
 }
 
-function isRetryableDownloadError(error) {
+function retryAttempts(value, fallback) {
+  const configuredAttempts = Number(value ?? fallback);
+  return Number.isFinite(configuredAttempts) ? Math.max(1, Math.floor(configuredAttempts)) : fallback;
+}
+
+function isRetryableGameBananaError(error) {
   if (error?.nonRetryable) return false;
   if (!Number.isInteger(error?.status)) return true;
-  return RETRYABLE_DOWNLOAD_STATUSES.has(error.status);
+  return RETRYABLE_GAMEBANANA_STATUSES.has(error.status);
+}
+
+export async function fetchGameBananaApi(url, options = {}) {
+  const attempts = retryAttempts(options.attempts, DEFAULT_API_ATTEMPTS);
+  let lastError = null;
+
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      const response = await fetch(buildGameBananaApiRequestUrl(url), {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
+      });
+      if (!response.ok) {
+        const error = new Error(`GameBanana API returned HTTP ${response.status}`);
+        error.status = response.status;
+        throw error;
+      }
+      return await response.json();
+    } catch (error) {
+      lastError = error;
+      if (attempt >= attempts || !isRetryableGameBananaError(error)) break;
+      console.warn(`[warn] ${error?.message || error}; retrying (${attempt + 1}/${attempts})...`);
+      await sleep(retryDelayMs(attempt, options));
+    }
+  }
+
+  fail(lastError?.message || 'GameBanana API request failed');
 }
 
 export async function downloadFile(file, options = {}) {
   if (!file.downloadUrl) fail(`${file.fileName} has no download URL`);
-  const configuredAttempts = Number(options.downloadAttempts ?? DEFAULT_DOWNLOAD_ATTEMPTS);
-  const attempts = Number.isFinite(configuredAttempts) ? Math.max(1, Math.floor(configuredAttempts)) : DEFAULT_DOWNLOAD_ATTEMPTS;
+  const attempts = retryAttempts(options.downloadAttempts, DEFAULT_DOWNLOAD_ATTEMPTS);
   let lastError = null;
 
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
@@ -222,9 +245,9 @@ export async function downloadFile(file, options = {}) {
       return Object.freeze({ bytes, md5, sha256: hash(bytes, 'sha256'), cachePath });
     } catch (error) {
       lastError = error;
-      if (attempt >= attempts || !isRetryableDownloadError(error)) break;
+      if (attempt >= attempts || !isRetryableGameBananaError(error)) break;
       console.warn(`[warn] ${error?.message || error}; retrying (${attempt + 1}/${attempts})...`);
-      await sleep(downloadRetryDelayMs(attempt, options));
+      await sleep(retryDelayMs(attempt, options));
     }
   }
 
@@ -390,12 +413,28 @@ function parseArgs(argv) {
   return Object.freeze({
     allowDowngrade: argv.includes('--allow-downgrade'),
     allowMissingTemplate: argv.includes('--allow-missing-template'),
+    allowStaleMetadata: argv.includes('--allow-stale-metadata'),
     dryRun: argv.includes('--dry-run')
   });
 }
 
+function currentGeneratedMetadata() {
+  return Object.freeze({
+    modSource: CURRENT_MOD_SOURCE,
+    requiredTemplate: CURRENT_REQUIRED_TEMPLATE_SOURCE,
+    presetSources: CURRENT_PRESET_SOURCES
+  });
+}
+
 export async function syncGameBananaMod(options = {}) {
-  const apiPayload = await fetchJson(GAMEBANANA_MOD_API_URL);
+  let apiPayload;
+  try {
+    apiPayload = await fetchGameBananaApi(GAMEBANANA_MOD_API_URL, options);
+  } catch (error) {
+    if (!options.allowStaleMetadata) throw error;
+    console.warn(`[warn] ${error?.message || error}; deploying existing generated GameBanana metadata.`);
+    return currentGeneratedMetadata();
+  }
   const files = normalizeGameBananaFiles(apiPayload);
   const selection = selectLatestGameBananaFiles(files, {
     requireTemplate: options.allowMissingTemplate !== true

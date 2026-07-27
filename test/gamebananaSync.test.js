@@ -5,10 +5,12 @@ import {
   buildGameBananaApiRequestUrl,
   classifyGameBananaFile,
   downloadFile,
+  fetchGameBananaApi,
   metadataModuleContent,
   normalizeGameBananaFiles,
   patchableTemplateBytes,
-  selectLatestGameBananaFiles
+  selectLatestGameBananaFiles,
+  syncGameBananaMod
 } from '../scripts/sync-gamebanana-mod.mjs';
 
 function gamebananaFile(id, fileName, options = {}) {
@@ -113,6 +115,52 @@ test('cache-busts GameBanana API requests', () => {
   assert.equal(requestUrl.searchParams.get('_sync'), '123');
 });
 
+
+test('retries transient GameBanana API responses', async (t) => {
+  let calls = 0;
+  t.mock.method(globalThis, 'fetch', async () => {
+    calls += 1;
+    if (calls === 1) return new Response('', { status: 522 });
+    return Response.json({ source: 'GameBanana' });
+  });
+
+  const result = await fetchGameBananaApi('https://api.gamebanana.com/Core/Item/Data?format=json_min', {
+    attempts: 2,
+    retryDelayMs: 0
+  });
+
+  assert.equal(calls, 2);
+  assert.deepEqual(result, { source: 'GameBanana' });
+});
+
+test('retries truncated GameBanana API JSON responses', async (t) => {
+  let calls = 0;
+  t.mock.method(globalThis, 'fetch', async () => {
+    calls += 1;
+    if (calls === 1) return new Response('{"source":');
+    return Response.json({ source: 'GameBanana' });
+  });
+
+  const result = await fetchGameBananaApi('https://api.gamebanana.com/Core/Item/Data?format=json_min', {
+    attempts: 2,
+    retryDelayMs: 0
+  });
+
+  assert.equal(calls, 2);
+  assert.deepEqual(result, { source: 'GameBanana' });
+});
+
+test('keeps the prior generated metadata when the GameBanana API stays unavailable', async (t) => {
+  t.mock.method(globalThis, 'fetch', async () => new Response('', { status: 522 }));
+
+  const result = await syncGameBananaMod({
+    allowStaleMetadata: true,
+    attempts: 1
+  });
+
+  assert.equal(result.modSource.batchDateTag, '07_10');
+  assert.equal(result.requiredTemplate.fileName, 'templete_07_10.7z');
+});
 test('uses the matching GameBanana template when a newer filter archive is not patchable', async () => {
   const fallbackBytes = new Uint8Array(await readFile('public/templates/gamebanana/passive-only/scripts/abilities.vdata_c.template'));
   const result = await patchableTemplateBytes(new Uint8Array(), {

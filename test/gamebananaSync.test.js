@@ -1,5 +1,9 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import {
+  GAMEBANANA_MOD_SOURCE as CURRENT_MOD_SOURCE,
+  REQUIRED_GAMEBANANA_TEMPLATE_SOURCE as CURRENT_REQUIRED_TEMPLATE_SOURCE
+} from '../src/data/gamebananaSources.generated.js';
 import test from 'node:test';
 import {
   buildGameBananaApiRequestUrl,
@@ -158,8 +162,8 @@ test('keeps the prior generated metadata when the GameBanana API stays unavailab
     attempts: 1
   });
 
-  assert.equal(result.modSource.batchDateTag, '07_10');
-  assert.equal(result.requiredTemplate.fileName, 'templete_07_10.7z');
+  assert.equal(result.modSource.batchDateTag, CURRENT_MOD_SOURCE.batchDateTag);
+  assert.equal(result.requiredTemplate.fileName, CURRENT_REQUIRED_TEMPLATE_SOURCE.fileName);
 });
 test('uses the matching GameBanana template when a newer filter archive is not patchable', async () => {
   const fallbackBytes = new Uint8Array(await readFile('public/templates/gamebanana/passive-only/scripts/abilities.vdata_c.template'));

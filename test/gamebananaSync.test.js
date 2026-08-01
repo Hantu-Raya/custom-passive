@@ -165,6 +165,24 @@ test('keeps the prior generated metadata when the GameBanana API stays unavailab
   assert.equal(result.modSource.batchDateTag, CURRENT_MOD_SOURCE.batchDateTag);
   assert.equal(result.requiredTemplate.fileName, CURRENT_REQUIRED_TEMPLATE_SOURCE.fileName);
 });
+
+test('keeps the prior generated metadata when an archive download stays unavailable', async (t) => {
+  let calls = 0;
+  t.mock.method(globalThis, 'fetch', async () => {
+    calls += 1;
+    if (calls === 1) return Response.json(API_FIXTURE);
+    throw new TypeError('fetch failed');
+  });
+
+  const result = await syncGameBananaMod({
+    allowStaleMetadata: true,
+    allowDowngrade: true,
+    attempts: 1,
+    downloadAttempts: 1
+  });
+  assert.equal(result.modSource.batchDateTag, CURRENT_MOD_SOURCE.batchDateTag);
+  assert.equal(result.requiredTemplate.fileName, CURRENT_REQUIRED_TEMPLATE_SOURCE.fileName);
+});
 test('uses the matching GameBanana template when a newer filter archive is not patchable', async () => {
   const fallbackBytes = new Uint8Array(await readFile('public/templates/gamebanana/passive-only/scripts/abilities.vdata_c.template'));
   const result = await patchableTemplateBytes(new Uint8Array(), {

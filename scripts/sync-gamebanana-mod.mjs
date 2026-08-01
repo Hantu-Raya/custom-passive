@@ -188,6 +188,12 @@ function isRetryableGameBananaError(error) {
   return RETRYABLE_GAMEBANANA_STATUSES.has(error.status);
 }
 
+function rethrowGameBananaFailure(error, fallbackMessage) {
+  const failure = error instanceof Error ? error : new Error(String(error || fallbackMessage));
+  failure.gameBananaUnavailable = isRetryableGameBananaError(error);
+  throw failure;
+}
+
 export async function fetchGameBananaApi(url, options = {}) {
   const attempts = retryAttempts(options.attempts, DEFAULT_API_ATTEMPTS);
   let lastError = null;
@@ -212,7 +218,7 @@ export async function fetchGameBananaApi(url, options = {}) {
     }
   }
 
-  fail(lastError?.message || 'GameBanana API request failed');
+  rethrowGameBananaFailure(lastError, 'GameBanana API request failed');
 }
 
 export async function downloadFile(file, options = {}) {
@@ -251,7 +257,7 @@ export async function downloadFile(file, options = {}) {
     }
   }
 
-  fail(lastError?.message || `Could not download ${file.fileName}`);
+  rethrowGameBananaFailure(lastError, `Could not download ${file.fileName}`);
 }
 
 function vdataFromVpk(vpkBytes, archiveName) {
@@ -427,14 +433,17 @@ function currentGeneratedMetadata() {
 }
 
 export async function syncGameBananaMod(options = {}) {
-  let apiPayload;
   try {
-    apiPayload = await fetchGameBananaApi(GAMEBANANA_MOD_API_URL, options);
+    return await syncGameBananaModFresh(options);
   } catch (error) {
-    if (!options.allowStaleMetadata) throw error;
-    console.warn(`[warn] ${error?.message || error}; deploying existing generated GameBanana metadata.`);
+    if (!options.allowStaleMetadata || !error?.gameBananaUnavailable) throw error;
+    console.warn(`[warn] ${error.message}; deploying existing generated GameBanana metadata.`);
     return currentGeneratedMetadata();
   }
+}
+
+async function syncGameBananaModFresh(options) {
+  const apiPayload = await fetchGameBananaApi(GAMEBANANA_MOD_API_URL, options);
   const files = normalizeGameBananaFiles(apiPayload);
   const selection = selectLatestGameBananaFiles(files, {
     requireTemplate: options.allowMissingTemplate !== true

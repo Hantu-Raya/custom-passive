@@ -4,6 +4,12 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path, { dirname } from 'node:path';
 import { zstdDecompressSync } from 'node:zlib';
+import {
+  GAMEBANANA_MOD_SOURCE,
+  GAMEBANANA_PRESET_SOURCES,
+  REQUIRED_GAMEBANANA_TEMPLATE_SOURCE
+} from '../src/data/gamebananaSources.generated.js';
+import { metadataModuleContent } from './sync-gamebanana-mod.mjs';
 import { DEADLOCK_ITEMS } from '../src/data/deadlockItems.generated.js';
 import { extractArchiveMember } from '../src/lib/archiveExtractor.js';
 import { PRESET_TEMPLATES, REQUIRED_GAMEBANANA_TEMPLATE } from '../src/lib/presetTemplates.js';
@@ -17,8 +23,15 @@ const SR2_COMPILER = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/sr2co
 const PASSIVE_TRANSFORM = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/passive.py';
 const ACTIVE_TRANSFORM = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/active.py';
 const ACTIVE_NO_BEHAVIOR_TRANSFORM = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/active_no_behavior.py';
-const REQUIRED_TEMPLATE_ARCHIVE_PATH = `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/${REQUIRED_GAMEBANANA_TEMPLATE.fileName}`;
-const PRESET_TEMPLATE_BY_ID = new Map(PRESET_TEMPLATES.map((preset) => [preset.id, preset]));
+const DEFAULT_REQUIRED_TEMPLATE_ARCHIVE_PATH = `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/${REQUIRED_GAMEBANANA_TEMPLATE.fileName}`;
+const GENERATED_METADATA_PATH = 'src/data/gamebananaSources.generated.js';
+const TEMPLATE_ARCHIVE_OPTION = '--template-archive';
+const SKIP_SOURCE_ARCHIVE_VERIFICATION = process.argv.includes('--skip-source-archive-verification');
+const templateArchiveOptionIndex = process.argv.indexOf(TEMPLATE_ARCHIVE_OPTION);
+const REQUIRED_TEMPLATE_ARCHIVE_PATH = templateArchiveOptionIndex === -1
+  ? DEFAULT_REQUIRED_TEMPLATE_ARCHIVE_PATH
+  : process.argv[templateArchiveOptionIndex + 1];
+if (!REQUIRED_TEMPLATE_ARCHIVE_PATH) fail(`${TEMPLATE_ARCHIVE_OPTION} requires an archive path`);
 
 const PRESETS = Object.freeze([
   Object.freeze({
@@ -202,11 +215,43 @@ async function buildPresetTemplate(preset) {
   };
 }
 
+async function updateGeneratedTemplateHashes(results) {
+  const templateSha256ById = new Map(results.map((result) => [result.id, result.templateSha256]));
+  const presetSources = Object.freeze({
+    passiveOnly: Object.freeze({
+      ...GAMEBANANA_PRESET_SOURCES.passiveOnly,
+      templateSha256: templateSha256ById.get('passive-only')
+    }),
+    passiveAndActive: Object.freeze({
+      ...GAMEBANANA_PRESET_SOURCES.passiveAndActive,
+      templateSha256: templateSha256ById.get('passive-and-active')
+    }),
+    passiveAndActiveNoBehavior: Object.freeze({
+      ...GAMEBANANA_PRESET_SOURCES.passiveAndActiveNoBehavior,
+      templateSha256: templateSha256ById.get('passive-and-active-no-behavior')
+    })
+  });
+  await writeFile(GENERATED_METADATA_PATH, metadataModuleContent({
+    modSource: GAMEBANANA_MOD_SOURCE,
+    requiredTemplate: REQUIRED_GAMEBANANA_TEMPLATE_SOURCE,
+    presetSources
+  }));
+}
+
 const archiveSha256 = await verifyRequiredTemplateArchive();
 console.log(`${REQUIRED_GAMEBANANA_TEMPLATE.fileName}: verified archive sha256 ${archiveSha256}`);
+if (SKIP_SOURCE_ARCHIVE_VERIFICATION) {
+  console.warn('Skipping source archive verification; rebuilding templates from local Deadlock sources.');
+} else {
+  for (const preset of PRESETS) {
+    const selection = await verifyPresetSelection(preset);
+    console.log(`${preset.id}: verified ${selection.selectedCount} selected ids from source archive sha256 ${selection.archiveSha256}`);
+  }
+}
+const results = [];
 for (const preset of PRESETS) {
-  const selection = await verifyPresetSelection(preset);
-  console.log(`${preset.id}: verified ${selection.selectedCount} selected ids from source archive sha256 ${selection.archiveSha256}`);
   const result = await buildPresetTemplate(preset);
+  results.push(result);
   console.log(`${result.id}: wrote ${result.outputPath} (${result.bytes} bytes, template sha256 ${result.templateSha256})`);
 }
+await updateGeneratedTemplateHashes(results);

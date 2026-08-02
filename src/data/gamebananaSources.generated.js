@@ -72,7 +72,7 @@ export const GAMEBANANA_PRESET_SOURCES = Object.freeze({
     sha256: "1ea35368b373819221e1cdc7f4f673cb5d39d5e42dcda9ce961058d24306697a",
     size: 356713,
     templatePath: "templates/gamebanana/passive-only/scripts/abilities.vdata_c.template",
-    templateSha256: "b6065280051f9ae804ed68600c32a5a3f497c9c94f1081936e50aa652e4ba70f"
+    templateSha256: "33b3675cc75ca8ae47317aff38cc5e20ffbe1935f516c045dd0896b8737fdb32"
   }),
   passiveAndActive: Object.freeze({
     archiveMember: "pak03_dir.vpk",
@@ -165,7 +165,7 @@ export const GAMEBANANA_PRESET_SOURCES = Object.freeze({
     sha256: "2cfd435f60d2d49b2e9eb5fb8ffff231b711d95e072816de8d164a0afc007885",
     size: 357077,
     templatePath: "templates/gamebanana/passive-and-active/scripts/abilities.vdata_c.template",
-    templateSha256: "96853c7da369502f832ff50a35d3e9b08fe4a0b46752f74784b72808dd7ac319"
+    templateSha256: "58349da77472cb444d471f4e01c1beff08d8f1acf1df5d40777b7202a1e9e842"
   }),
   passiveAndActiveNoBehavior: Object.freeze({
     archiveMember: "pak05_dir.vpk",
@@ -258,6 +258,6 @@ export const GAMEBANANA_PRESET_SOURCES = Object.freeze({
     sha256: "a1a43d98f7e695b7664022b1422cf38757fbf26d41f9f6e0bf9119ffa8cdc724",
     size: 357004,
     templatePath: "templates/gamebanana/passive-and-active-no-behavior/scripts/abilities.vdata_c.template",
-    templateSha256: "6b228987acd1969e9b5876ddf5a6dddb29a0cd886d1766f51d2806770aceb96d"
+    templateSha256: "bf9fe757dee1cc9606a9bf8b33685bc6448144ea125244fa185a8d3cae8fbf1f"
   })
 });

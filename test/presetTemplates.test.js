@@ -14,6 +14,8 @@ function assertCurrentSource(preset, source) {
   assert.equal(preset.archiveOutputFileName, source.archiveOutputFileName);
   assert.equal(preset.sourceArchive.fileName, source.fileName);
   assert.equal(preset.sourceArchive.sha256, source.sha256);
+  assert.equal(preset.templateSha256, source.templateSha256);
+  assert.match(source.templateSha256, /^[a-f0-9]{64}$/);
   assert.equal(source.dateTag, GAMEBANANA_MOD_SOURCE.batchDateTag);
   assert.equal(dateTagFromFile(source.fileName), GAMEBANANA_MOD_SOURCE.batchDateTag);
   assert.match(source.sha256, /^[a-f0-9]{64}$/);
@@ -26,7 +28,6 @@ test('passive and active preset preselects yes-behavior archive selection withou
   assert.equal(preset.outputFileName, 'pak03_dir.vpk');
   assertCurrentSource(preset, GAMEBANANA_PRESET_SOURCES.passiveAndActive);
   assert.equal(preset.templatePath, 'templates/gamebanana/passive-and-active/scripts/abilities.vdata_c.template');
-  assert.equal(preset.templateSha256, '96853c7da369502f832ff50a35d3e9b08fe4a0b46752f74784b72808dd7ac319');
   assert.equal(dateTagFromFile(REQUIRED_GAMEBANANA_TEMPLATE.fileName), GAMEBANANA_MOD_SOURCE.batchDateTag);
   assert.match(REQUIRED_GAMEBANANA_TEMPLATE.sha256, /^[a-f0-9]{64}$/);
   assert.equal(REQUIRED_GAMEBANANA_TEMPLATE.archiveMember, 'pak02_dir.vpk');
@@ -46,7 +47,6 @@ test('passive and active no-behavior preset matches pak05 archive', () => {
   assert.equal(preset.outputFileName, 'pak05_dir.vpk');
   assertCurrentSource(preset, GAMEBANANA_PRESET_SOURCES.passiveAndActiveNoBehavior);
   assert.equal(preset.templatePath, 'templates/gamebanana/passive-and-active-no-behavior/scripts/abilities.vdata_c.template');
-  assert.equal(preset.templateSha256, '6b228987acd1969e9b5876ddf5a6dddb29a0cd886d1766f51d2806770aceb96d');
   assert.equal(preset.sourceArchive.archiveMember, 'pak05_dir.vpk');
   assert.deepEqual(preset.supportedItemIds, ALL_ITEM_IDS);
   assert.equal(preset.presetItemIds.length, 74);
@@ -59,7 +59,6 @@ test('passive only preset preselects source archive selection without hiding sho
   assert.equal(preset.outputFileName, 'pak04_dir.vpk');
   assertCurrentSource(preset, GAMEBANANA_PRESET_SOURCES.passiveOnly);
   assert.equal(preset.templatePath, 'templates/gamebanana/passive-only/scripts/abilities.vdata_c.template');
-  assert.equal(preset.templateSha256, 'b6065280051f9ae804ed68600c32a5a3f497c9c94f1081936e50aa652e4ba70f');
   assert.equal(preset.sourceArchive.archiveMember, 'pak04_dir.vpk');
   assert.deepEqual(preset.supportedItemIds, ALL_ITEM_IDS);
   assert.equal(preset.presetItemIds.length, 33);

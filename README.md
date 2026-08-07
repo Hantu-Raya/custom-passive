@@ -51,25 +51,46 @@ npm run generate:data
 
 This also prunes unused extracted shop art, converts runtime assets to WebP with `ffmpeg`, and writes the default template fixture under `test/fixtures/`.
 
-Regenerate GameBanana preset templates and verify source archive selections:
+## Updating GameBanana templates
 
-```bash
-npm run generate:presets
-```
-
-Both commands depend on local Deadlock/tool paths configured in `scripts/` and may not run on a fresh machine without those files.
-
-Sync the latest complete GameBanana batch:
+Sync GameBanana metadata before generating templates:
 
 ```bash
 npm run sync:gamebanana
 ```
 
-The sync script cache-busts GameBanana API requests, retries transient HTTP failures and truncated JSON, verifies archive MD5 values, computes SHA-256 locally, extracts preset VPKs, and writes static metadata. It refuses to downgrade from the current generated batch unless you pass `-- --allow-downgrade`.
+The sync script cache-busts GameBanana API requests, retries transient API and archive failures, verifies archive MD5 values, computes SHA-256 locally, extracts preset VPKs, and writes static metadata. It refuses to downgrade from the current generated batch unless you pass `-- --allow-downgrade`.
 
-If GameBanana's API remains unavailable, the command fails after its retries. GitHub Pages runs the same command with `-- --allow-stale-metadata`: it deploys the existing verified metadata and templates instead of failing. That fallback never writes new metadata; the next hourly run retries the live sync. Do not use it for a manual metadata update when the latest archive must be captured immediately.
+Then rebuild the browser templates from the current local Deadlock sources:
 
-GameBanana filters that omit passive flags for catalog items cannot replace browser patch templates. The sync keeps the current complete generated template in that case while still recording the latest preset archive metadata.
+```bash
+npm run generate:presets
+```
+
+`generate:presets` writes all three `public/templates/gamebanana/**/abilities.vdata_c.template` files and refreshes their SHA-256 values in `src/data/gamebananaSources.generated.js`. Commit those files together.
+
+If the matching GameBanana archives are not installed under the configured `G:/SteamLibrary/.../addons/` path, point the generator at the verified template archive and bypass only source-archive selection verification:
+
+```bash
+npm run generate:presets -- \
+  --template-archive "G:/templete_MM_DD.7z" \
+  --skip-source-archive-verification
+```
+
+The supplied archive must match the SHA-256 in generated metadata. This mode still compiles the local current Deadlock sources and creates a complete browser template.
+
+Never copy a GameBanana filter or template VData directly into `public/templates/`. A newly published archive can omit passive-flag fields for catalog items. The browser would then either fail to patch selections or fall back to an older complete template. Rebuild from current local sources so every catalog item has a writable flag, then run the validation below.
+
+GitHub Pages uses `-- --allow-stale-metadata` only when GameBanana's API or an archive download remains unavailable after retries. It deploys the last verified metadata and templates without changing either; the next hourly run retries the live sync. Do not use this mode for a manual update that must capture the latest batch.
+
+After a template rebuild, run:
+
+```bash
+npm test
+npm run build
+```
+
+The template tests verify each public template's SHA-256, complete catalog coverage, and patched selections.
 
 ## Verification
 
@@ -98,7 +119,7 @@ Astro is configured with:
 
 Build output is written to `dist/`.
 
-GitHub Pages deploys from `.github/workflows/deploy.yml`. The workflow runs hourly and on pushes to `main`. Each run retries cache-busted GameBanana API requests, syncs fresh metadata when possible, then runs tests and builds. If the API remains unavailable, it deploys the last verified generated metadata and tries the live sync again on the next hourly run.
+GitHub Pages deploys from `.github/workflows/deploy.yml`. The workflow runs hourly and on pushes to `main`. Each run retries cache-busted GameBanana API requests and archive downloads, syncs fresh metadata when possible, then runs tests and builds. If either external step remains unavailable, it deploys the last verified metadata and templates and retries the live sync on the next hourly run.
 
 ## License
 

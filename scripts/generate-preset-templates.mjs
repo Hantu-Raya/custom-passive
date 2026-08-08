@@ -56,6 +56,7 @@ const PRESETS = Object.freeze([
 
 const PASSIVE_FLAG_LINE_PATTERN = /\n\s*m_bShowInPassiveItemsArea\s*=\s*(?:"(?:true|false)"|true|false)/g;
 const CANDIDATE_IDS = new Set(DEADLOCK_ITEMS.map((item) => item.id));
+const PRESET_TEMPLATE_BY_ID = new Map(PRESET_TEMPLATES.map((preset) => [preset.id, preset]));
 
 function sha256(bytes) {
   return createHash('sha256').update(bytes).digest('hex');

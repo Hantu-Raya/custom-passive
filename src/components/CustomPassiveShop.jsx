@@ -688,7 +688,7 @@ function TemplateGate({
       <section class="template-gate-dialog" role="dialog" aria-modal="true" aria-labelledby="template-gate-heading">
         <span class="eyebrow">Template required</span>
         <h2 id="template-gate-heading">Link {REQUIRED_GAMEBANANA_TEMPLATE.fileName}</h2>
-        <p>The builder needs this one verified 06/18 GameBanana template archive before any VPK can be built.</p>
+        <p>The builder needs the verified GameBanana template archive listed below before any VPK can be built.</p>
         <label for="template-gate-preset">Template type</label>
         <select
           id="template-gate-preset"
@@ -735,7 +735,7 @@ function TemplateGate({
           }}
         >
           <span>Upload / link {REQUIRED_GAMEBANANA_TEMPLATE.fileName}</span>
-          <em>Use only the 06/18 template archive from GameBanana</em>
+          <em>Use the exact archive listed above from GameBanana</em>
         </label>
         <input
           id="template-gate-file"

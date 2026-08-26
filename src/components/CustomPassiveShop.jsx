@@ -8,6 +8,7 @@ import { PRESET_TEMPLATE_IDS, PRESET_TEMPLATES, REQUIRED_GAMEBANANA_TEMPLATE, ge
 const STORAGE_KEY = 'custom-passive:selected-items:v2';
 const TEMPLATE_VERIFICATION_STORAGE_KEY = 'custom-passive:template-verification:v1';
 const TEMPLATE_VERIFICATION_TTL_MS = 12 * 60 * 60 * 1000;
+const KOFI_DONATION_URL = 'https://ko-fi.com/hantuaraya';
 const SHOP_IMAGE_BASE = `${import.meta.env.BASE_URL}assets/deadlock/panorama/images/shop/`;
 const SHOP_ASSET_BASE = `${SHOP_IMAGE_BASE}catalog/`;
 const TAB_ICONS = Object.freeze({
@@ -563,6 +564,20 @@ function SearchBox({ query, onQueryChange }) {
     </div>
   );
 }
+function DonationStrip() {
+  return (
+    <section class="donation-strip" aria-label="Support the project">
+      <span class="donation-strip-copy">
+        <strong>Support updates</strong>
+        <span>Hosting and releases.</span>
+      </span>
+      <a data-testid="donation-link" href={KOFI_DONATION_URL} target="_blank" rel="noreferrer" aria-label="Donate on Ko-fi">
+        Donate
+      </a>
+    </section>
+  );
+}
+
 
 function BuildDownloadPanel({
   selectedCount,
@@ -663,6 +678,7 @@ function BuildDownloadPanel({
         <button type="button" class="primary-build" data-testid="build-download" onClick={onBuild} disabled={!templateReady}>Build / download archive</button>
       </div>
       <p class="build-status" role="status">{status}</p>
+      <DonationStrip />
       <footer class="page-footer" aria-label="Project notices">
         <p>
           Unofficial fan-made tool. Not affiliated with Valve. Runs locally; archives are not uploaded. Built by{' '}

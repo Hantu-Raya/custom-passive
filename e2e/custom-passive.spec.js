@@ -185,6 +185,8 @@ test('loads verified GameBanana presets before building', async ({ page }) => {
   const passiveOnly = getPresetTemplate(PRESET_TEMPLATE_IDS.PASSIVE_ONLY);
   const passiveAndActive = getPresetTemplate(PRESET_TEMPLATE_IDS.PASSIVE_AND_ACTIVE);
   await expect(page.getByTestId('gamebanana-template-link')).toHaveAttribute('href', REQUIRED_GAMEBANANA_TEMPLATE.modUrl);
+  await expect(page.getByTestId('donation-link')).toHaveAttribute('href', 'https://ko-fi.com/hantuaraya');
+  await expect(page.getByTestId('donation-link')).toHaveText('Donate');
   await expect(page.getByTestId('preset-template-archive-sha')).toHaveText(REQUIRED_GAMEBANANA_TEMPLATE.sha256);
   await expect(page.getByTestId('preset-template-sha')).toHaveText(passiveOnly.templateSha256);
   await expect(page.getByTestId('output-filename')).toHaveText(passiveOnly.archiveOutputFileName);
@@ -483,15 +485,20 @@ test('keeps build status and footer readable on low-dpi desktop panel', async ({
     };
     const status = document.querySelector('.build-status').getBoundingClientRect();
     const footer = document.querySelector('.page-footer').getBoundingClientRect();
+    const donationStrip = document.querySelector('.donation-strip').getBoundingClientRect();
     return {
       status: readableBox('.build-status'),
       footer: readableBox('.page-footer'),
+      donationStrip: readableBox('.donation-strip'),
+      donationStripWidth: donationStrip.width,
       statusFooterGap: footer.top - status.bottom
     };
   });
 
   expect(metrics.status.scrollHeight).toBeLessThanOrEqual(metrics.status.clientHeight + 1);
   expect(metrics.footer.scrollHeight).toBeLessThanOrEqual(metrics.footer.clientHeight + 1);
+  expect(metrics.donationStrip.scrollHeight).toBeLessThanOrEqual(metrics.donationStrip.clientHeight + 1);
+  expect(metrics.donationStripWidth).toBeGreaterThan(200);
   expect(metrics.statusFooterGap).toBeGreaterThanOrEqual(10);
 });
 

@@ -9,6 +9,16 @@ const STORAGE_KEY = 'custom-passive:selected-items:v2';
 const TEMPLATE_VERIFICATION_STORAGE_KEY = 'custom-passive:template-verification:v1';
 const TEMPLATE_VERIFICATION_TTL_MS = 12 * 60 * 60 * 1000;
 const KOFI_DONATION_URL = 'https://ko-fi.com/hantuaraya';
+const KOFI_LEADERBOARD_URL = 'https://ko-fi.com/hantuaraya/leaderboard';
+const SUPPORTERS = Object.freeze([
+  Object.freeze({ rank: 1, displayName: 'civo', totalUsd: 100 }),
+  Object.freeze({ rank: 2, displayName: 'dacooder', totalUsd: 20 }),
+  Object.freeze({ rank: 3, displayName: 'DimpuMudit', totalUsd: 17 }),
+  Object.freeze({ rank: 4, displayName: 'Ko-fi Supporter', totalUsd: 10 }),
+  Object.freeze({ rank: 5, displayName: 'Ko-fi Supporter', totalUsd: 5 }),
+  Object.freeze({ rank: 6, displayName: 'greggey', totalUsd: 5 }),
+  Object.freeze({ rank: 7, displayName: 'Timmcd', totalUsd: 5 })
+]);
 const SHOP_IMAGE_BASE = `${import.meta.env.BASE_URL}assets/deadlock/panorama/images/shop/`;
 const SHOP_ASSET_BASE = `${SHOP_IMAGE_BASE}catalog/`;
 const TAB_ICONS = Object.freeze({
@@ -549,7 +559,7 @@ function SearchBox({ query, onQueryChange }) {
   return (
     <div class="catalog-search search-box" role="search">
       <label htmlFor="shop-search">Search items</label>
-      <p class="search-hint">Try searching by Item Name or by stat such as Ammo, Lifesteal or Spirit Power</p>
+      <p class="search-hint">Search by item name or stat, such as Ammo, Lifesteal or Spirit Power</p>
       <div class="search-row">
         <input
           id="shop-search"
@@ -564,17 +574,58 @@ function SearchBox({ query, onQueryChange }) {
     </div>
   );
 }
-function DonationStrip() {
+function SupporterSequence({ duplicate = false }) {
   return (
-    <section class="donation-strip" aria-label="Support the project">
-      <span class="donation-strip-copy">
-        <strong>Support updates</strong>
-        <span>Hosting and releases.</span>
+    <span class="catalog-supporter-sequence" aria-hidden={duplicate ? 'true' : undefined}>
+      {SUPPORTERS.map((supporter) => (
+        <span class="catalog-supporter-item" key={`${duplicate ? 'duplicate' : 'primary'}-${supporter.rank}`}>
+          <b>{supporter.rank}</b>
+          <span>{supporter.displayName}</span>
+          <strong>${supporter.totalUsd}</strong>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function CatalogSupportFooter() {
+  const accessibleLabel = `Ko-fi top supporters: ${SUPPORTERS
+    .map((supporter) => `${supporter.rank} ${supporter.displayName} $${supporter.totalUsd}`)
+    .join(', ')}`;
+
+  return (
+    <footer class="catalog-support-footer" aria-label="Support the project">
+      <span class="catalog-support-copy">
+        <strong>Back the next update</strong>
+        <span>Donations fund hosting and release work.</span>
       </span>
-      <a data-testid="donation-link" href={KOFI_DONATION_URL} target="_blank" rel="noreferrer" aria-label="Donate on Ko-fi">
+      <span class="catalog-supporter-strip">
+        <span class="catalog-supporter-label" aria-hidden="true">Top supporters</span>
+        <a
+          class="catalog-supporter-window"
+          href={KOFI_LEADERBOARD_URL}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={accessibleLabel}
+          data-testid="supporter-leaderboard-link"
+        >
+          <span class="catalog-supporter-track" aria-hidden="true">
+            <SupporterSequence />
+            <SupporterSequence duplicate />
+          </span>
+        </a>
+      </span>
+      <a
+        class="catalog-donation-link"
+        data-testid="donation-link"
+        href={KOFI_DONATION_URL}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Donate on Ko-fi"
+      >
         Donate
       </a>
-    </section>
+    </footer>
   );
 }
 
@@ -678,7 +729,6 @@ function BuildDownloadPanel({
         <button type="button" class="primary-build" data-testid="build-download" onClick={onBuild} disabled={!templateReady}>Build / download archive</button>
       </div>
       <p class="build-status" role="status">{status}</p>
-      <DonationStrip />
       <footer class="page-footer" aria-label="Project notices">
         <p>
           Unofficial fan-made tool. Not affiliated with Valve. Runs locally; archives are not uploaded. Built by{' '}
@@ -1199,6 +1249,7 @@ export default function CustomPassiveShop() {
             </div>
           )}
         </div>
+        <CatalogSupportFooter />
       </section>
     </ShopShell>
   );

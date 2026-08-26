@@ -187,6 +187,7 @@ test('loads verified GameBanana presets before building', async ({ page }) => {
   await expect(page.getByTestId('gamebanana-template-link')).toHaveAttribute('href', REQUIRED_GAMEBANANA_TEMPLATE.modUrl);
   await expect(page.getByTestId('donation-link')).toHaveAttribute('href', 'https://ko-fi.com/hantuaraya');
   await expect(page.getByTestId('donation-link')).toHaveText('Donate');
+  await expect(page.getByTestId('supporter-leaderboard-link')).toHaveAttribute('href', 'https://ko-fi.com/hantuaraya/leaderboard');
   await expect(page.getByTestId('preset-template-archive-sha')).toHaveText(REQUIRED_GAMEBANANA_TEMPLATE.sha256);
   await expect(page.getByTestId('preset-template-sha')).toHaveText(passiveOnly.templateSha256);
   await expect(page.getByTestId('output-filename')).toHaveText(passiveOnly.archiveOutputFileName);
@@ -485,21 +486,43 @@ test('keeps build status and footer readable on low-dpi desktop panel', async ({
     };
     const status = document.querySelector('.build-status').getBoundingClientRect();
     const footer = document.querySelector('.page-footer').getBoundingClientRect();
-    const donationStrip = document.querySelector('.donation-strip').getBoundingClientRect();
+    const catalogContent = document.querySelector('.catalog-content').getBoundingClientRect();
+    const supportFooter = document.querySelector('.catalog-support-footer').getBoundingClientRect();
+    const donationLink = document.querySelector('[data-testid="donation-link"]').getBoundingClientRect();
     return {
       status: readableBox('.build-status'),
       footer: readableBox('.page-footer'),
-      donationStrip: readableBox('.donation-strip'),
-      donationStripWidth: donationStrip.width,
+      supportFooter: readableBox('.catalog-support-footer'),
+      supportFooterBottom: supportFooter.bottom,
+      supportFooterGap: supportFooter.top - catalogContent.bottom,
+      donationInsideFooter: donationLink.top >= supportFooter.top && donationLink.bottom <= supportFooter.bottom,
+      viewportHeight: window.innerHeight,
       statusFooterGap: footer.top - status.bottom
     };
   });
 
   expect(metrics.status.scrollHeight).toBeLessThanOrEqual(metrics.status.clientHeight + 1);
   expect(metrics.footer.scrollHeight).toBeLessThanOrEqual(metrics.footer.clientHeight + 1);
-  expect(metrics.donationStrip.scrollHeight).toBeLessThanOrEqual(metrics.donationStrip.clientHeight + 1);
-  expect(metrics.donationStripWidth).toBeGreaterThan(200);
+  expect(metrics.supportFooter.scrollHeight).toBeLessThanOrEqual(metrics.supportFooter.clientHeight + 1);
+  expect(metrics.supportFooterBottom).toBeLessThanOrEqual(metrics.viewportHeight);
+  expect(metrics.supportFooterGap).toBeGreaterThanOrEqual(7);
+  expect(metrics.donationInsideFooter).toBe(true);
   expect(metrics.statusFooterGap).toBeGreaterThanOrEqual(10);
+});
+
+test('keeps the support footer visible across catalog modes', async ({ page }) => {
+  await openVitalityShop(page, { width: 1600, height: 1000 });
+  const supportFooter = page.locator('.catalog-support-footer');
+
+  await expect(supportFooter).toBeVisible();
+  await expect(page.getByTestId('donation-link')).toBeVisible();
+  await expect(page.getByTestId('supporter-leaderboard-link')).toBeVisible();
+
+  await page.getByTestId('tab-selected').click();
+  await expect(supportFooter).toBeVisible();
+
+  await page.getByTestId('tab-search').click();
+  await expect(supportFooter).toBeVisible();
 });
 
 test('renders active and imbue badges as in-game card strips', async ({ page }) => {

@@ -1438,7 +1438,4 @@ button.shop-tab-search.is-active {
   .catalog-list-board::after {
     transition-duration: 0.01ms !important;
   }
-  .catalog-supporter-track {
-    animation: none;
-  }
 }

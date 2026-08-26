@@ -525,6 +525,22 @@ test('keeps the support footer visible across catalog modes', async ({ page }) =
   await expect(supportFooter).toBeVisible();
 });
 
+test('keeps the supporter ticker moving with reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await openVitalityShop(page, { width: 1600, height: 1000 });
+
+  const tickerAnimation = await page.locator('.catalog-supporter-track').evaluate((track) => {
+    const style = getComputedStyle(track);
+    return {
+      name: style.animationName,
+      duration: style.animationDuration
+    };
+  });
+
+  expect(tickerAnimation.name).toBe('catalog-supporter-scroll');
+  expect(tickerAnimation.duration).not.toBe('0s');
+});
+
 test('renders active and imbue badges as in-game card strips', async ({ page }) => {
   await page.goto('/custom-passive/');
   await waitForHydration(page, PRESET_TEMPLATE_IDS.PASSIVE_AND_ACTIVE);

@@ -528,13 +528,6 @@ a:focus-visible {
   color: var(--deadlock-muted);
   font-size: 0.7rem;
 }
-.catalog-supporter-item b {
-  color: var(--deadlock-brass);
-}
-.catalog-supporter-item strong {
-  color: var(--deadlock-ink);
-  font-variant-numeric: tabular-nums;
-}
 .catalog-donation-link {
   display: inline-flex;
   min-height: 32px;

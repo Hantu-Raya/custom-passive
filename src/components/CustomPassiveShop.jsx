@@ -11,12 +11,12 @@ const TEMPLATE_VERIFICATION_TTL_MS = 12 * 60 * 60 * 1000;
 const KOFI_DONATION_URL = 'https://ko-fi.com/hantuaraya';
 const KOFI_LEADERBOARD_URL = 'https://ko-fi.com/hantuaraya/leaderboard';
 const SUPPORTERS = Object.freeze([
-  'civo',
-  'dacooder',
-  'DimpuMudit',
-  'greggey',
-  'oOBansh33',
-  'Timmcd'
+  Object.freeze({ displayName: 'civo', totalUsd: 100 }),
+  Object.freeze({ displayName: 'dacooder', totalUsd: 20 }),
+  Object.freeze({ displayName: 'DimpuMudit', totalUsd: 17 }),
+  Object.freeze({ displayName: 'greggey', totalUsd: 5 }),
+  Object.freeze({ displayName: 'oOBansh33', totalUsd: 10 }),
+  Object.freeze({ displayName: 'Timmcd', totalUsd: 5 })
 ]);
 const SHOP_IMAGE_BASE = `${import.meta.env.BASE_URL}assets/deadlock/panorama/images/shop/`;
 const SHOP_ASSET_BASE = `${SHOP_IMAGE_BASE}catalog/`;
@@ -577,8 +577,9 @@ function SupporterSequence({ duplicate = false }) {
   return (
     <span class="catalog-supporter-sequence" aria-hidden={duplicate ? 'true' : undefined}>
       {SUPPORTERS.map((supporter) => (
-        <span class="catalog-supporter-item" key={`${duplicate ? 'duplicate' : 'primary'}-${supporter}`}>
-          {supporter}
+        <span class="catalog-supporter-item" key={`${duplicate ? 'duplicate' : 'primary'}-${supporter.displayName}`}>
+          <span>{supporter.displayName}</span>
+          <strong>${supporter.totalUsd}</strong>
         </span>
       ))}
     </span>
@@ -586,7 +587,7 @@ function SupporterSequence({ duplicate = false }) {
 }
 
 function CatalogSupportFooter() {
-  const accessibleLabel = `Supporters: ${SUPPORTERS.join(', ')}`;
+  const accessibleLabel = `Supporters: ${SUPPORTERS.map((supporter) => `${supporter.displayName} $${supporter.totalUsd}`).join(', ')}`;
 
   return (
     <footer class="catalog-support-footer" aria-label="Support the project">

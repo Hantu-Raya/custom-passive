@@ -129,6 +129,14 @@ No lint script is currently declared.
 - GameBanana compatibility is decided by generated MD5/SHA-256 metadata, not filenames alone.
 - `sync:gamebanana` refuses downgrades unless `-- --allow-downgrade`; it can keep the current template with `-- --allow-missing-template` only when intentional.
 
+## Supporter Leaderboard
+
+- Treat the user-provided Ko-fi supporters CSV as authoritative for each leaderboard update.
+- Include every CSV row. Display blank, `Anonymous`, and equivalent anonymous names as `Ko-fi Supporter`.
+- Sort by descending `Total`. Equal totals share a competition rank; preserve CSV row order within ties.
+- Publish only the derived rank, display name, and total USD. Keep every other CSV field out of source, tests, build output, and browser output.
+- Update exact E2E leaderboard expectations, verify the built footer, and confirm the deployed Pages result.
+
 ## Testing & QA
 
 - Unit/integration tests use Node's built-in `node:test` and `node:assert/strict`.

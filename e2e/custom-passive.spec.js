@@ -13,13 +13,15 @@ const REQUIRED_TEMPLATE_UPLOAD = `G:/SteamLibrary/steamapps/common/Deadlock/game
 const TEMPLATE_VERIFICATION_STORAGE_KEY = 'custom-passive:template-verification:v1';
 const SELECTED_ITEMS_STORAGE_KEY = 'custom-passive:selected-items:v2';
 const TEMPLATE_VERIFICATION_TTL_MS = 12 * 60 * 60 * 1000;
-const PUBLIC_SUPPORTERS = Object.freeze([
-  Object.freeze({ displayName: 'civo', totalUsd: 100 }),
-  Object.freeze({ displayName: 'dacooder', totalUsd: 20 }),
-  Object.freeze({ displayName: 'DimpuMudit', totalUsd: 17 }),
-  Object.freeze({ displayName: 'greggey', totalUsd: 5 }),
-  Object.freeze({ displayName: 'oOBansh33', totalUsd: 10 }),
-  Object.freeze({ displayName: 'Timmcd', totalUsd: 5 })
+const SUPPORTER_LEADERBOARD = Object.freeze([
+  Object.freeze({ rank: 1, displayName: 'civo', totalUsd: 100 }),
+  Object.freeze({ rank: 2, displayName: 'dacooder', totalUsd: 20 }),
+  Object.freeze({ rank: 3, displayName: 'DimpuMudit', totalUsd: 17 }),
+  Object.freeze({ rank: 4, displayName: 'oOBansh33', totalUsd: 10 }),
+  Object.freeze({ rank: 4, displayName: 'Ko-fi Supporter', totalUsd: 10 }),
+  Object.freeze({ rank: 6, displayName: 'Ko-fi Supporter', totalUsd: 5 }),
+  Object.freeze({ rank: 6, displayName: 'greggey', totalUsd: 5 }),
+  Object.freeze({ rank: 6, displayName: 'Timmcd', totalUsd: 5 })
 ]);
 
 async function seedTemplateVerification(page, expiresAt) {
@@ -533,7 +535,7 @@ test('keeps the support footer visible across catalog modes', async ({ page }) =
   await expect(supportFooter).toBeVisible();
 });
 
-test('shows public supporter names and dollar totals only', async ({ page }) => {
+test('renders the complete donation leaderboard without private CSV fields', async ({ page }) => {
   await page.setViewportSize({ width: 1600, height: 1000 });
   await seedTemplateVerification(page, Date.now() + TEMPLATE_VERIFICATION_TTL_MS);
   await page.goto('/custom-passive/');
@@ -541,17 +543,18 @@ test('shows public supporter names and dollar totals only', async ({ page }) => 
   await expect(page.getByTestId('template-gate')).toHaveCount(0);
   const supporterLink = page.getByTestId('supporter-leaderboard-link');
   const supporterItems = page.locator('.catalog-supporter-sequence').first().locator('.catalog-supporter-item');
-  const accessibleLabel = `Supporters: ${PUBLIC_SUPPORTERS
-    .map((supporter) => `${supporter.displayName} $${supporter.totalUsd}`)
+  const accessibleLabel = `Leaderboard: ${SUPPORTER_LEADERBOARD
+    .map((supporter) => `${supporter.rank} ${supporter.displayName} $${supporter.totalUsd}`)
     .join(', ')}`;
 
   await expect(supporterLink).toHaveAttribute('aria-label', accessibleLabel);
-  await expect(supporterItems).toHaveCount(PUBLIC_SUPPORTERS.length);
+  await expect(supporterItems).toHaveCount(SUPPORTER_LEADERBOARD.length);
   expect((await supporterItems.allTextContents()).map((text) => text.replace(/\s+/g, '')))
-    .toEqual(PUBLIC_SUPPORTERS.map((supporter) => `${supporter.displayName}$${supporter.totalUsd}`));
+    .toEqual(SUPPORTER_LEADERBOARD.map((supporter) => `${supporter.rank}${supporter.displayName}$${supporter.totalUsd}`.replace(/\s+/g, '')));
   expect(await supporterItems.evaluateAll((items) => items.map((item) => Array.from(item.children, (child) => child.tagName))))
-    .toEqual(PUBLIC_SUPPORTERS.map(() => ['SPAN', 'STRONG']));
-  await expect(page.locator('.catalog-supporter-strip')).not.toContainText(/Ko-fi Supporter|\bAnonymous\b/i);
+    .toEqual(SUPPORTER_LEADERBOARD.map(() => ['B', 'SPAN', 'STRONG']));
+  await expect(supporterItems.filter({ hasText: 'Ko-fi Supporter' })).toHaveCount(2);
+  await expect(page.locator('.catalog-supporter-strip')).not.toContainText(/\bAnonymous\b/i);
 });
 
 test('keeps the supporter ticker moving with reduced motion', async ({ page }) => {

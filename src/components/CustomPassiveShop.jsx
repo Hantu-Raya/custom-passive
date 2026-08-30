@@ -12,13 +12,14 @@ const KOFI_DONATION_URL = 'https://ko-fi.com/hantuaraya';
 const KOFI_LEADERBOARD_URL = 'https://ko-fi.com/hantuaraya/leaderboard';
 const SUPPORTERS = Object.freeze([
   Object.freeze({ rank: 1, displayName: 'civo', totalUsd: 100 }),
+  Object.freeze({ rank: 2, displayName: 'www.skillnshred.com', totalUsd: 20 }),
   Object.freeze({ rank: 2, displayName: 'dacooder', totalUsd: 20 }),
-  Object.freeze({ rank: 3, displayName: 'DimpuMudit', totalUsd: 17 }),
-  Object.freeze({ rank: 4, displayName: 'oOBansh33', totalUsd: 10 }),
-  Object.freeze({ rank: 4, displayName: 'Ko-fi Supporter', totalUsd: 10 }),
-  Object.freeze({ rank: 6, displayName: 'Ko-fi Supporter', totalUsd: 5 }),
-  Object.freeze({ rank: 6, displayName: 'greggey', totalUsd: 5 }),
-  Object.freeze({ rank: 6, displayName: 'Timmcd', totalUsd: 5 })
+  Object.freeze({ rank: 4, displayName: 'DimpuMudit', totalUsd: 17 }),
+  Object.freeze({ rank: 5, displayName: 'oOBansh33', totalUsd: 10 }),
+  Object.freeze({ rank: 5, displayName: 'Ko-fi Supporter', totalUsd: 10 }),
+  Object.freeze({ rank: 7, displayName: 'Ko-fi Supporter', totalUsd: 5 }),
+  Object.freeze({ rank: 7, displayName: 'greggey', totalUsd: 5 }),
+  Object.freeze({ rank: 7, displayName: 'Timmcd', totalUsd: 5 })
 ]);
 const SHOP_IMAGE_BASE = `${import.meta.env.BASE_URL}assets/deadlock/panorama/images/shop/`;
 const SHOP_ASSET_BASE = `${SHOP_IMAGE_BASE}catalog/`;

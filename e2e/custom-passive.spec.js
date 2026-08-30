@@ -15,13 +15,14 @@ const SELECTED_ITEMS_STORAGE_KEY = 'custom-passive:selected-items:v2';
 const TEMPLATE_VERIFICATION_TTL_MS = 12 * 60 * 60 * 1000;
 const SUPPORTER_LEADERBOARD = Object.freeze([
   Object.freeze({ rank: 1, displayName: 'civo', totalUsd: 100 }),
+  Object.freeze({ rank: 2, displayName: 'www.skillnshred.com', totalUsd: 20 }),
   Object.freeze({ rank: 2, displayName: 'dacooder', totalUsd: 20 }),
-  Object.freeze({ rank: 3, displayName: 'DimpuMudit', totalUsd: 17 }),
-  Object.freeze({ rank: 4, displayName: 'oOBansh33', totalUsd: 10 }),
-  Object.freeze({ rank: 4, displayName: 'Ko-fi Supporter', totalUsd: 10 }),
-  Object.freeze({ rank: 6, displayName: 'Ko-fi Supporter', totalUsd: 5 }),
-  Object.freeze({ rank: 6, displayName: 'greggey', totalUsd: 5 }),
-  Object.freeze({ rank: 6, displayName: 'Timmcd', totalUsd: 5 })
+  Object.freeze({ rank: 4, displayName: 'DimpuMudit', totalUsd: 17 }),
+  Object.freeze({ rank: 5, displayName: 'oOBansh33', totalUsd: 10 }),
+  Object.freeze({ rank: 5, displayName: 'Ko-fi Supporter', totalUsd: 10 }),
+  Object.freeze({ rank: 7, displayName: 'Ko-fi Supporter', totalUsd: 5 }),
+  Object.freeze({ rank: 7, displayName: 'greggey', totalUsd: 5 }),
+  Object.freeze({ rank: 7, displayName: 'Timmcd', totalUsd: 5 })
 ]);
 
 async function seedTemplateVerification(page, expiresAt) {

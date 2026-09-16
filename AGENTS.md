@@ -16,7 +16,7 @@ The app deploys to GitHub Pages under `/custom-passive/`. Keep runtime asset, te
   - `TIER_COSTS` drives tier labels and catalog validation.
 - GameBanana metadata is generated in `src/data/gamebananaSources.generated.js` and adapted by `src/lib/presetTemplates.js` into `REQUIRED_GAMEBANANA_TEMPLATE`, `PRESET_TEMPLATE_IDS`, `PRESET_TEMPLATES`, and `getPresetTemplate()`.
 - Startup template gate:
-  - User uploads/links `templete_06_19.7z`.
+  - User uploads/links `templete_09_17.7z`.
   - Browser verifies SHA-256 against `REQUIRED_GAMEBANANA_TEMPLATE.sha256`.
   - Successful verification is cached for 12 hours under `custom-passive:template-verification:v1`.
 - Build flow:
@@ -141,7 +141,7 @@ No lint script is currently declared.
 
 - Unit/integration tests use Node's built-in `node:test` and `node:assert/strict`.
 - E2E tests use `@playwright/test`; base URL is `http://127.0.0.1:4321/custom-passive/`.
-- Playwright starts `npm run dev -- --host 127.0.0.1`, reuses an existing server outside CI, and expects the local upload fixture at `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/templete_06_19.7z`.
+- Playwright starts `npm run dev -- --host 127.0.0.1`, reuses an existing server outside CI, and expects the local upload fixture at `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/templete_09_17.7z`.
 - Prefer tests using real generated data, real template bytes, real VPK round trips, and real browser downloads. Do not replace these paths with mocks.
 - For UI or browser build changes, run at least:
 

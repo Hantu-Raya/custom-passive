@@ -544,34 +544,45 @@ test('renders the complete donation leaderboard without private CSV fields', asy
   await expect(page.getByTestId('template-gate')).toHaveCount(0);
   const supporterLink = page.getByTestId('supporter-leaderboard-link');
   const supporterItems = page.locator('.catalog-supporter-sequence').first().locator('.catalog-supporter-item');
-  const accessibleLabel = `Leaderboard: ${SUPPORTER_LEADERBOARD
+  const accessibleLabel = `Ko-fi top supporters: ${SUPPORTER_LEADERBOARD
     .map((supporter) => `${supporter.rank} ${supporter.displayName} $${supporter.totalUsd}`)
     .join(', ')}`;
 
+  await expect(page.locator('.catalog-supporter-label')).toHaveText('Top supporters');
   await expect(supporterLink).toHaveAttribute('aria-label', accessibleLabel);
+  await expect(page.locator('.catalog-supporter-track')).toHaveAttribute('aria-hidden', 'true');
   await expect(supporterItems).toHaveCount(SUPPORTER_LEADERBOARD.length);
   expect((await supporterItems.allTextContents()).map((text) => text.replace(/\s+/g, '')))
     .toEqual(SUPPORTER_LEADERBOARD.map((supporter) => `${supporter.rank}${supporter.displayName}$${supporter.totalUsd}`.replace(/\s+/g, '')));
-  expect(await supporterItems.evaluateAll((items) => items.map((item) => Array.from(item.children, (child) => child.tagName))))
-    .toEqual(SUPPORTER_LEADERBOARD.map(() => ['B', 'SPAN', 'STRONG']));
+  expect(await supporterItems.first().locator(':scope > *').evaluateAll((nodes) => nodes.map((node) => node.className)))
+    .toEqual(['catalog-supporter-rank', 'catalog-supporter-name', 'catalog-supporter-amount']);
   await expect(supporterItems.filter({ hasText: 'Ko-fi Supporter' })).toHaveCount(2);
   await expect(page.locator('.catalog-supporter-strip')).not.toContainText(/\bAnonymous\b/i);
+  await expect(page.locator('.catalog-supporter-sequence').nth(1)).toHaveAttribute('aria-hidden', 'true');
+  for (let index = 0; index < 3; index += 1) {
+    await expect(supporterItems.nth(index)).toHaveClass(new RegExp(`catalog-supporter-place-${index + 1}`));
+  }
 });
 
 test('keeps the supporter ticker moving with reduced motion', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await openVitalityShop(page, { width: 1600, height: 1000 });
 
-  const tickerAnimation = await page.locator('.catalog-supporter-track').evaluate((track) => {
+  const ticker = page.locator('.catalog-supporter-track');
+  const readTickerAnimation = () => ticker.evaluate((track) => {
     const style = getComputedStyle(track);
+    const sequence = track.querySelector('.catalog-supporter-sequence');
     return {
       name: style.animationName,
-      duration: style.animationDuration
+      duration: Number.parseFloat(style.animationDuration),
+      expectedDuration: sequence.getBoundingClientRect().width / 36
     };
   });
+  await expect.poll(async () => (await readTickerAnimation()).duration).toBeGreaterThan(4);
+  const tickerAnimation = await readTickerAnimation();
 
   expect(tickerAnimation.name).toBe('catalog-supporter-scroll');
-  expect(tickerAnimation.duration).not.toBe('0s');
+  expect(tickerAnimation.duration).toBeCloseTo(tickerAnimation.expectedDuration, 1);
 });
 
 test('renders active and imbue badges as in-game card strips', async ({ page }) => {

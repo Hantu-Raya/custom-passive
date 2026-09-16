@@ -21,6 +21,17 @@ const SUPPORTERS = Object.freeze([
   Object.freeze({ rank: 7, displayName: 'greggey', totalUsd: 5 }),
   Object.freeze({ rank: 7, displayName: 'Timmcd', totalUsd: 5 })
 ]);
+const SUPPORTER_SPEED_PX_PER_SECOND = 36;
+const MIN_ANIMATION_SECONDS = 4;
+const USD_FORMATTER = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2
+});
+function formatDonation(total) {
+  return USD_FORMATTER.format(total);
+}
 const SHOP_IMAGE_BASE = `${import.meta.env.BASE_URL}assets/deadlock/panorama/images/shop/`;
 const SHOP_ASSET_BASE = `${SHOP_IMAGE_BASE}catalog/`;
 const TAB_ICONS = Object.freeze({
@@ -576,25 +587,45 @@ function SearchBox({ query, onQueryChange }) {
     </div>
   );
 }
-function SupporterSequence({ duplicate = false }) {
+function SupporterSequence({ duplicate = false, sequenceRef = null }) {
   return (
-    <span class="catalog-supporter-sequence" aria-hidden={duplicate ? 'true' : undefined}>
-      {SUPPORTERS.map((supporter) => (
+    <span class="catalog-supporter-sequence" ref={sequenceRef} aria-hidden={duplicate ? 'true' : undefined}>
+      {SUPPORTERS.map((supporter, index) => (
         <span
-          class="catalog-supporter-item"
+          class={`catalog-supporter-item${index < 3 ? ` catalog-supporter-place-${index + 1}` : ''}`}
           key={`${duplicate ? 'duplicate' : 'primary'}-${supporter.rank}-${supporter.displayName}-${supporter.totalUsd}`}
         >
-          <b>{supporter.rank}</b>
-          <span>{supporter.displayName}</span>
-          <strong>${supporter.totalUsd}</strong>
+          <span class="catalog-supporter-rank">{supporter.rank}</span>
+          <span class="catalog-supporter-name">{supporter.displayName}</span>
+          <span class="catalog-supporter-amount">{formatDonation(supporter.totalUsd)}</span>
         </span>
       ))}
     </span>
   );
 }
-
 function CatalogSupportFooter() {
-  const accessibleLabel = `Leaderboard: ${SUPPORTERS.map((supporter) => `${supporter.rank} ${supporter.displayName} $${supporter.totalUsd}`).join(', ')}`;
+  const [duration, setDuration] = useState(MIN_ANIMATION_SECONDS);
+  const sequenceRef = useRef(null);
+
+  useEffect(() => {
+    const sequence = sequenceRef.current;
+    if (!sequence) return undefined;
+    const measureSequence = () => {
+      const width = sequence.getBoundingClientRect().width || sequence.scrollWidth;
+      if (width > 0) setDuration(Math.max(MIN_ANIMATION_SECONDS, width / SUPPORTER_SPEED_PX_PER_SECOND));
+    };
+
+    measureSequence();
+    if ('ResizeObserver' in window) {
+      const observer = new window.ResizeObserver(measureSequence);
+      observer.observe(sequence);
+      return () => observer.disconnect();
+    }
+    window.addEventListener('resize', measureSequence);
+    return () => window.removeEventListener('resize', measureSequence);
+  }, []);
+
+  const accessibleLabel = `Ko-fi top supporters: ${SUPPORTERS.map((supporter) => `${supporter.rank} ${supporter.displayName} ${formatDonation(supporter.totalUsd)}`).join(', ')}`;
 
   return (
     <footer class="catalog-support-footer" aria-label="Support the project">
@@ -603,7 +634,7 @@ function CatalogSupportFooter() {
         <span>Donations fund hosting and release work.</span>
       </span>
       <span class="catalog-supporter-strip">
-        <span class="catalog-supporter-label" aria-hidden="true">Leaderboard</span>
+        <span class="catalog-supporter-label" aria-hidden="true">Top supporters</span>
         <a
           class="catalog-supporter-window"
           href={KOFI_LEADERBOARD_URL}
@@ -612,8 +643,8 @@ function CatalogSupportFooter() {
           aria-label={accessibleLabel}
           data-testid="supporter-leaderboard-link"
         >
-          <span class="catalog-supporter-track" aria-hidden="true">
-            <SupporterSequence />
+          <span class="catalog-supporter-track" aria-hidden="true" style={{ '--catalog-supporter-duration': `${duration}s` }}>
+            <SupporterSequence sequenceRef={sequenceRef} />
             <SupporterSequence duplicate />
           </span>
         </a>

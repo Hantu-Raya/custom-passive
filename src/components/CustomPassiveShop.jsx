@@ -34,17 +34,19 @@ function formatDonation(total) {
 }
 const SHOP_IMAGE_BASE = `${import.meta.env.BASE_URL}assets/deadlock/panorama/images/shop/`;
 const SHOP_ASSET_BASE = `${SHOP_IMAGE_BASE}catalog/`;
+// Deadlock removed these PNGs in the 2026-09-29 update; the last exported copies are kept outside generated assets.
+const STATIC_ASSET_BASE = `${import.meta.env.BASE_URL}assets/static/`;
 const TAB_ICONS = Object.freeze({
   selected: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_builds_psd.webp`,
   weapon: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_weapon_psd.webp`,
   vitality: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_vitality_psd.webp`,
   spirit: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_spirit_psd.webp`,
-  search: `${SHOP_ASSET_BASE}catalog_shop_tab_search_showing_sm_psd.webp`
+  search: `${STATIC_ASSET_BASE}catalog_shop_tab_search_showing_sm_psd.webp`
 });
 const SHOP_BG_TABS = new Set(['weapon', 'vitality', 'spirit']);
 const SHOP_BACKGROUNDS = Object.freeze({
-  generic: `${SHOP_ASSET_BASE}catalog_shop_generic_bg_psd.webp`,
-  selected: `${SHOP_ASSET_BASE}catalog_shop_builds_bg_psd.webp`,
+  generic: `${STATIC_ASSET_BASE}catalog_shop_generic_bg_psd.webp`,
+  selected: `${STATIC_ASSET_BASE}catalog_shop_builds_bg_psd.webp`,
   weapon: `${SHOP_ASSET_BASE}catalog_shop_bg_weapon_psd.webp`,
   vitality: `${SHOP_ASSET_BASE}catalog_shop_bg_vitality_psd.webp`,
   spirit: `${SHOP_ASSET_BASE}catalog_shop_bg_spirit_psd.webp`

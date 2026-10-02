@@ -16,6 +16,7 @@ import { PRESET_TEMPLATES, REQUIRED_GAMEBANANA_TEMPLATE } from '../src/lib/prese
 import { readPassiveFlagSelectedItemIds } from '../src/lib/source2PassiveFlags.js';
 import { uncompressSource2Resource } from '../src/lib/source2BinaryKv3.js';
 import { readVpk } from '../src/lib/vpkReader.js';
+import { injectStockExternalRefs } from './inject-stock-external-refs.mjs';
 
 const ABILITIES_SOURCE = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/abilities.vdata';
 const ABILITIES_PASSIVE_SOURCE = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/abilities2.vdata';
@@ -159,6 +160,7 @@ async function compileTemplate(vdataContent, presetId) {
     fail(`SR2 compiler failed with exit code ${result.code}\n${result.stderr || result.stdout}`);
   }
   if (!existsSync(compiledPath)) fail(`Compiled template not found: ${compiledPath}`);
+  injectStockExternalRefs(compiledPath, sourcePath);
   return new Uint8Array(await readFile(compiledPath));
 }
 

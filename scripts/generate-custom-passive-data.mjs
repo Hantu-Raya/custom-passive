@@ -6,6 +6,7 @@ import { zstdDecompressSync } from 'node:zlib';
 import { BINARY_KV3_BOOLEAN_FALSE } from '../src/lib/passiveFlagTemplate.js';
 import { readPassiveFlagTemplate } from '../src/lib/source2PassiveFlags.js';
 import { uncompressSource2Resource } from '../src/lib/source2BinaryKv3.js';
+import { injectStockExternalRefs } from './inject-stock-external-refs.mjs';
 
 const ABILITIES_SOURCE = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/abilities.vdata';
 const SR2_COMPILER = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/sr2compiler/New folder.exe';
@@ -255,6 +256,7 @@ async function compileTemplate(vdataContent) {
     fail(`SR2 compiler failed with exit code ${result.code}\n${result.stderr || result.stdout}`);
   }
   if (!existsSync(compiledPath)) fail(`Compiled template not found: ${compiledPath}`);
+  injectStockExternalRefs(compiledPath, sourcePath);
   return new Uint8Array(await readFile(compiledPath));
 }
 

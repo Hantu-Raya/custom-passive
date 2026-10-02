@@ -16,7 +16,7 @@ The app deploys to GitHub Pages under `/custom-passive/`. Keep runtime asset, te
   - `TIER_COSTS` drives tier labels and catalog validation.
 - GameBanana metadata is generated in `src/data/gamebananaSources.generated.js` and adapted by `src/lib/presetTemplates.js` into `REQUIRED_GAMEBANANA_TEMPLATE`, `PRESET_TEMPLATE_IDS`, `PRESET_TEMPLATES`, and `getPresetTemplate()`.
 - Startup template gate:
-  - User uploads/links `templete_09_30.7z`.
+  - User uploads/links `templete_10_02.7z`.
   - Browser verifies SHA-256 against `REQUIRED_GAMEBANANA_TEMPLATE.sha256`.
   - Successful verification is cached for 12 hours under `custom-passive:template-verification:v1`.
 - Build flow:
@@ -126,6 +126,7 @@ No lint script is currently declared.
   - `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/.tmp/source2viewer-cli/Source2Viewer-CLI.exe`
   - `ffmpeg` on `PATH` for WebP optimization
 - `generate:data` deletes and repopulates `public/assets/deadlock/`; review generated diffs carefully.
+- Both generators run `scripts/inject-stock-external-refs.mjs` after compiling: it extracts stock `scripts/abilities.vdata_c` from `pak01_dir.vpk` and calls the mods repo's `abilities/scripts/inject_stock_external_refs.py` to copy the stock RERL block (561 icon texture refs). The Dota compiler omits it, which makes icons load on first use in game. Injection fails if the local VData icons no longer match the installed game.
 - GameBanana compatibility is decided by generated MD5/SHA-256 metadata, not filenames alone.
 - `sync:gamebanana` refuses downgrades unless `-- --allow-downgrade`; it can keep the current template with `-- --allow-missing-template` only when intentional.
 
@@ -141,7 +142,7 @@ No lint script is currently declared.
 
 - Unit/integration tests use Node's built-in `node:test` and `node:assert/strict`.
 - E2E tests use `@playwright/test`; base URL is `http://127.0.0.1:4321/custom-passive/`.
-- Playwright starts `npm run dev -- --host 127.0.0.1`, reuses an existing server outside CI, and expects the local upload fixture at `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/templete_09_30.7z`.
+- Playwright starts `npm run dev -- --host 127.0.0.1`, reuses an existing server outside CI, and expects the local upload fixture at `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/templete_10_02.7z`.
 - Prefer tests using real generated data, real template bytes, real VPK round trips, and real browser downloads. Do not replace these paths with mocks.
 - For UI or browser build changes, run at least:
 

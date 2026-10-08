@@ -9,7 +9,8 @@ import { uncompressSource2Resource } from '../src/lib/source2BinaryKv3.js';
 import { readVpk } from '../src/lib/vpkReader.js';
 
 const ITEM_IDS = DEADLOCK_ITEMS.map((item) => item.id);
-const REQUIRED_TEMPLATE_UPLOAD = `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/${REQUIRED_GAMEBANANA_TEMPLATE.fileName}`;
+const REQUIRED_TEMPLATE_UPLOAD = process.env.CUSTOM_PASSIVE_TEMPLATE_ARCHIVE
+  || `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/${REQUIRED_GAMEBANANA_TEMPLATE.fileName}`;
 const TEMPLATE_VERIFICATION_STORAGE_KEY = 'custom-passive:template-verification:v1';
 const SELECTED_ITEMS_STORAGE_KEY = 'custom-passive:selected-items:v2';
 const TEMPLATE_VERIFICATION_TTL_MS = 12 * 60 * 60 * 1000;

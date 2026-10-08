@@ -1,161 +1,107 @@
-# Repository Guidelines
+# Custom Passive Builder
 
-## Project Overview
+## Scope
 
-`custom-passive` is a static Astro + Preact app for Deadlock passive-item modding. Users verify the required GameBanana template archive, choose a preset, select shop items, and download a browser-built `.7z` containing a VPK with patched `scripts/abilities.vdata_c`. Archive processing stays local in the browser; there is no server runtime.
+`custom-passive` is a static Astro + Preact app (<https://hantu-raya.github.io/custom-passive/>) for the GameBanana mod "Always Show Passive Items and Actives Icons" (mod 601444). Users verify the required GameBanana template archive, choose a preset, select shop items, and download a browser-built `.7z` containing one VPK with a patched `scripts/abilities.vdata_c`. Archive processing stays in the browser; there is no server runtime. Keep it that way: no server-only dependencies for build or download behavior.
 
-The app deploys to GitHub Pages under `/custom-passive/`. Keep runtime asset, template, WASM, and Playwright URLs base-path safe.
+The app deploys to GitHub Pages under `/custom-passive/`. Every runtime asset, template, WASM and Playwright URL must stay base-path safe.
 
-## Architecture & Data Flow
+Upstream ownership: the four GameBanana archives come from `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/build_abilities_paks.ps1` (see that repo's `abilities/AGENTS.md`). This repo's generators compile from that repo's VData baselines and transform scripts, so a transform change there makes the generated templates disagree with the published archives until they are rebuilt, uploaded and synced here.
 
-- `src/pages/index.astro` imports `src/styles/global.css` and hydrates `src/components/CustomPassiveShop.jsx` with `client:load`.
-- `CustomPassiveShop.jsx` owns UI state: selected item IDs, active tab/search, preset mode, template gate, status strings, and predictive hover.
-- Generated item data comes from `src/data/deadlockItems.generated.js`:
-  - `DEADLOCK_ITEMS` drives catalog rendering, search, tabs, icons, costs, and activation badges.
-  - `PASSIVE_FLAG_TYPE_OFFSETS` maps item IDs to Binary KV3 passive-flag offsets.
-  - `TIER_COSTS` drives tier labels and catalog validation.
-- GameBanana metadata is generated in `src/data/gamebananaSources.generated.js` and adapted by `src/lib/presetTemplates.js` into `REQUIRED_GAMEBANANA_TEMPLATE`, `PRESET_TEMPLATE_IDS`, `PRESET_TEMPLATES`, and `getPresetTemplate()`.
-- Startup template gate:
-  - User uploads/links `templete_10_07.7z`.
-  - Browser verifies SHA-256 against `REQUIRED_GAMEBANANA_TEMPLATE.sha256`.
-  - Successful verification is cached for 12 hours under `custom-passive:template-verification:v1`.
-- Build flow:
-  1. Selected preset identifies a public binary template in `public/templates/gamebanana/**/scripts/abilities.vdata_c.template`.
-  2. `loadTemplateBytes()` fetches `${import.meta.env.BASE_URL}${templatePath}` and verifies template SHA-256.
-  3. `source2PassiveFlags.js` scans current Source 2/Binary KV3 bytes and `assertCompletePassiveFlagOffsets()` rejects incomplete templates.
-  4. `passiveFlagTemplate.js` copies template bytes, resets all known flags false, then sets selected IDs true.
-  5. `source2ResourceCompression.js` zstd-compresses Binary KV3 buffers and updates Source 2 compressed-size fields.
-  6. `vpkWriter.js` writes a browser-safe VPK v2 with `scripts/abilities.vdata_c`.
-  7. `archiveWriter.js` wraps the VPK in a `.7z` via `7z-wasm`; `download.js` triggers the download.
-- Presets only change selected IDs and output template; all shop items remain available.
+| Preset id | GameBanana archive | VPK member | Source transform |
+|-----------|--------------------|------------|------------------|
+| required template | `templete_MM_DD.7z` (spelling intentional) | `pak02_dir.vpk` | none |
+| `passive-only` | `filter_for_passive_items_MM_DD.7z` | `pak04_dir.vpk` | `passive.py` on `abilities2.vdata` |
+| `passive-and-active` | `filter_for_passive_and_active_items_yesbehaviour_MM_DD.7z` | `pak03_dir.vpk` | `active.py` |
+| `passive-and-active-no-behavior` | `filter_for_passive_and_active_items_MM_DD.7z` | `pak05_dir.vpk` | `active_no_behavior.py` |
 
-## Key Directories
+Presets only change the selected IDs and output template; every shop item stays available.
 
-- `src/pages/` — Astro page entrypoints. Current shell: `index.astro`.
-- `src/components/` — Preact UI. `CustomPassiveShop.jsx` owns app state, template gate, tabs, selection, predictive hover, build/download actions, and stable E2E selectors.
-- `src/lib/` — browser-safe binary/package primitives: Source 2 parsing, passive flag patching, zstd compression, VPK read/write, 7z extract/write, filename sanitizing, and download helper.
-- `src/data/` — generated item catalog, passive offsets, tier costs, and GameBanana metadata. Do not hand-edit generated files.
-- `src/styles/` — global CSS for the build panel, modal gate, catalog boards, item cards, hover animation, responsive layout, and reduced-motion rules.
-- `scripts/` — local generation and GameBanana sync pipelines.
-- `public/templates/` — generated preset Binary KV3 templates fetched by the browser at build time.
-- `public/assets/deadlock/` — generated/pruned Deadlock WebP shop and item assets.
-- `test/` — Node `node:test` unit/integration tests and binary fixtures.
-- `e2e/` — Playwright browser tests.
-- `.github/workflows/` — GitHub Pages deployment workflow.
+## Source ownership
 
-## Development Commands
-
-Use npm; `package-lock.json` is lockfile version 3.
-
-```bash
-npm install
-npm run dev                         # Astro dev server
-npm run dev -- --host 127.0.0.1     # Dev server used by Playwright
-npm run build                       # Static Astro build to dist/
-npm run preview                     # Preview built output
-npm test                            # Node unit/integration tests
-npm run test:e2e                    # Playwright E2E tests
-npm run check                       # generate:data + generate:presets + tests + build + E2E
+```text
+src/pages/index.astro (imports src/styles/global.css)
+  -> src/components/CustomPassiveShop.jsx (client:load)
+       -> src/data/deadlockItems.generated.js
+       -> src/lib/presetTemplates.js <- src/data/gamebananaSources.generated.js
+       -> src/lib/packageBuilder.js
+            -> source2PassiveFlags.js -> passiveFlagTemplate.js
+            -> source2ResourceCompression.js -> vpkWriter.js -> archiveWriter.js -> download.js
 ```
 
-Generation and sync commands:
+- `CustomPassiveShop.jsx` owns UI state: selected item IDs, active tab/search, preset mode, template gate, status strings, predictive hover, and build/download actions.
+- `deadlockItems.generated.js` provides `DEADLOCK_ITEMS` (catalog, search, tabs, icons, costs, activation badges), `PASSIVE_FLAG_TYPE_OFFSETS` (item ID → Binary KV3 passive-flag offset), and `TIER_COSTS`.
+- `presetTemplates.js` adapts generated GameBanana metadata into `REQUIRED_GAMEBANANA_TEMPLATE` (including `downloadPageUrl`, `https://gamebanana.com/mods/download/601444#FileInfo_<fileId>`), `PRESET_TEMPLATE_IDS`, `PRESET_TEMPLATES` and `getPresetTemplate()`.
+- `packageBuilder.js` loads templates and verifies their SHA-256, then assembles the package payload.
+- `source2BinaryKv3.js` parses and rebuilds Source 2 resources; `source2PassiveFlags.js` scans passive-flag offsets; `passiveFlagTemplate.js` patches and reads flag bytes.
+- `vpkWriter.js`/`vpkReader.js` write and read browser-safe VPK v2. `archiveWriter.js`/`archiveExtractor.js`/`sevenZipWasm.js` wrap `7z-wasm` and depend on `public/7zz.wasm`.
+- `scripts/generate-custom-passive-data.mjs` is the authoritative catalog, default test template and WebP asset generator. `scripts/generate-preset-templates.mjs` generates the preset templates and verifies archive selections. `scripts/sync-gamebanana-mod.mjs` syncs GameBanana metadata. `scripts/inject-stock-external-refs.mjs` restores the stock RERL block after each compile.
 
-```bash
-npm run generate:data               # Regenerate catalog, offsets, default test fixture, WebP assets
-npm run generate:presets            # Regenerate public GameBanana preset templates
-npm run sync:gamebanana             # Sync GameBanana metadata/templates from API
-```
+## Template gate and build flow
 
-No lint script is currently declared.
+- Startup gate: the user uploads or links the required template (currently `templete_10_07.7z`). The browser checks its SHA-256 against `REQUIRED_GAMEBANANA_TEMPLATE.sha256` and caches success for 12 hours under `custom-passive:template-verification:v1`. The gate and build-panel links open `downloadPageUrl`, not the mod page.
+- Build: the selected preset names a public binary template in `public/templates/gamebanana/**/scripts/abilities.vdata_c.template`.
+  1. `loadTemplateBytes()` fetches `${import.meta.env.BASE_URL}${templatePath}` and verifies its SHA-256. Preset templates download only when the user clicks Build.
+  2. `source2PassiveFlags.js` scans the Binary KV3 bytes; `assertCompletePassiveFlagOffsets()` rejects incomplete templates.
+  3. `passiveFlagTemplate.js` copies the bytes, resets every known flag to false, then sets the selected IDs true.
+  4. `source2ResourceCompression.js` zstd-compresses Binary KV3 buffers and updates the Source 2 compressed-size fields.
+  5. `vpkWriter.js` writes a VPK v2 with `scripts/abilities.vdata_c`; `archiveWriter.js` wraps it in a `.7z`; `download.js` triggers the download.
 
-## Code Conventions & Common Patterns
+## Runtime rules
 
-- ESM only: `package.json` sets `type: module`; scripts/configs use `.mjs`.
-- Preact hooks come from `preact/hooks`. Keep hooks at component/custom-hook top level.
+- ESM only (`type: module`; scripts and configs use `.mjs`). Use Node and npm, not Bun; Node 22.12+ locally, Node 22 in CI.
+- Preact hooks come from `preact/hooks` and stay at component/custom-hook top level.
 - Store selected IDs as immutable `Set` updates; persist sorted arrays under `custom-passive:selected-items:v2`.
-- Guard browser-only APIs during static evaluation: `typeof window === 'undefined'`, `typeof document === 'undefined'`, optional `import.meta.env` access.
-- Prefix public runtime paths with `import.meta.env.BASE_URL`. Never hard-code root `/` for app assets/templates because deployment base is `/custom-passive/`.
-- Keep generated metadata frozen with `Object.freeze`; update generators instead of generated data by hand.
-- Surface user-facing failures through status text and clear `Error` messages at binary, fetch, archive, template, and validation boundaries.
-- Binary code uses `Uint8Array` and `DataView` with little-endian reads/writes. Patch copies; do not mutate source template bytes.
-- Browser build path must stay browser-safe. Do not import native compiler/tool scripts into browser-reachable files.
-- Heavy browser build modules are loaded lazily (`vpkWriter.js`, `archiveWriter.js`, `7z-wasm`); zstd/xxhash init is promise-cached.
-- Stable selectors used by E2E include `template-gate`, `template-gate-preset`, `template-gate-file`, `preset-template-select`, `selected-count`, `build-download`, `tab-*`, `search-input`, and `item-card-${item.id}`.
-- CSS class names are behavior-coupled: `is-predicted-hover`, `is-item-hovered`, `is-hover-related`, `item-hover-frame`, `catalog-board`, and `catalog-list-board` are tested/styled contracts.
+- Guard browser-only APIs during static evaluation (`typeof window`/`typeof document`, optional `import.meta.env`).
+- Prefix runtime paths with `import.meta.env.BASE_URL`; never hard-code `/`. Keep `public/7zz.wasm` and `public/zstd.wasm` at the base root.
+- Binary code uses `Uint8Array`/`DataView` little-endian reads and writes, patches copies, and never mutates source template bytes.
+- Browser-reachable files must not import native compiler or tool scripts. Load heavy modules lazily (`vpkWriter.js`, `archiveWriter.js`, `7z-wasm`); zstd/xxhash init is promise-cached.
+- Surface user-facing failures through status text and clear `Error` messages at binary, fetch, archive, template and validation boundaries.
+- Stable E2E selectors: `template-gate`, `template-gate-preset`, `template-gate-file`, `template-gate-link`, `gamebanana-template-link`, `preset-template-select`, `selected-count`, `build-download`, `tab-*`, `search-input`, `item-card-${item.id}`.
+- Behavior-coupled CSS classes: `is-predicted-hover`, `is-item-hovered`, `is-hover-related`, `item-hover-frame`, `catalog-board`, `catalog-list-board`.
+- GameBanana compatibility is decided by generated MD5/SHA-256 metadata, never filenames.
 
-## Important Files
+## Supporter leaderboard
 
-- `package.json` — npm scripts and dependencies.
-- `astro.config.mjs` — GitHub Pages `site`, `/custom-passive/` base, Preact integration, and Vite alias for `module` to `src/lib/nodeModuleShim.js`.
-- `playwright.config.mjs` — E2E base URL and dev-server command.
-- `.github/workflows/deploy.yml` — Pages CI: `npm ci`, `npm run sync:gamebanana`, `npm test`, `npm run build`, upload `dist/`, deploy.
-- `src/pages/index.astro` — app HTML shell.
-- `src/components/CustomPassiveShop.jsx` — main UI and browser build orchestration.
-- `src/styles/global.css` — global layout, Deadlock styling, card proportions, hover states, breakpoints.
-- `src/data/deadlockItems.generated.js` — generated catalog and passive offsets.
-- `src/data/gamebananaSources.generated.js` — generated GameBanana source metadata, checksums, preset selected IDs, and template paths.
-- `src/lib/presetTemplates.js` — runtime preset/template metadata adapter.
-- `src/lib/packageBuilder.js` — template loading/SHA verification and package payload assembly.
-- `src/lib/passiveFlagTemplate.js` — byte-level passive flag patcher/reader.
-- `src/lib/source2BinaryKv3.js` — Source 2 resource and Binary KV3 parsing/rebuild helpers.
-- `src/lib/source2PassiveFlags.js` — Source 2/Binary KV3 passive-flag offset scanner.
-- `src/lib/source2ResourceCompression.js` — zstd Binary KV3 compressor and Source 2 size-field updater.
-- `src/lib/vpkWriter.js` / `src/lib/vpkReader.js` — browser-safe VPK v2 writer/reader.
-- `src/lib/archiveWriter.js` / `src/lib/archiveExtractor.js` / `src/lib/sevenZipWasm.js` — `7z-wasm` wrappers; depend on `public/7zz.wasm`.
-- `scripts/generate-custom-passive-data.mjs` — authoritative catalog/default-template/asset generator.
-- `scripts/generate-preset-templates.mjs` — preset template generator and archive selection verifier.
-- `scripts/sync-gamebanana-mod.mjs` — GameBanana API sync and static metadata/template updater.
-- `test/fixtures/templates/custom_passive/scripts/abilities.vdata_c.template` — generated default Binary KV3 fixture for tests.
-- `public/templates/gamebanana/*/scripts/abilities.vdata_c.template` — generated preset templates fetched by the app.
-- `e2e/custom-passive.spec.js` — browser/download/layout/hover/template coverage.
+- Treat the user-provided Ko-fi supporters CSV as authoritative for each update and include every row. Show blank, `Anonymous` and equivalent names as `Ko-fi Supporter`.
+- Sort by descending `Total`; equal totals share a competition rank and keep CSV order.
+- Publish only rank, display name and total USD. Keep every other CSV field out of source, tests, build output and browser output.
+- Update the exact E2E leaderboard expectations, verify the built footer, and confirm the deployed Pages result.
 
-## Runtime/Tooling Preferences
+## Source and generated files
 
-- Use Node and npm, not Bun. README states Node 22.12+ for local development; CI uses Node 22.
-- The app is static after build. Do not add server-only runtime dependencies for build/download behavior.
-- Keep `public/7zz.wasm` and `public/zstd.wasm` served from the Astro base root.
-- `generate:data` and `generate:presets` assume Windows/local Deadlock tooling paths, including:
-  - `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/abilities.vdata`
-  - `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/abilities2.vdata`
-  - `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/sr2compiler/New folder.exe`
-  - `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/passive.py`
-  - `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/active.py`
-  - `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/active_no_behavior.py`
-  - `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/pak01_dir.vpk`
-  - `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/*.7z`
-  - `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/.tmp/source2viewer-cli/Source2Viewer-CLI.exe`
-  - `ffmpeg` on `PATH` for WebP optimization
-- `generate:data` deletes and repopulates `public/assets/deadlock/`; review generated diffs carefully.
-- Both generators run `scripts/inject-stock-external-refs.mjs` after compiling: it extracts stock `scripts/abilities.vdata_c` from `pak01_dir.vpk` and calls the mods repo's `abilities/scripts/inject_stock_external_refs.py` to copy the stock RERL block (561 icon texture refs). The Dota compiler omits it, which makes icons load on first use in game. Injection fails if the local VData icons no longer match the installed game.
-- GameBanana compatibility is decided by generated MD5/SHA-256 metadata, not filenames alone.
-- `sync:gamebanana` refuses downgrades unless `-- --allow-downgrade`; it can keep the current template with `-- --allow-missing-template` only when intentional.
+Edit `src/components/`, `src/lib/`, `src/pages/`, `src/styles/`, `scripts/`, `test/` and `e2e/`. Never hand-edit `src/data/*.generated.js`, `public/templates/`, `public/assets/deadlock/` or `test/fixtures/templates/`; change the generators instead. Generated metadata stays `Object.freeze`d. `generate:data` deletes and repopulates `public/assets/deadlock/`, so review its diff.
 
-## Supporter Leaderboard
+Never copy a GameBanana filter or template VData into `public/templates/`: newer archives can omit passive-flag fields, so templates are always rebuilt from the current local sources.
 
-- Treat the user-provided Ko-fi supporters CSV as authoritative for each leaderboard update.
-- Include every CSV row. Display blank, `Anonymous`, and equivalent anonymous names as `Ko-fi Supporter`.
-- Sort by descending `Total`. Equal totals share a competition rank; preserve CSV row order within ties.
-- Publish only the derived rank, display name, and total USD. Keep every other CSV field out of source, tests, build output, and browser output.
-- Update exact E2E leaderboard expectations, verify the built footer, and confirm the deployed Pages result.
+The nested `custom-passive/` directory is a gitignored stale copy; do not edit or grep it as source.
 
-## Testing & QA
+Generators assume these local paths:
 
-- Unit/integration tests use Node's built-in `node:test` and `node:assert/strict`.
-- E2E tests use `@playwright/test`; base URL is `http://127.0.0.1:4321/custom-passive/`.
-- Playwright starts `npm run dev -- --host 127.0.0.1`, reuses an existing server outside CI, and expects the local upload fixture at `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/templete_10_07.7z`.
-- Prefer tests using real generated data, real template bytes, real VPK round trips, and real browser downloads. Do not replace these paths with mocks.
-- For UI or browser build changes, run at least:
+- `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/abilities.vdata`, `abilities2.vdata`, `passive.py`, `active.py`, `active_no_behavior.py`, `inject_stock_external_refs.py`
+- `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/sr2compiler/New folder.exe`
+- `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/.tmp/source2viewer-cli/Source2Viewer-CLI.exe`
+- `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/pak01_dir.vpk`
+- the four current GameBanana archives in `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/` under their GameBanana filenames
+- `ffmpeg` on `PATH` for WebP optimization
+
+## Verification
 
 ```bash
-npm test
+npm test          # node:test unit/integration
 npm run build
-npm run test:e2e
+npm run test:e2e  # Playwright, http://127.0.0.1:4321/custom-passive/
+npm run check     # generate:data + generate:presets + test + build + test:e2e
 ```
 
-- For generator/template/catalog changes, run the full local pipeline when required Deadlock/tool paths exist:
+UI or browser-build changes need at least `npm test`, `npm run build` and `npm run test:e2e`. Generator, template or catalog changes need `npm run check`. Playwright starts `npm run dev -- --host 127.0.0.1`, reuses an existing server outside CI, and uploads `addons/${REQUIRED_GAMEBANANA_TEMPLATE.fileName}`, so that archive must be present.
 
-```bash
-npm run check
-```
+Prefer real generated data, real template bytes, real VPK round trips and real browser downloads; do not replace them with mocks. Tests use `node:test` with `node:assert/strict` and `@playwright/test`.
 
-- Existing coverage includes catalog shape, passive byte patching, preset metadata and SHA checks, Source 2 offset scanning, package building, VPK round trip, archive import/export, browser path safety, CSS regressions, template gate TTL, downloads, search/tabs, hover prediction/dimming, layout, badges, card proportions, and debug-control absence.
+### Release checklist (new GameBanana batch)
+
+- **Sync first.** `npm run sync:gamebanana` verifies archive MD5s, computes SHA-256 locally and writes metadata. It refuses downgrades unless `-- --allow-downgrade`, and keeps the current template with `-- --allow-missing-template` only when intended.
+- **Put all four archives in `addons/`** under their GameBanana names and check their MD5s against `gamebananaSources.generated.js` (download with `https://gamebanana.com/dl/<fileId>`).
+- **Mods repo must match the upload.** `generate:presets` verifies the selections against the GameBanana archives using the mods repo's current scripts. If that fails, the local transforms have moved past the published batch: rebuild and upload first, or use `-- --template-archive <path> --skip-source-archive-verification` only when deliberately shipping ahead of the archives.
+- **Run `npm run check`** and commit the generated metadata, templates, fixture and assets together. Running the generators twice should produce no diff.
+- **Deploy manually.** Pages deployment is `workflow_dispatch` only (`gh workflow run deploy.yml -R Hantu-Raya/custom-passive`); pushing does not publish. CI syncs with `-- --allow-stale-metadata`, which keeps the last verified data if GameBanana is unreachable; never use it for a manual update.

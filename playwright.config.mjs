@@ -12,7 +12,7 @@ export default defineConfig({
   projects: [
     {
       name: 'e2e',
-      testMatch: 'custom-passive.spec.js'
+      testMatch: /(custom-passive|categoryBoards)\.spec\.js$/
     },
     {
       name: 'visual',

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { DEADLOCK_ITEMS, TIER_COSTS } from '../data/deadlockItems.generated.js';
+import { SHOP_LAYOUT } from '../data/shopLayout.generated.js';
 import { downloadBytes } from '../lib/download.js';
 import { buildCompressedCustomPassivePackage, loadTemplateBytes, sha256Hex } from '../lib/packageBuilder.js';
 import { assertCompletePassiveFlagOffsets, readPassiveFlagTemplate } from '../lib/source2PassiveFlags.js';
@@ -70,35 +71,43 @@ const SHOP_ITEM_IDS_BY_CATEGORY = Object.freeze(Object.fromEntries(
   ])
 ));
 const CATEGORY_LABELS = Object.freeze({ selected: 'Selected', weapon: 'Weapon', vitality: 'Vitality', spirit: 'Spirit', search: 'Search all' });
-const TIER_COLUMNS = Object.freeze({
-  generic: { 1: 5, 2: 6, 3: 7, 4: 4 },
-  weapon: { 1: 5, 2: 6, 3: 7, 4: 4 },
-  vitality: { 1: 5, 2: 6, 3: 5, 4: 6 },
-  spirit: { 1: 5, 2: 6, 3: 5, 4: 6 }
+export const CATEGORY_TIER_COLUMNS = Object.freeze({
+  weapon: Object.freeze({ 1: 5, 2: 6, 3: 7, 4: 4 }),
+  spirit: Object.freeze({ 1: 5, 2: 6, 3: 5, 4: 6 }),
+  vitality: Object.freeze({ 1: 5, 2: 6, 3: 5, 4: 6 })
 });
-const WEAPON_GUIDE_BOXES = Object.freeze({
-  1: Object.freeze({ left: 4.6, top: 20.0, width: 40.2, height: 27.9 }),
-  2: Object.freeze({ left: 48.5, top: 6.5, width: 47.2, height: 41.6 }),
-  3: Object.freeze({ left: 4.6, top: 55.7, width: 54.8, height: 42.9 }),
-  4: Object.freeze({ left: 63.6, top: 55.6, width: 31.8, height: 46.9 })
+// Stock citadel_hud_hero_shop.css (#ShopModsContainer/.ShopNavigationTab)
+// and citadel_shop_mods_filtered.css (.ModList/.CostLabel). Category art
+// already contains the blank sticker shapes; only the teal prices are drawn.
+const CATEGORY_BOARD_STOCK = Object.freeze({
+  navWidth: 75,
+  containerMarginRight: 20,
+  rightTierMarginLeft: 20,
+  listPaddingX: 11,
+  listPaddingY: 6,
+  listMarginY: 3,
+  tierPaddingY: 10,
+  labelPaddingTop: 30,
+  labelMarginTop: 4,
+  labelMarginBottom: -20,
+  labelWidth: 80,
+  labelFontSizes: Object.freeze({ 1: 24, 2: 26, 3: 28, 4: 28 })
 });
-const VITALITY_GUIDE_BOXES = Object.freeze({
-  1: Object.freeze({ left: 4.6, top: 19.5, width: 39.8, height: 28.9 }),
-  2: Object.freeze({ left: 48.8, top: 6.4, width: 47.4, height: 44.0 }),
-  3: Object.freeze({ left: 5.2, top: 55.4, width: 40.4, height: 41.8 }),
-  4: Object.freeze({ left: 48.8, top: 55.4, width: 47.5, height: 41.8 })
+const CATEGORY_BOARD_WIDTH = SHOP_LAYOUT.mainPanel.width - CATEGORY_BOARD_STOCK.navWidth - CATEGORY_BOARD_STOCK.containerMarginRight;
+const stockBoardLength = (value) => `calc(${value} * var(--shop-unit))`;
+const CATALOG_BOARD_SCALE = Object.freeze({
+  '--category-board-aspect': CATEGORY_BOARD_WIDTH / SHOP_LAYOUT.mainPanel.height,
+  '--shop-card-scale': SHOP_LAYOUT.mod.width / CATEGORY_BOARD_WIDTH,
+  '--shop-card-aspect': `${SHOP_LAYOUT.mod.width} / ${SHOP_LAYOUT.mod.height}`
 });
-const SPIRIT_GUIDE_BOXES = Object.freeze({
-  1: Object.freeze({ left: 4.8, top: 19.5, width: 41.7, height: 28.0 }),
-  2: Object.freeze({ left: 48.8, top: 5.9, width: 47.4, height: 40.9 }),
-  3: Object.freeze({ left: 4.9, top: 55.5, width: 39.5, height: 41.6 }),
-  4: Object.freeze({ left: 48.8, top: 55.4, width: 47.8, height: 41.9 })
-});
-const DEFAULT_GUIDE_BOXES = Object.freeze({
-  generic: WEAPON_GUIDE_BOXES,
-  weapon: WEAPON_GUIDE_BOXES,
-  vitality: VITALITY_GUIDE_BOXES,
-  spirit: SPIRIT_GUIDE_BOXES
+const CATEGORY_BOARD_STYLE = Object.freeze({
+  ...CATALOG_BOARD_SCALE,
+  '--shop-unit': `calc(100cqw / ${CATEGORY_BOARD_WIDTH})`,
+  '--shop-card-width': stockBoardLength(SHOP_LAYOUT.mod.width),
+  '--shop-card-height': stockBoardLength(SHOP_LAYOUT.mod.height),
+  // Use the stock 3px margin once between cells, with the verified wrap counts.
+  '--shop-grid-gap': stockBoardLength(SHOP_LAYOUT.mod.margin),
+  '--tier-label-width': stockBoardLength(CATEGORY_BOARD_STOCK.labelWidth)
 });
 const VALID_ITEM_IDS = new Set(DEADLOCK_ITEMS.map((item) => item.id));
 const DUAL_BADGE_ITEM_IDS = new Set(['upgrade_ability_power_shard']);
@@ -359,16 +368,24 @@ function createTierMap() {
   return new Map([1, 2, 3, 4].map((tier) => [tier, []]));
 }
 
-function defaultGuideBoxesFor(category) {
-  return DEFAULT_GUIDE_BOXES[category] || DEFAULT_GUIDE_BOXES.generic;
-}
-
-function guideBoxStyle(box) {
+function categoryTierStyle(category, tier) {
+  const region = SHOP_LAYOUT.categoryTiers[category][tier];
+  const { costLabel } = region;
+  const fontSize = CATEGORY_BOARD_STOCK.labelFontSizes[tier];
+  const labelHeight = fontSize + CATEGORY_BOARD_STOCK.labelPaddingTop
+    + CATEGORY_BOARD_STOCK.labelMarginTop + CATEGORY_BOARD_STOCK.labelMarginBottom;
   return {
-    left: `${box.left}%`,
-    top: `${box.top}%`,
-    width: `${box.width}%`,
-    height: `${box.height}%`
+    left: stockBoardLength(SHOP_LAYOUT.modTiersMargin.left + region.x + (tier % 2 === 0 ? CATEGORY_BOARD_STOCK.rightTierMarginLeft : 0)),
+    top: stockBoardLength(SHOP_LAYOUT.modTiersMargin.top + region.y),
+    width: stockBoardLength(region.width),
+    '--tier-columns': CATEGORY_TIER_COLUMNS[category][tier],
+    '--tier-grid-left': stockBoardLength(CATEGORY_BOARD_STOCK.listPaddingX + SHOP_LAYOUT.mod.margin),
+    '--tier-grid-top': stockBoardLength(labelHeight + costLabel.marginTop + costLabel.marginBottom
+      + CATEGORY_BOARD_STOCK.listMarginY + CATEGORY_BOARD_STOCK.listPaddingY
+      + CATEGORY_BOARD_STOCK.tierPaddingY + SHOP_LAYOUT.mod.margin),
+    '--tier-price-left': stockBoardLength(costLabel.marginLeft),
+    '--tier-price-top': stockBoardLength(costLabel.marginTop + CATEGORY_BOARD_STOCK.labelPaddingTop),
+    '--tier-price-font-size': stockBoardLength(fontSize)
   };
 }
 
@@ -857,13 +874,16 @@ function TemplateGate({
   );
 }
 
-function TierSection({ tier, columns, box, slots, selectedIds, predictedHoverItemId, relatedHoverIds, onToggle }) {
+function TierSection({ category, tier, slots, selectedIds, predictedHoverItemId, relatedHoverIds, onToggle }) {
   const visibleCount = countVisibleSlots(slots);
   return (
-    <section class="tier-section" aria-labelledby={`tier-${tier}`} style={{ '--tier-columns': columns, ...guideBoxStyle(box) }}>
+    <section class="tier-section" data-tier={tier} aria-labelledby={`tier-${tier}`} style={categoryTierStyle(category, tier)}>
       <div class="tier-heading">
         <h2 id={`tier-${tier}`}>${TIER_COSTS[tier].toLocaleString()} TIER {tier}</h2>
         <span>{visibleCount} item{visibleCount === 1 ? '' : 's'}</span>
+      </div>
+      <div class="tier-price">
+        <span class="tier-price-label">{TIER_COSTS[tier]}</span>
       </div>
       {visibleCount > 0 ? (
         <div class="item-grid">
@@ -1231,8 +1251,6 @@ export default function CustomPassiveShop() {
 
   const isCategoryTab = SHOP_BG_TABS.has(activeTab);
   const catalogBackground = isCategoryTab ? activeTab : 'generic';
-  const tierColumns = TIER_COLUMNS[catalogBackground];
-  const guideBoxes = useMemo(() => defaultGuideBoxesFor(catalogBackground), [catalogBackground]);
   const relatedHoverIds = useMemo(() => RELATED_ITEM_IDS_BY_ID.get(predictedHoverItemId) || new Set(), [predictedHoverItemId]);
   const isTemplateReady = templateState.status === 'ready' && !templateGateOpen;
   useEffect(() => {
@@ -1267,15 +1285,15 @@ export default function CustomPassiveShop() {
         <ShopTabs activeTab={activeTab} onTabChange={changeTab} />
         <div class={`catalog-content ${isCategoryTab ? '' : 'catalog-content-list'}`}>
           {isCategoryTab ? (
-            <div key={`board-${catalogBackground}`} class={`catalog-board catalog-board-${catalogBackground}`} style={{ '--catalog-bg': `url("${SHOP_BACKGROUNDS[catalogBackground]}")` }}>
+            <div key={`board-${catalogBackground}`} class={`catalog-board catalog-board-${catalogBackground}`} style={{ ...CATEGORY_BOARD_STYLE, '--catalog-bg': `url("${SHOP_BACKGROUNDS[catalogBackground]}")` }}>
               <div class="tiers">
                 {[1, 2, 3, 4].map((tier) => (
-                  <TierSection key={tier} tier={tier} columns={tierColumns[tier]} box={guideBoxes[tier]} slots={itemsByTier.get(tier)} selectedIds={selectedIds} predictedHoverItemId={predictedHoverItemId} relatedHoverIds={relatedHoverIds} onToggle={toggleItem} />
+                  <TierSection key={tier} category={catalogBackground} tier={tier} slots={itemsByTier.get(tier)} selectedIds={selectedIds} predictedHoverItemId={predictedHoverItemId} relatedHoverIds={relatedHoverIds} onToggle={toggleItem} />
                 ))}
               </div>
             </div>
           ) : (
-            <div key={`list-${activeTab}`} class={`catalog-list-board catalog-list-board-${activeTab}`} style={{ '--catalog-selected-bg': `url("${SHOP_BACKGROUNDS.selected}")` }}>
+            <div key={`list-${activeTab}`} class={`catalog-list-board catalog-list-board-${activeTab}`} style={{ ...CATALOG_BOARD_SCALE, '--catalog-selected-bg': `url("${SHOP_BACKGROUNDS.selected}")` }}>
               {activeTab === 'search' && <SearchBox query={query} onQueryChange={updateQuery} />}
               <div class="list-tiers">
                 {[1, 2, 3, 4].map((tier) => (

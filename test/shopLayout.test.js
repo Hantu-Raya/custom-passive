@@ -116,3 +116,30 @@ test('catalog stats ids match the recorded API and are unique unsigned 32-bit in
     statsIds.add(item.statsId);
   }
 });
+
+test('verified category columns match reference first rows and wrap every catalog item', () => {
+  // JSX cannot be imported by node:test; mirror CATEGORY_TIER_COLUMNS here
+  // and verify the table against independently captured in-game icons.
+  const columns = {
+    weapon: { 1: 5, 2: 6, 3: 7, 4: 4 },
+    spirit: { 1: 5, 2: 6, 3: 5, 4: 6 },
+    vitality: { 1: 5, 2: 6, 3: 5, 4: 6 }
+  };
+  const anchors = JSON.parse(readFileSync(new URL('../e2e/fixtures/shop-reference-anchors.json', import.meta.url), 'utf8'));
+  for (const [category, tiers] of Object.entries(columns)) {
+    const capture = anchors.captures[`tab_${category}`];
+    for (const tier of [1, 2, 3, 4]) {
+      const items = DEADLOCK_ITEMS.filter((item) => item.category === category && item.tier === tier);
+      const itemIds = new Set(items.map((item) => item.id));
+      const firstRow = capture.cards.filter((card) => itemIds.has(card.id)
+        && Math.abs(card.y - capture.tiers[tier].firstCard.y) <= 20);
+      assert.equal(firstRow.length, tiers[tier], `${category} tier ${tier}: reference columns`);
+      const rows = Math.ceil(items.length / tiers[tier]);
+      assert.ok(rows * tiers[tier] >= items.length, `${category} tier ${tier}: every item fits`);
+      assert.ok((rows - 1) * tiers[tier] < items.length, `${category} tier ${tier}: no unnecessary row`);
+      const wrappedItems = Array.from({ length: rows }, (_, row) => items.slice(row * tiers[tier], (row + 1) * tiers[tier])).flat();
+      assert.deepEqual(wrappedItems.map((item) => item.id), items.map((item) => item.id), `${category} tier ${tier}: no hidden item`);
+      assert.deepEqual(capture.cards.filter((card) => itemIds.has(card.id)).map((card) => card.id).sort(), [...itemIds].sort(), `${category} tier ${tier}: full reference coverage`);
+    }
+  }
+});

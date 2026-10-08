@@ -114,6 +114,12 @@ async function readShopGeometry(page) {
     const panel = document.querySelector('.build-panel').getBoundingClientRect();
     const tabs = document.querySelector('.shop-tabs').getBoundingClientRect();
     const board = document.querySelector('.catalog-board').getBoundingClientRect();
+    const cards = [...document.querySelectorAll('.catalog-board .item-card')];
+    const outsideIds = cards.filter((card) => {
+      const rect = card.getBoundingClientRect();
+      return rect.left < board.left - 1 || rect.right > board.right + 1
+        || rect.top < board.top - 1 || rect.bottom > board.bottom + 1;
+    }).map((card) => card.dataset.itemId);
     return {
       panelWidth: panel.width,
       panelRight: panel.right,
@@ -121,6 +127,9 @@ async function readShopGeometry(page) {
       tabsWidth: tabs.width,
       boardWidth: board.width,
       boardRight: board.right,
+      cardCount: cards.length,
+      minimumCardWidth: Math.min(...cards.map((card) => card.getBoundingClientRect().width)),
+      outsideIds,
       viewportWidth: window.innerWidth
     };
   });
@@ -469,6 +478,9 @@ test('places the shop catalog close to the builder panel on desktop', async ({ p
   expect(geometry.tabsLeft).toBeGreaterThan(geometry.panelRight);
   expect(geometry.tabsLeft - geometry.panelRight).toBeGreaterThan(40);
   expect(geometry.tabsLeft - geometry.panelRight).toBeLessThan(58);
+  expect(geometry.cardCount).toBe(DEADLOCK_ITEMS.filter((item) => item.category === 'vitality').length);
+  expect(geometry.outsideIds).toEqual([]);
+  expect(geometry.boardRight).toBeLessThanOrEqual(geometry.viewportWidth);
 });
 
 test('keeps the game shop board usable on compact desktop viewports', async ({ page }) => {
@@ -481,6 +493,10 @@ test('keeps the game shop board usable on compact desktop viewports', async ({ p
   expect(geometry.boardWidth).toBeGreaterThanOrEqual(620);
   expect(geometry.tabsLeft - geometry.panelRight).toBeGreaterThanOrEqual(28);
   expect(geometry.tabsLeft - geometry.panelRight).toBeLessThanOrEqual(32);
+  expect(geometry.cardCount).toBe(DEADLOCK_ITEMS.filter((item) => item.category === 'vitality').length);
+  expect(geometry.outsideIds).toEqual([]);
+  expect(geometry.minimumCardWidth).toBeGreaterThanOrEqual(40);
+  expect(geometry.boardRight).toBeLessThanOrEqual(geometry.viewportWidth);
 });
 
 test('keeps build status and footer readable on low-dpi desktop panel', async ({ page }) => {

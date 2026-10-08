@@ -1,3 +1,9 @@
+@property --tier-card-width {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
 :root {
   --deadlock-bg: #070b0b;
   --deadlock-bg-deep: #020303;
@@ -601,31 +607,59 @@ a:focus-visible {
   position: absolute;
   z-index: 7;
   left: 0;
-  top: 36px;
+  top: 0;
   display: grid;
-  gap: 4px;
+  gap: calc(var(--shop-rail-width) * 8 / 75);
 }
 .shop-tab {
+  position: relative;
+  justify-self: end;
   width: var(--shop-rail-width);
-  min-height: var(--shop-rail-width);
+  height: var(--shop-rail-width);
+  min-height: 0;
   display: grid;
   place-items: center;
+  padding: 0;
   border: 0;
-  border-left: 4px solid transparent;
   border-radius: 9px 0 0 9px;
-  background: #0b100edd;
-  color: #ffefd79c;
-  box-shadow: inset -12px 0 14px #0007;
+  background: transparent;
+  color: var(--off-black);
   cursor: pointer;
-  font-weight: 900;
-  transition: color 140ms ease, background 140ms ease, border-color 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+  --tab-color: #b2b2af;
 }
+.shop-tab::before,
+.shop-tab::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.shop-tab::before {
+  background: var(--tab-color);
+  -webkit-mask: var(--shop-tab-shape) left top / 100% calc(var(--shop-rail-width) * 230 / 75) no-repeat;
+  mask: var(--shop-tab-shape) left top / 100% calc(var(--shop-rail-width) * 230 / 75) no-repeat;
+}
+.shop-tab::after {
+  background: var(--shop-tab-edge) left top / 100% 100% no-repeat;
+}
+.shop-tab:hover { filter: brightness(1.15); }
+.shop-tab.is-active { height: calc(var(--shop-rail-width) * 200 / 75); }
+.shop-tab:focus-visible { outline: 3px solid var(--enhanced-cyan); outline-offset: 2px; }
+.shop-tab-selected { --tab-color: #5ca9b9; }
+.shop-tab-popular { --tab-color: #de6948; }
+.shop-tab-weapon { --tab-color: #e4b20c; }
+.shop-tab-spirit { --tab-color: #b866de; }
+.shop-tab-vitality { --tab-color: #a5ce3c; }
+.shop-tab-weapon,
+.shop-tab-spirit,
+.shop-tab-vitality { width: calc(var(--shop-rail-width) * 60 / 70); }
 .shop-tab img {
-  width: min(34px, calc(var(--shop-rail-width) * 0.58));
-  height: min(34px, calc(var(--shop-rail-width) * 0.58));
+  position: relative;
+  z-index: 1;
+  width: calc(var(--shop-rail-width) * 70 / 75);
+  height: calc(var(--shop-rail-width) * 70 / 75);
   object-fit: contain;
-  filter: brightness(0) invert(1) drop-shadow(0 2px 4px #000b);
-  opacity: 0.86;
+  opacity: 0.95;
   pointer-events: none;
 }
 .shop-tab span { font-size: 2rem; line-height: 1; pointer-events: none; }
@@ -652,7 +686,7 @@ a:focus-visible {
   --shop-grid-gap: calc(var(--shop-card-margin) * var(--shop-unit));
   padding: 0;
   border-radius: 8px;
-  background: var(--catalog-selected-bg) center / 100% 100% no-repeat;
+  background: var(--catalog-list-bg) center / 100% 100% no-repeat;
   box-shadow: 0 24px 90px #000c;
 }
 .catalog-list-board > .search-box {
@@ -674,8 +708,6 @@ a:focus-visible {
   border-bottom: 0;
   background: rgb(16 19 13 / 72%);
   box-shadow: none;
-  -webkit-backdrop-filter: blur(18px) saturate(1.15);
-  backdrop-filter: blur(18px) saturate(1.15);
 }
 .catalog-list-board > .search-box label {
   grid-area: label;
@@ -698,6 +730,7 @@ a:focus-visible {
   opacity: 0.8;
 }
 .catalog-list-board > .search-box .search-row {
+  position: relative;
   grid-column: 1;
   grid-row: 1 / 3;
   align-self: center;
@@ -714,6 +747,11 @@ a:focus-visible {
   padding: 10px 36px 7px 10px;
   text-align: center;
   box-shadow: none;
+}
+.catalog-list-board input[type="search"]::-webkit-search-cancel-button,
+.catalog-list-board input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
 }
 .catalog-list-board > .search-box .search-row button {
   min-width: 0;
@@ -751,6 +789,8 @@ a:focus-visible {
   overflow-x: hidden;
   padding-inline: var(--tier-board-edge);
   scrollbar-width: thin;
+  /* Resolve the common width once, before it reaches the 156 card subtrees. */
+  --tier-card-width: var(--shop-card-width);
   scroll-padding-block: calc(8.5cqw + var(--tier-board-edge)) var(--tier-board-edge);
 }
 .tier-board-scroller:focus-visible {
@@ -775,12 +815,26 @@ a:focus-visible {
   /* Reference: first price rule sits 45px below the header on a 950px board. */
   padding-top: calc(100cqw * 45 / 950 - 12px);
 }
+/* Stock ModList bottom spacing: card margin 3 + tier padding 10 + list
+   padding 6 + list margin 3; the next CostLabel adds margin-top 4.
+   Filtered labels add 30px padding-top; Recommended labels do not. */
+.catalog-list-board-all .tier-board-rows {
+  gap: calc(56 * var(--shop-unit));
+}
+.catalog-list-board-popular .tier-board-rows {
+  gap: calc(26 * var(--shop-unit));
+  padding-top: max(0px, calc(100cqw * 45 / 950 - 30 * var(--shop-unit) - 12px));
+}
 .tier-board-row {
   position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   column-gap: var(--shop-grid-gap);
   align-items: start;
+  /* Skip off-screen paint without changing the measured tier/card geometry. */
+  content-visibility: auto;
+  contain-intrinsic-block-size: auto var(--tier-row-height);
+  overflow-clip-margin: calc(var(--shop-card-width) * 1.5);
 }
 .tier-board-price {
   position: absolute;
@@ -815,10 +869,27 @@ a:focus-visible {
 .tier-board-row.is-empty-tier {
   height: var(--empty-tier-height);
   opacity: var(--empty-tier-opacity);
+  contain-intrinsic-block-size: auto var(--empty-tier-height);
 }
 .tier-board-row.is-empty-tier .tier-board-cell {
   height: var(--empty-tier-height);
   padding: 0;
+}
+.catalog-list-board .item-card {
+  /* Promote only animated hover cards, not all 156 idle cards and their names. */
+  transform: none;
+  container-type: normal;
+  --item-cqw: calc(var(--tier-card-width) / 100);
+}
+.catalog-list-board .item-hover-frame {
+  /* The positioned frame already establishes the card/texture containing block. */
+  contain: none;
+}
+.catalog-list-board .item-icon,
+.catalog-list-board .item-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .tier-board-empty {
   margin: 0;
@@ -827,53 +898,26 @@ a:focus-visible {
   font-weight: 700;
   text-align: center;
 }
-.shop-tab-search {
-  margin-top: clamp(14px, 2.2vh, 24px);
-  background: transparent;
-  border-left-color: transparent;
-  box-shadow: none;
+
+.popular-header {
+  flex: 0 0 auto;
+  color: var(--off-black);
+  background: #d8c8a9;
 }
-.shop-tab-search:hover {
-  background: transparent;
-  box-shadow: none;
-  filter: brightness(1.12);
+.popular-header-art {
+  height: calc(80 * var(--shop-unit));
+  background: var(--popular-header-bg) center / 100% 100% no-repeat;
 }
-.shop-tab-search img {
-  width: min(42px, calc(var(--shop-rail-width) * 0.78));
-  height: min(42px, calc(var(--shop-rail-width) * 0.78));
-  filter: none;
-  opacity: 0.95;
-  transform: translateY(4px);
+.popular-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  padding: 6px 18px;
 }
-button.shop-tab-search.is-active {
-  background: transparent;
-  border-left-color: transparent;
-  box-shadow: none;
-}
-.shop-tab:hover { color: var(--off-white); box-shadow: inset -16px 0 18px #0007, 0 0 0 1px #ffefd733; }
-.shop-tab.is-active { color: #10130d; box-shadow: inset -10px 0 14px #0004, 0 0 22px #99ffd633; }
-.shop-tab.is-active img {
-  filter: brightness(0) saturate(1);
-  opacity: 0.9;
-}
-.shop-tab-selected.is-active { background: linear-gradient(90deg, var(--shard), #386a5a); border-left-color: var(--shard); }
-.shop-tab-weapon.is-active { background: linear-gradient(90deg, var(--weapon), #865006); border-left-color: var(--weapon); }
-.shop-tab-vitality.is-active { background: linear-gradient(90deg, var(--vitality), #416a08); border-left-color: var(--vitality); }
-.shop-tab-spirit.is-active { background: linear-gradient(90deg, var(--spirit), #7946a5); border-left-color: var(--spirit); }
-.shop-tab-search:hover {
-  background: transparent;
-  box-shadow: none;
-  filter: brightness(1.12);
-}
-button.shop-tab-search.is-active {
-  background: transparent;
-  border-left-color: transparent;
-  box-shadow: none;
-}
-.shop-tab-search.is-active img {
-  filter: none;
-  opacity: 1;
-}
+.popular-controls label { font-weight: 700; }
+.popular-controls select { max-width: 100%; min-height: 34px; }
+.popular-controls p { flex: 1 1 240px; margin: 0; font-size: 12px; }
 
 .catalog-board {
   width: min(100%, calc((var(--app-viewport-height) - (var(--shell-pad) * 2) - var(--catalog-support-footer-height) - 8px) * var(--category-board-aspect)));
@@ -1085,13 +1129,14 @@ button.shop-tab-search.is-active {
   pointer-events: none;
   background: var(--tooltip-header) center / cover no-repeat;
   opacity: 0;
+  visibility: hidden;
   mix-blend-mode: screen;
   transform: translate3d(-50%, -50%, 0) skew(22deg) scale(1);
   -webkit-mask-image: var(--tooltip-star);
   mask-image: var(--tooltip-star);
   -webkit-mask-size: cover;
   mask-size: cover;
-  transition: opacity 120ms ease-out;
+  transition: opacity 120ms ease-out, visibility 120ms ease-out;
 }
 .hover-texture-secondary {
   width: 188%;
@@ -1102,6 +1147,7 @@ button.shop-tab-search.is-active {
 .item-hover-frame:hover .hover-texture,
 .item-hover-frame.is-predicted-hover .hover-texture {
   opacity: 0.78;
+  visibility: visible;
 }
 .item-hover-frame:hover .hover-texture-primary,
 .item-hover-frame.is-predicted-hover .hover-texture-primary {
@@ -1138,6 +1184,7 @@ button.shop-tab-search.is-active {
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
   container-type: inline-size;
+  --item-cqw: 1cqw;
 }
 .item-card > * {
   position: relative;
@@ -1295,8 +1342,6 @@ button.shop-tab-search.is-active {
   95% { transform: translate3d(-50%, -50%, 0) rotate(0deg) skew(22deg) scale(0.9844); }
   100% { transform: translate3d(-50%, -50%, 0) rotate(0deg) skew(22deg) scale(1); }
 }
-.item-cost,
-.item-tier,
 .warning-badge,
 .selected-star,
 .item-activation-badge {
@@ -1306,9 +1351,6 @@ button.shop-tab-search.is-active {
   font-weight: 1000;
   line-height: 1;
 }
-.item-cost,
-.item-tier,
-.item-state { display: none; }
 .warning-badge {
   left: 0;
   bottom: 0;
@@ -1336,7 +1378,7 @@ button.shop-tab-search.is-active {
   z-index: 4;
   left: 5%;
   right: 5%;
-  bottom: calc(100% - 100cqw);
+  bottom: calc(100% - 100 * var(--item-cqw));
   display: grid;
   gap: 0;
   justify-items: center;
@@ -1351,19 +1393,19 @@ button.shop-tab-search.is-active {
   display: grid;
   place-items: center;
   width: 100%;
-  min-height: min(10px, 13.5cqw);
-  padding: 0 min(2px, 2.5cqw);
+  min-height: min(10px, calc(13.5 * var(--item-cqw)));
+  padding: 0 min(2px, calc(2.5 * var(--item-cqw)));
   border-radius: 0;
   background: #181718;
   color: #fff;
-  font-size: min(8.5px, 10.625cqw);
+  font-size: min(8.5px, calc(10.625 * var(--item-cqw)));
   letter-spacing: 0;
   text-align: center;
   text-shadow: 0 1px 1px #000;
 }
 .item-activation-badges:not(.item-activation-badges-stacked) .item-activation-badge {
-  min-height: min(8px, 11.5cqw);
-  font-size: min(7.5px, 10cqw);
+  min-height: min(8px, calc(11.5 * var(--item-cqw)));
+  font-size: min(7.5px, calc(10 * var(--item-cqw)));
 }
 .item-activation-badge-active {
   width: 68%;
@@ -1408,14 +1450,14 @@ button.shop-tab-search.is-active {
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
-  width: calc(100cqw * 59 / var(--shop-card-stock-width));
+  width: calc(100 * var(--item-cqw) * 59 / var(--shop-card-stock-width));
   align-self: center;
-  padding: 0 min(2px, calc(100cqw * 2 / var(--shop-card-stock-width)));
-  max-width: min(82px, calc(100cqw * 82 / var(--shop-card-stock-width)));
-  max-height: min(40px, calc(100cqw * 40 / var(--shop-card-stock-width)));
+  padding: 0 min(2px, calc(100 * var(--item-cqw) * 2 / var(--shop-card-stock-width)));
+  max-width: min(82px, calc(100 * var(--item-cqw) * 82 / var(--shop-card-stock-width)));
+  max-height: min(40px, calc(100 * var(--item-cqw) * 40 / var(--shop-card-stock-width)));
   overflow: hidden;
   font-family: var(--font-oracle);
-  font-size: min(12px, calc(100cqw * 12 / var(--shop-card-stock-width)));
+  font-size: min(12px, calc(100 * var(--item-cqw) * 12 / var(--shop-card-stock-width)));
   font-weight: 500;
   line-height: 1.04;
   text-align: center;
@@ -1431,20 +1473,20 @@ button.shop-tab-search.is-active {
   transform-origin: center;
 }
 .item-card-name-compact .item-name {
-  font-size: min(10px, calc(100cqw * 10 / var(--shop-card-stock-width)));
+  font-size: min(10px, calc(100 * var(--item-cqw) * 10 / var(--shop-card-stock-width)));
 }
 .item-card-name-dense .item-name {
-  font-size: min(9.25px, calc(100cqw * 9.25 / var(--shop-card-stock-width)));
+  font-size: min(9.25px, calc(100 * var(--item-cqw) * 9.25 / var(--shop-card-stock-width)));
 }
 .item-card-name-long-word .item-name {
-  font-size: min(9.5px, calc(100cqw * 9.5 / var(--shop-card-stock-width)));
+  font-size: min(9.5px, calc(100 * var(--item-cqw) * 9.5 / var(--shop-card-stock-width)));
 }
 .item-card-name-single-word .item-name {
   width: 100%;
-  font-size: min(13px, calc(100cqw * 13 / var(--shop-card-stock-width)));
+  font-size: min(13px, calc(100 * var(--item-cqw) * 13 / var(--shop-card-stock-width)));
 }
 .item-card-name-single-word.item-card-name-long-word .item-name {
-  font-size: min(11px, calc(100cqw * 11 / var(--shop-card-stock-width)));
+  font-size: min(11px, calc(100 * var(--item-cqw) * 11 / var(--shop-card-stock-width)));
 }
 .item-card-tier-3.item-card-weapon .item-name {
   color: #000;
@@ -1464,7 +1506,6 @@ button.shop-tab-search.is-active {
     overflow: auto;
     gap: 12px;
   }
-  .shop-tab-search { margin-top: 0; }
   .build-panel {
     position: relative;
     top: auto;
@@ -1510,6 +1551,7 @@ button.shop-tab-search.is-active {
   .tier-board-row:not(.is-empty-tier) {
     grid-template-columns: minmax(0, 1fr);
     row-gap: 18px;
+    content-visibility: visible;
   }
   .tier-board-row:not(.is-empty-tier) .tier-board-cell::before {
     content: attr(data-category);
@@ -1519,10 +1561,10 @@ button.shop-tab-search.is-active {
     text-transform: capitalize;
   }
   .shop-tabs { position: relative; left: auto; top: auto; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 0; margin-bottom: 8px; }
-  .shop-tab { width: auto; min-height: 54px; border-left: 0; border-bottom: 4px solid transparent; border-radius: 12px 12px 0 0; }
+  .shop-tab { width: 100%; height: 54px; min-height: 54px; border-radius: 12px 12px 0 0; }
   .shop-tab img { width: 32px; height: 32px; }
   .shop-tab span { font-size: 1.6rem; }
-  .shop-tab.is-active { box-shadow: inset 0 -10px 14px #0004, 0 0 22px #99ffd633; }
+  .shop-tab.is-active { height: 72px; }
   .catalog-board { border-radius: 18px; }
 }
 

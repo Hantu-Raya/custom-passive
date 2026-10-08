@@ -1,6 +1,10 @@
 import { expect, test } from '@playwright/test';
 import { PRESET_TEMPLATE_IDS, REQUIRED_GAMEBANANA_TEMPLATE, getPresetTemplate } from '../src/lib/presetTemplates.js';
 
+test.beforeEach(async ({ page }) => {
+  await page.route('https://api.deadlock-api.com/**', (route) => route.abort());
+});
+
 const REQUIRED_TEMPLATE_UPLOAD = process.env.CUSTOM_PASSIVE_TEMPLATE_ARCHIVE
   || `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/${REQUIRED_GAMEBANANA_TEMPLATE.fileName}`;
 

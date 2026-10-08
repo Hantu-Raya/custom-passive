@@ -8,6 +8,10 @@ import { readPassiveFlagTemplate } from '../src/lib/source2PassiveFlags.js';
 import { uncompressSource2Resource } from '../src/lib/source2BinaryKv3.js';
 import { readVpk } from '../src/lib/vpkReader.js';
 
+test.beforeEach(async ({ page }) => {
+  await page.route('https://api.deadlock-api.com/**', (route) => route.abort());
+});
+
 const ITEM_IDS = DEADLOCK_ITEMS.map((item) => item.id);
 const REQUIRED_TEMPLATE_UPLOAD = process.env.CUSTOM_PASSIVE_TEMPLATE_ARCHIVE
   || `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/${REQUIRED_GAMEBANANA_TEMPLATE.fileName}`;
@@ -184,7 +188,7 @@ test('downloads a compressed archive with browser-selected passive flag bytes', 
   await expect(page.getByTestId('selected-count')).toHaveText(String(getPresetTemplate(PRESET_TEMPLATE_IDS.PASSIVE_ONLY).presetItemIds.length));
   await page.getByTestId('clear-selection').click();
   await expect(page.getByTestId('selected-count')).toHaveText('0');
-  await page.getByTestId('tab-search').click();
+  await page.getByTestId('tab-all').click();
   await page.getByTestId('search-input').fill('Headshot');
   await page.getByTestId('item-card-upgrade_headshot_booster').click();
   await expect(page.getByTestId('item-card-upgrade_headshot_booster')).toHaveAttribute('aria-pressed', 'true');
@@ -223,7 +227,7 @@ test('loads verified GameBanana presets before building', async ({ page }) => {
   await expect(page.getByTestId('selected-count')).toHaveText(String(passiveAndActive.presetItemIds.length));
 
   await page.getByTestId('clear-selection').click();
-  await page.getByTestId('tab-search').click();
+  await page.getByTestId('tab-all').click();
   await page.getByTestId('search-input').fill('Close Range');
   await page.getByTestId('item-card-upgrade_close_range').click();
 
@@ -393,14 +397,14 @@ test('predicts vertical hover only near an item card', async ({ page }) => {
 });
 
 
-test('embeds search only inside the search shop tab', async ({ page }) => {
+test('embeds search only inside the All Items tab', async ({ page }) => {
   await page.goto('/custom-passive/');
   await waitForHydration(page);
   await page.getByTestId('tab-weapon').click();
   await expect(page.locator('.catalog-title-row')).toHaveCount(0);
   await expect(page.getByTestId('search-input')).toHaveCount(0);
 
-  await page.getByTestId('tab-search').click();
+  await page.getByTestId('tab-all').click();
   await searchForToxic(page);
 
   await page.getByTestId('tab-weapon').click();
@@ -412,7 +416,7 @@ test('keeps the search hint expanded on desktop', async ({ page }) => {
   await page.setViewportSize({ width: 1569, height: 912 });
   await page.goto('/custom-passive/');
   await waitForHydration(page);
-  await page.getByTestId('tab-search').click();
+  await page.getByTestId('tab-all').click();
 
   const hintMetrics = await page.locator('.search-hint').evaluate((hint) => {
     const box = hint.getBoundingClientRect();
@@ -431,10 +435,10 @@ test('keeps the search hint expanded on desktop', async ({ page }) => {
   expect(hintMetrics.height).toBeLessThan(hintMetrics.lineHeight * 1.25);
 });
 
-test('shows selected and search tabs as three-column tier boards', async ({ page }) => {
+test('shows Selected and All Items as three-column tier boards', async ({ page }) => {
   await page.goto('/custom-passive/');
   await waitForHydration(page, PRESET_TEMPLATE_IDS.PASSIVE_AND_ACTIVE);
-  await page.getByTestId('tab-search').click();
+  await page.getByTestId('tab-all').click();
   await page.getByTestId('search-input').fill('Close Range');
   await page.getByTestId('item-card-upgrade_close_range').click();
 
@@ -442,7 +446,7 @@ test('shows selected and search tabs as three-column tier boards', async ({ page
   await expect(page.locator('.catalog-list-board')).toHaveCount(1);
   await expect(page.locator('.tier-board-row')).toHaveCount(4);
   await expect(page.locator('.tier-board-cell')).toHaveCount(12);
-  await page.getByTestId('tab-search').click();
+  await page.getByTestId('tab-all').click();
   await expect(page.locator('.catalog-list-board')).toHaveCount(1);
   await expect(page.getByTestId('item-card-upgrade_close_range')).toBeVisible();
   await expect(page.getByTestId('item-card-upgrade_health')).toBeVisible();
@@ -551,7 +555,7 @@ test('keeps the support footer visible across catalog modes', async ({ page }) =
   await page.getByTestId('tab-selected').click();
   await expect(supportFooter).toBeVisible();
 
-  await page.getByTestId('tab-search').click();
+  await page.getByTestId('tab-all').click();
   await expect(supportFooter).toBeVisible();
 });
 

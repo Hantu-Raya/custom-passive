@@ -1,8 +1,13 @@
 import { expect, test } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
 import { DEADLOCK_ITEMS, TIER_COSTS } from '../src/data/deadlockItems.generated.js';
 import { SHOP_LAYOUT } from '../src/data/shopLayout.generated.js';
 import { PRESET_TEMPLATE_IDS, REQUIRED_GAMEBANANA_TEMPLATE, getPresetTemplate } from '../src/lib/presetTemplates.js';
 import { TIER_BOARD_CATEGORIES, TIER_BOARD_COLUMNS, TIER_BOARD_TIERS } from '../src/lib/tierBoard.js';
+
+test.beforeEach(async ({ page }) => {
+  await page.route('https://api.deadlock-api.com/**', (route) => route.abort());
+});
 
 const COUNTS = {
   weapon: [7, 16, 19, 11],
@@ -46,11 +51,37 @@ async function expectFirstTierSpacing(page) {
     const card = row.querySelector('.item-hover-frame').getBoundingClientRect();
     const ruleY = price.top + price.height / 2;
     const referenceScale = 950 / board.getBoundingClientRect().width;
-    return { headerToRule: (ruleY - header.bottom) * referenceScale, ruleToCard: (card.top - ruleY) * referenceScale };
+    const nextPrice = board.querySelector('.tier-board-row[data-tier="2"] .tier-board-price').getBoundingClientRect();
+    const lastCardBottom = Math.max(...[...row.querySelectorAll('.item-hover-frame')].map((frame) => frame.getBoundingClientRect().bottom));
+    return {
+      kind: board.classList.contains('catalog-list-board-popular') ? 'popular' : board.classList.contains('catalog-list-board-all') ? 'all' : 'selected',
+      referenceScale,
+      headerToRule: (ruleY - header.bottom) * referenceScale,
+      ruleToCard: (card.top - ruleY) * referenceScale,
+      cardToNextRule: (nextPrice.top + nextPrice.height / 2 - lastCardBottom) * referenceScale
+    };
   });
-  expect(Math.abs(spacing.headerToRule - 45), 'reference-scaled header-to-first-price spacing').toBeLessThanOrEqual(1);
+  const stockToReference = 950 / (SHOP_LAYOUT.mainPanel.width - 75 - 20);
+  // Recommended omits Filtered's 30px CostLabel padding; both retain the
+  // 3px card margin + 10px tier padding + 6px list padding + 3px list margin.
+  const headerToRule = spacing.kind === 'popular' ? 45 - 30 * stockToReference : 45;
+  const gapStock = spacing.kind === 'popular' ? 26 : spacing.kind === 'all' ? 56 : 76 * 0.85;
+  expect(Math.abs(spacing.headerToRule - headerToRule), 'reference-scaled header-to-first-price spacing').toBeLessThanOrEqual(1);
+  expect(Math.abs(spacing.cardToNextRule - (gapStock * stockToReference + 12 * spacing.referenceScale)), 'stock-derived last-card-to-next-price spacing').toBeLessThanOrEqual(1);
   expect(Math.abs(spacing.ruleToCard - 18), 'reference-scaled first-price-to-card spacing').toBeLessThanOrEqual(1);
 }
+
+test('Popular uses Recommended header and tier spacing, without Filtered label padding', async ({ page }) => {
+  await page.route('https://api.deadlock-api.com/**', async (route) => {
+    const fixture = route.request().url().includes('/assets/heroes') ? 'heroes.json' : 'item-stats-silver.json';
+    await route.fulfill({ contentType: 'application/json', body: await readFile(new URL(`./fixtures/deadlock-api/${fixture}`, import.meta.url), 'utf8') });
+  });
+  await openShop(page);
+  await page.getByTestId('tab-popular').click();
+  await page.getByTestId('popular-hero-select').selectOption('80');
+  await expect(page.getByTestId('item-card-upgrade_close_range')).toBeVisible();
+  await expectFirstTierSpacing(page);
+});
 
 test('Selected renders every item in twelve four-across cells with tallest-cell row heights', async ({ page }) => {
   await openShop(page);
@@ -118,21 +149,21 @@ test('empty tiers keep the stock height and opacity, and empty selection disable
   await expect(page.getByRole('button', { name: 'Select all shown' })).toBeDisabled();
 });
 
-test('Search renders the filtered set and selects exactly those cards', async ({ page }) => {
+test('All Items renders the filtered set and selects exactly those cards', async ({ page }) => {
   await openShop(page);
   await page.getByTestId('clear-selection').click();
-  await page.getByTestId('tab-search').click();
+  await page.getByTestId('tab-all').click();
   await page.getByTestId('search-input').fill('spirit');
   const supportedIds = new Set(getPresetTemplate(PRESET_TEMPLATE_IDS.PASSIVE_ONLY).supportedItemIds);
   const expectedIds = DEADLOCK_ITEMS.filter((item) => supportedIds.has(item.id)
     && `${item.id} ${item.label} ${item.description} ${item.category} tier ${item.tier}`.toLowerCase().includes('spirit'))
     .map((item) => item.id).sort();
-  await expect(page.locator('.catalog-list-board-search .item-card')).toHaveCount(expectedIds.length);
+  await expect(page.locator('.catalog-list-board-all .item-card')).toHaveCount(expectedIds.length);
   expect(await renderedIds(page)).toEqual(expectedIds);
   await expectFirstTierSpacing(page);
   await page.getByRole('button', { name: 'Select all shown' }).click();
   await expect(page.getByTestId('selected-count')).toHaveText(String(expectedIds.length));
-  await expect(page.locator('.catalog-list-board-search .item-card[aria-pressed="true"]')).toHaveCount(expectedIds.length);
+  await expect(page.locator('.catalog-list-board-all .item-card[aria-pressed="true"]')).toHaveCount(expectedIds.length);
   await page.getByTestId('tab-selected').click();
   expect(await renderedIds(page)).toEqual(expectedIds);
 });

@@ -57,7 +57,8 @@ src/pages/index.astro (imports src/styles/global.css)
 - Binary code uses `Uint8Array`/`DataView` little-endian reads and writes, patches copies, and never mutates source template bytes.
 - Browser-reachable files must not import native compiler or tool scripts. Load heavy modules lazily (`vpkWriter.js`, `archiveWriter.js`, `7z-wasm`); zstd/xxhash init is promise-cached.
 - Surface user-facing failures through status text and clear `Error` messages at binary, fetch, archive, template and validation boundaries.
-- Stable E2E selectors: `template-gate`, `template-gate-preset`, `template-gate-file`, `template-gate-link`, `gamebanana-template-link`, `preset-template-select`, `selected-count`, `build-download`, `tab-*`, `search-input`, `item-card-${item.id}`.
+- Popular is the only runtime feature that contacts `api.deadlock-api.com`: lazily load heroes and normal-mode item stats while the tab is open, with an explicit hourly-rounded 30-day window. Validate responses, session-cache successful raw rows for 10 minutes, share pending keys, abort after 8 seconds and ignore stale hero results. No guessed fallback or automatic 429 retry. Build/download remain browser-only and independent of the API.
+- Stable E2E selectors: `template-gate`, `template-gate-preset`, `template-gate-file`, `template-gate-link`, `gamebanana-template-link`, `preset-template-select`, `selected-count`, `build-download`, `tab-selected`, `tab-popular`, `tab-all`, `tab-weapon`, `tab-spirit`, `tab-vitality`, `popular-hero-select`, `search-input`, `clear-search`, `item-card-${item.id}`.
 - Behavior-coupled CSS classes: `is-predicted-hover`, `is-item-hovered`, `is-hover-related`, `item-hover-frame`, `catalog-board`, `catalog-list-board`.
 - GameBanana compatibility is decided by generated MD5/SHA-256 metadata, never filenames.
 

@@ -4,6 +4,10 @@ import { PRESET_TEMPLATE_IDS, REQUIRED_GAMEBANANA_TEMPLATE, getPresetTemplate } 
 import { CATEGORY_TIER_COLUMNS } from '../src/lib/tierBoard.js';
 import { expectRectNear, loadReferenceAnchors, rectOf } from './helpers/shopGeometry.js';
 
+test.beforeEach(async ({ page }) => {
+  await page.route('https://api.deadlock-api.com/**', (route) => route.abort());
+});
+
 const ANCHORS = loadReferenceAnchors();
 const REQUIRED_TEMPLATE_UPLOAD = process.env.CUSTOM_PASSIVE_TEMPLATE_ARCHIVE
   || `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/${REQUIRED_GAMEBANANA_TEMPLATE.fileName}`;

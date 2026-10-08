@@ -1,0 +1,7 @@
+{
+  "recordedAt": "2026-10-08T11:54:57.723Z",
+  "source": "https://api.deadlock-api.com",
+  "heroesRequest": "/v1/assets/heroes?only_active=true (trimmed to id/class_name/name/flags)",
+  "itemStatsRequest": "/v1/analytics/item-stats?hero_id=<id>&game_mode=normal&min_unix_timestamp=1788865200",
+  "minUnixTimestamp": 1788865200
+}

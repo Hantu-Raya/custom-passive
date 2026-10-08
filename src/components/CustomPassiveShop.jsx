@@ -6,6 +6,7 @@ import { buildCompressedCustomPassivePackage, loadTemplateBytes, sha256Hex } fro
 import { assertCompletePassiveFlagOffsets, readPassiveFlagTemplate } from '../lib/source2PassiveFlags.js';
 import { PRESET_TEMPLATE_IDS, PRESET_TEMPLATES, REQUIRED_GAMEBANANA_TEMPLATE, getPresetTemplate } from '../lib/presetTemplates.js';
 import { CATEGORY_TIER_COLUMNS, TIER_BOARD_COLUMNS, groupTierBoard } from '../lib/tierBoard.js';
+import { createLatestPopularRequest, createPopularItemsClient, getPopularItems, popularityLabel } from '../lib/popularItems.js';
 
 const STORAGE_KEY = 'custom-passive:selected-items:v2';
 const TEMPLATE_VERIFICATION_STORAGE_KEY = 'custom-passive:template-verification:v1';
@@ -36,19 +37,18 @@ function formatDonation(total) {
 }
 const SHOP_IMAGE_BASE = `${import.meta.env.BASE_URL}assets/deadlock/panorama/images/shop/`;
 const SHOP_ASSET_BASE = `${SHOP_IMAGE_BASE}catalog/`;
-// Deadlock removed these PNGs in the 2026-09-29 update; the last exported copies are kept outside generated assets.
-const STATIC_ASSET_BASE = `${import.meta.env.BASE_URL}assets/static/`;
 const TAB_ICONS = Object.freeze({
   selected: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_builds_psd.webp`,
+  popular: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_recommendations_psd.webp`,
+  all: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_all_psd.webp`,
   weapon: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_weapon_psd.webp`,
-  vitality: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_vitality_psd.webp`,
   spirit: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_spirit_psd.webp`,
-  search: `${STATIC_ASSET_BASE}catalog_shop_tab_search_showing_sm_psd.webp`
+  vitality: `${SHOP_ASSET_BASE}catalog_shop_tab_icon_vitality_psd.webp`
 });
 const SHOP_BG_TABS = new Set(['weapon', 'vitality', 'spirit']);
 const SHOP_BACKGROUNDS = Object.freeze({
-  generic: `${STATIC_ASSET_BASE}catalog_shop_generic_bg_psd.webp`,
-  selected: `${SHOP_ASSET_BASE}catalog_shop_generic_bg2_psd.webp`,
+  generic: `${SHOP_ASSET_BASE}catalog_shop_generic_bg2_psd.webp`,
+  popular: `${SHOP_ASSET_BASE}catalog_shop_popular_bg_psd.webp`,
   weapon: `${SHOP_ASSET_BASE}catalog_shop_bg_weapon_psd.webp`,
   vitality: `${SHOP_ASSET_BASE}catalog_shop_bg_vitality_psd.webp`,
   spirit: `${SHOP_ASSET_BASE}catalog_shop_bg_spirit_psd.webp`
@@ -58,10 +58,11 @@ const SHOP_CARD_ASSET_BASE = `${SHOP_ASSET_BASE}cards/`;
 const SHOP_TOOLTIP_STAR = `${SHOP_ASSET_BASE}backer_star_test_png.webp`;
 const TABS = Object.freeze([
   { id: 'selected', label: 'Selected' },
+  { id: 'popular', label: 'Popular' },
+  { id: 'all', label: 'All Items' },
   { id: 'weapon', label: 'Weapon' },
-  { id: 'vitality', label: 'Vitality' },
   { id: 'spirit', label: 'Spirit' },
-  { id: 'search', label: 'Search' }
+  { id: 'vitality', label: 'Vitality' }
 ]);
 const CATEGORY_GLYPHS = Object.freeze({ weapon: '✦', vitality: '✚', spirit: '⬡' });
 const SHOP_CATEGORIES = Object.freeze(['weapon', 'vitality', 'spirit']);
@@ -71,7 +72,7 @@ const SHOP_ITEM_IDS_BY_CATEGORY = Object.freeze(Object.fromEntries(
     Object.freeze(DEADLOCK_ITEMS.filter((item) => item.category === category).map((item) => item.id))
   ])
 ));
-const CATEGORY_LABELS = Object.freeze({ selected: 'Selected', weapon: 'Weapon', vitality: 'Vitality', spirit: 'Spirit', search: 'Search all' });
+const CATEGORY_LABELS = Object.freeze({ selected: 'Selected', popular: 'Popular', all: 'All Items', weapon: 'Weapon', vitality: 'Vitality', spirit: 'Spirit' });
 // Stock citadel_hud_hero_shop.css (#ShopModsContainer/.ShopNavigationTab)
 // and citadel_shop_mods_filtered.css (.ModList/.CostLabel). Category art
 // already contains the blank sticker shapes; only the teal prices are drawn.
@@ -558,7 +559,7 @@ function ShopShell({ children, hoveringItem, onMouseMove, onMouseLeave }) {
 
 function ShopTabs({ activeTab, onTabChange }) {
   return (
-    <nav class="shop-tabs" aria-label="Shop categories">
+    <nav class="shop-tabs" aria-label="Shop categories" style={{ '--shop-tab-shape': `url("${SHOP_ASSET_BASE}catalog_shop_tab_shape_psd.webp")`, '--shop-tab-edge': `url("${SHOP_ASSET_BASE}catalog_shop_tab_edge_overlay_psd.webp")` }}>
       {TABS.map((tab) => (
         <button
           key={tab.id}
@@ -570,7 +571,7 @@ function ShopTabs({ activeTab, onTabChange }) {
           aria-label={tab.label}
           title={tab.label}
         >
-          {TAB_ICONS[tab.id].startsWith('/') ? <img src={TAB_ICONS[tab.id]} alt="" /> : <span aria-hidden="true">{TAB_ICONS[tab.id]}</span>}
+          <img src={TAB_ICONS[tab.id]} alt="" />
           <em>{tab.label}</em>
         </button>
       ))}
@@ -592,7 +593,7 @@ function SearchBox({ query, onQueryChange }) {
           placeholder="Headshot, spirit, tier 2..."
           onInput={(event) => onQueryChange(event.currentTarget.value)}
         />
-        <button type="button" data-testid="clear-search" onClick={() => onQueryChange('')} disabled={!query}>Clear</button>
+        {query && <button type="button" data-testid="clear-search" aria-label="Clear search" onClick={() => onQueryChange('')}>Clear</button>}
       </div>
     </div>
   );
@@ -775,7 +776,7 @@ function BuildDownloadPanel({
       <p class="build-status" role="status">{status}</p>
       <footer class="page-footer" aria-label="Project notices">
         <p>
-          Unofficial fan-made tool. Not affiliated with Valve. Runs locally; archives are not uploaded. Built by{' '}
+          Unofficial, not affiliated with Valve. Archives stay local; the Popular tab contacts deadlock-api.com. Built by{' '}
           <a href="https://github.com/Hantu-Raya" target="_blank" rel="noreferrer">Hantu-Raya</a>.
           {' '}Source on{' '}
           <a href="https://github.com/Hantu-Raya/custom-passive" target="_blank" rel="noreferrer">GitHub</a>.
@@ -889,7 +890,29 @@ function TierSection({ category, tier, slots, selectedIds, predictedHoverItemId,
   );
 }
 
-function TierBoard({ activeTab, items, query, onQueryChange, selectedIds, predictedHoverItemId, relatedHoverIds, onToggle }) {
+function PopularHeader({ heroId, heroes, onHeroChange, data, error }) {
+  return (
+    <div class="popular-header">
+      <div class="popular-header-art" aria-hidden="true" />
+      <div class="popular-controls">
+        <label htmlFor="popular-hero">Hero</label>
+        <select id="popular-hero" data-testid="popular-hero-select" value={heroId ?? ''} onChange={(event) => onHeroChange(event.currentTarget.value === '' ? null : Number(event.currentTarget.value))}>
+          <option value="">All heroes</option>
+          {heroes.map((hero) => <option key={hero.id} value={hero.id}>{hero.name}</option>)}
+        </select>
+        <p aria-live="polite">{data ? popularityLabel(data) : 'Third-party popularity from deadlock-api.com, last 30 days.'}{error && ` ${error}`}</p>
+      </div>
+    </div>
+  );
+}
+
+function tierRowIntrinsicHeight(cells) {
+  const cardRows = Math.max(...cells.map((cell) => Math.ceil(cell.items.length / TIER_BOARD_COLUMNS)));
+  const height = cardRows * SHOP_LAYOUT.mod.height + Math.max(0, cardRows - 1) * SHOP_LAYOUT.mod.margin;
+  return `calc(${height} * var(--shop-unit) + 100cqw * 18 / 950 + 12px)`;
+}
+
+function TierBoard({ activeTab, items, query, onQueryChange, popular, selectedIds, predictedHoverItemId, relatedHoverIds, onToggle }) {
   const rows = useMemo(() => groupTierBoard(items), [items]);
   return (
     <div
@@ -898,25 +921,28 @@ function TierBoard({ activeTab, items, query, onQueryChange, selectedIds, predic
         ...CATALOG_BOARD_SCALE,
         '--shop-unit': CATEGORY_BOARD_STYLE['--shop-unit'],
         '--shop-card-margin': SHOP_LAYOUT.mod.margin,
-        '--catalog-selected-bg': `url("${SHOP_BACKGROUNDS.selected}")`,
+        '--catalog-list-bg': `url("${SHOP_BACKGROUNDS[activeTab === 'popular' ? 'popular' : 'generic']}")`,
+        '--popular-header-bg': `url("${SHOP_ASSET_BASE}catalog_shop_top_recommendations_header_psd.webp")`,
         '--tier-board-columns': TIER_BOARD_COLUMNS,
         '--empty-tier-height': `${SHOP_LAYOUT.emptyTier.height}px`,
         '--empty-tier-opacity': SHOP_LAYOUT.emptyTier.opacity
       }}
     >
-      {activeTab === 'search' && <SearchBox query={query} onQueryChange={onQueryChange} />}
+      {activeTab === 'all' && <SearchBox query={query} onQueryChange={onQueryChange} />}
+      {activeTab === 'popular' && <PopularHeader {...popular} />}
       <div class="tier-board-scroller" tabIndex={0} role="region" aria-label={`${CATEGORY_LABELS[activeTab]} items by tier and category`}>
         <div class="tier-board-header">
           <img src={`${SHOP_ASSET_BASE}filters/shop_filtered_tree_header_full_psd.webp`} alt="Weapon, Spirit, Vitality" />
         </div>
         <div class="tier-board-rows">
-          {items.length === 0 && <p class="tier-board-empty">No matching items</p>}
+          {items.length === 0 && <p class="tier-board-empty">{activeTab === 'popular' ? popular.emptyMessage : 'No matching items'}</p>}
           {rows.map(({ tier, cost, cells }) => (
             <section
               key={tier}
               class={`tier-board-row ${cells.every((cell) => cell.items.length === 0) ? 'is-empty-tier' : ''}`}
               data-tier={tier}
               aria-labelledby={`tier-board-price-${tier}`}
+              style={{ '--tier-row-height': tierRowIntrinsicHeight(cells) }}
             >
               <h2 class="tier-board-price" id={`tier-board-price-${tier}`}>{cost}</h2>
               {cells.map(({ category, items: cellItems }) => (
@@ -962,8 +988,6 @@ function ItemCard({ item, index, selected, predictedHover, relatedHover, onToggl
         title={item.legacyRemoveWarning ? 'Legacy scripts removed this flag; custom output will still follow your selection.' : plainDescription}
         onClick={() => onToggle(item.id)}
       >
-        <span class="item-cost">${item.cost.toLocaleString()}</span>
-        <span class="item-tier">T{item.tier}</span>
         {selected && <span class="selected-star" aria-hidden="true">★</span>}
         {activationBadges.length > 0 && (
           <span class={`item-activation-badges ${activationBadges.length > 1 ? 'item-activation-badges-stacked' : ''}`}>
@@ -974,7 +998,6 @@ function ItemCard({ item, index, selected, predictedHover, relatedHover, onToggl
           {item.iconUrl ? <img src={`${import.meta.env.BASE_URL}${item.iconUrl}`} alt="" loading="eager" decoding="async" /> : <span><b>{CATEGORY_GLYPHS[item.category]}</b><em>{itemInitials(item.label)}</em></span>}
         </span>
         <span class="item-name"><span class="item-name-text">{item.label}</span></span>
-        <span class="item-state">{selected ? 'Selected passive' : 'Not selected'}</span>
       </button>
     </span>
   );
@@ -985,6 +1008,12 @@ export default function CustomPassiveShop() {
   const [selectionStorageReady, setSelectionStorageReady] = useState(false);
   const [activeTab, setActiveTab] = useState('selected');
   const [query, setQuery] = useState('');
+  const [popularHeroId, setPopularHeroId] = useState(null);
+  const [popularHeroes, setPopularHeroes] = useState([]);
+  const [popularHeroError, setPopularHeroError] = useState('');
+  const [popularState, setPopularState] = useState({ heroId: null, status: 'loading', data: null, error: '' });
+  const popularClient = useMemo(() => createPopularItemsClient({ items: DEADLOCK_ITEMS }), []);
+  const popularRequest = useMemo(() => createLatestPopularRequest(popularClient), [popularClient]);
   const [presetTemplateId, setPresetTemplateId] = useState(PRESET_TEMPLATE_IDS.PASSIVE_ONLY);
   const [templateLinked, setTemplateLinked] = useState(loadStoredTemplateVerification);
   const [templateState, setTemplateState] = useState({ status: 'needed', bytes: null, offsets: null });
@@ -1025,6 +1054,36 @@ export default function CustomPassiveShop() {
     if (!templateLinked || templateState.status !== 'needed') return;
     activatePresetTemplate(selectedPresetTemplate, { applyPreset: false });
   }, [selectedPresetTemplate, templateLinked, templateState.status]);
+  useEffect(() => {
+    if (activeTab !== 'popular') return undefined;
+    let ignored = false;
+    popularClient.loadHeroes().then((heroes) => {
+      if (!ignored) {
+        setPopularHeroes(heroes);
+        setPopularHeroError('');
+      }
+    }).catch((error) => {
+      if (!ignored) {
+        const reason = `Hero list unavailable: ${error?.message || String(error)}`;
+        setPopularHeroError(reason);
+        setStatus(reason);
+      }
+    });
+    return () => { ignored = true; };
+  }, [activeTab, popularClient]);
+
+  useEffect(() => {
+    if (activeTab !== 'popular') return undefined;
+    setPopularState({ heroId: popularHeroId, status: 'loading', data: null, error: '' });
+    popularRequest.load(popularHeroId, (data) => {
+      setPopularState({ heroId: popularHeroId, status: 'ready', data, error: '' });
+    }, (error) => {
+      const reason = error?.message || String(error);
+      setPopularState({ heroId: popularHeroId, status: 'error', data: null, error: reason });
+      setStatus(`Popularity data unavailable: ${reason}`);
+    });
+    return () => popularRequest.cancel();
+  }, [activeTab, popularHeroId, popularRequest]);
 
   useEffect(() => {
     if (!selectionStorageReady || !isScaleDebugEnabled()) return;
@@ -1036,8 +1095,11 @@ export default function CustomPassiveShop() {
     setStatus(`Scale debug selected ${debugSelectedIds.length} ${CATEGORY_LABELS[debugSelectionCategory]} items.`);
   }, [selectionStorageReady]);
 
+  const currentPopularState = popularState.heroId === popularHeroId ? popularState : { status: 'loading', data: null, error: '' };
+  const popularItems = useMemo(() => currentPopularState.data ? getPopularItems(currentPopularState.data.rows, DEADLOCK_ITEMS.filter((item) => supportedItemIds.has(item.id))) : [], [currentPopularState.data, supportedItemIds]);
   const normalizedQuery = query.trim().toLowerCase();
   const visibleItems = useMemo(() => {
+    if (activeTab === 'popular') return popularItems;
     return DEADLOCK_ITEMS.filter((item) => {
       if (!supportedItemIds.has(item.id)) return false;
       if (activeTab === 'selected' && !selectedIds.has(item.id)) return false;
@@ -1045,7 +1107,7 @@ export default function CustomPassiveShop() {
       if (normalizedQuery && !searchableText(item).includes(normalizedQuery)) return false;
       return true;
     });
-  }, [activeTab, normalizedQuery, selectedIds, supportedItemIds]);
+  }, [activeTab, normalizedQuery, selectedIds, supportedItemIds, popularItems]);
 
   const itemsByTier = useMemo(() => {
     const groups = createTierMap();
@@ -1110,6 +1172,13 @@ export default function CustomPassiveShop() {
 
   function updateQuery(value) {
     setQuery(value);
+  }
+
+  function changePopularHero(heroId) {
+    if (heroId === popularHeroId) return;
+    popularRequest.cancel();
+    clearPredictedHover();
+    setPopularHeroId(heroId);
   }
 
   function toggleItem(id) {
@@ -1179,7 +1248,7 @@ export default function CustomPassiveShop() {
     const shouldApplyPreset = options.applyPreset !== false;
     setTemplateState({ status: 'ready', bytes: null, offsets: null, presetTemplateId: preset.id });
     if (shouldApplyPreset) setSelectedIds(new Set(preset.presetItemIds));
-    setActiveTab('selected');
+    changeTab('selected');
     setTemplateGateOpen(false);
     setStatus(shouldApplyPreset
       ? `Verified ${REQUIRED_GAMEBANANA_TEMPLATE.fileName}; ${preset.label} mode preselected ${preset.presetItemIds.length} item${preset.presetItemIds.length === 1 ? '' : 's'} from ${preset.sourceArchive.fileName}. Template downloads when you build.`
@@ -1226,9 +1295,14 @@ export default function CustomPassiveShop() {
   }
 
   function changeTab(tabId) {
+    if (tabId !== 'popular') popularRequest.cancel();
+    if (tabId === 'popular' && activeTab !== 'popular') {
+      setPopularState({ heroId: popularHeroId, status: 'loading', data: null, error: '' });
+      setPopularHeroError('');
+    }
     setActiveTab(tabId);
     clearPredictedHover();
-    if (tabId !== 'search') setQuery('');
+    if (tabId !== 'all') setQuery('');
   }
 
   async function buildAndDownload(selectedItemIds) {
@@ -1310,7 +1384,7 @@ export default function CustomPassiveShop() {
               </div>
             </div>
           ) : (
-            <TierBoard key={`list-${activeTab}`} activeTab={activeTab} items={visibleItems} query={query} onQueryChange={updateQuery} selectedIds={selectedIds} predictedHoverItemId={predictedHoverItemId} relatedHoverIds={relatedHoverIds} onToggle={toggleItem} />
+            <TierBoard key={`list-${activeTab}`} activeTab={activeTab} items={visibleItems} query={query} onQueryChange={updateQuery} popular={{ heroId: popularHeroId, heroes: popularHeroes, onHeroChange: changePopularHero, data: currentPopularState.data, error: currentPopularState.error || popularHeroError, emptyMessage: currentPopularState.status === 'loading' ? 'Loading popularity data…' : currentPopularState.status === 'error' ? 'Popularity data unavailable' : 'No popularity data for this hero yet' }} selectedIds={selectedIds} predictedHoverItemId={predictedHoverItemId} relatedHoverIds={relatedHoverIds} onToggle={toggleItem} />
           )}
         </div>
         <CatalogSupportFooter />

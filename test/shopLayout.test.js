@@ -103,16 +103,20 @@ test('stock price font sizes and game font URLs preserve the deployment base pat
   const page = readFileSync(new URL('../src/pages/index.astro', import.meta.url), 'utf8');
   const css = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
   assert.match(page, /const shopFontBase = `\$\{import\.meta\.env\.BASE_URL\}assets\/deadlock\/panorama\/fonts\/`;/);
-  const names = ['valvepulp-bold.ttf', 'valveoracle-semibold.ttf', 'valveoracle-medium.ttf'];
-  const references = [...page.matchAll(/url\("([^"]+\.ttf)"\)|href=\{`([^`]+\.ttf)`\}/g)].map((match) => match[1] || match[2]);
-  assert.equal(references.length, 4, 'three font faces and the block font preload');
+  const names = ['valvepulp-bold.ttf', 'valveoracle-semibold.ttf', 'valveoracle-medium.ttf', 'radiance-regular.otf', 'radiance-bold.otf', 'radiance-semibold.otf'];
+  const references = [...page.matchAll(/url\("([^"]+\.(?:ttf|otf))"\)|href=\{`([^`]+\.(?:ttf|otf))`\}/g)].map((match) => match[1] || match[2]);
+  assert.equal(references.length, 7, 'six font faces and the block font preload');
   for (const reference of references) assert.ok(reference.startsWith('${shopFontBase}'), reference);
   for (const name of names) {
     assert.ok(references.includes(`\${shopFontBase}${name}`), name);
     assert.equal(existsSync(new URL(`../public/assets/deadlock/panorama/fonts/${name}`, import.meta.url)), true, name);
   }
   assert.match(page, /rel="preload" href=\{`\$\{shopFontBase\}valvepulp-bold\.ttf`\} as="font"/);
-  assert.doesNotMatch(css, /url\([^)]*\.ttf/, 'font sources must use the Astro BASE_URL-prefixed URLs');
+  assert.doesNotMatch(css, /url\([^)]*\.(?:ttf|otf)/, 'font sources must use the Astro BASE_URL-prefixed URLs');
+  assert.equal([...page.matchAll(/font-display: swap;/g)].length, 6);
+  assert.match(css, /font-family: Radiance, "Retail Demo", var\(--font-body\)/);
+  assert.match(css, /font-family: var\(--font-oracle\)/);
+  assert.doesNotMatch(page, /reaver-bold\.otf/);
 });
 
 test('every required shop surface has an optimized WebP asset', () => {

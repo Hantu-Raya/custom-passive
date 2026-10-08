@@ -213,6 +213,15 @@ test('loads verified GameBanana presets before building', async ({ page }) => {
   await expect(page.getByTestId('donation-link')).toHaveAttribute('href', 'https://ko-fi.com/hantuaraya');
   await expect(page.getByTestId('donation-link')).toHaveText('Donate');
   await expect(page.getByTestId('supporter-leaderboard-link')).toHaveAttribute('href', 'https://ko-fi.com/hantuaraya/leaderboard');
+  await expect(page.getByTestId('preset-template-details-toggle')).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.getByTestId('output-filename')).toBeHidden();
+  await page.getByTestId('preset-template-details-toggle').click();
+  await expect(page.getByTestId('preset-template-details-toggle')).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.getByTestId('output-filename')).toBeVisible();
+  const completeStatus = await page.getByRole('status').textContent();
+  await expect(page.getByRole('status')).toHaveAttribute('title', completeStatus);
+  await expect(page.locator('.build-details-status dd')).toBeVisible();
+  await expect(page.locator('.build-details-status dd')).toHaveText(completeStatus);
   await expect(page.getByTestId('preset-template-archive-sha')).toHaveText(REQUIRED_GAMEBANANA_TEMPLATE.sha256);
   await expect(page.getByTestId('preset-template-sha')).toHaveText(passiveOnly.templateSha256);
   await expect(page.getByTestId('output-filename')).toHaveText(passiveOnly.archiveOutputFileName);
@@ -467,6 +476,64 @@ test('keeps selected and category card scale stable across tab switches', async 
 
   expect(Math.abs(selectedWidth - weaponWidth)).toBeLessThan(1);
   expect(Math.abs(weaponAfterSelectedWidth - weaponWidth)).toBeLessThan(0.5);
+});
+
+test('fits the compact build panel without moving the desktop shop board', async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await openWeaponShop(page);
+  await page.evaluate(() => document.fonts.ready);
+
+  const readPanelGeometry = () => page.evaluate(() => {
+    const panel = document.querySelector('.build-panel');
+    const panelRect = panel.getBoundingClientRect();
+    const board = document.querySelector('.catalog-board').getBoundingClientRect();
+    return {
+      scrollHeight: panel.scrollHeight,
+      clientHeight: panel.clientHeight,
+      bottom: panelRect.bottom,
+      viewportHeight: window.innerHeight,
+      board: { x: board.x, y: board.y, width: board.width, height: board.height }
+    };
+  });
+  // Recorded from the pre-redesign Weapon board at 1600 × 900.
+  const expectedBoard = { x: 602.390625, y: 14, width: 943.84375, height: 819.984375 };
+  const collapsed = await readPanelGeometry();
+  expect(collapsed.scrollHeight).toBeLessThanOrEqual(collapsed.clientHeight + 1);
+  expect(collapsed.bottom).toBeLessThanOrEqual(collapsed.viewportHeight);
+  for (const [dimension, value] of Object.entries(expectedBoard)) {
+    expect(Math.abs(collapsed.board[dimension] - value), dimension).toBeLessThanOrEqual(0.1);
+  }
+
+  await page.getByTestId('preset-template-details-toggle').click();
+  const expanded = await readPanelGeometry();
+  expect(expanded.scrollHeight).toBeLessThanOrEqual(expanded.clientHeight + 1);
+  expect(expanded.bottom).toBeLessThanOrEqual(expanded.viewportHeight);
+  expect(expanded.board).toEqual(collapsed.board);
+
+  await page.setViewportSize({ width: 1280, height: 720 });
+  for (const presetId of Object.values(PRESET_TEMPLATE_IDS)) {
+    await page.getByTestId('preset-template-select').selectOption(presetId);
+    await page.getByTestId('tab-weapon').click();
+    const compact = await readPanelGeometry();
+    expect(compact.scrollHeight).toBeLessThanOrEqual(compact.clientHeight + 1);
+    expect(compact.bottom).toBeLessThanOrEqual(compact.viewportHeight);
+  }
+});
+
+test('keeps the stacked phone build controls touch-sized', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/custom-passive/');
+  await waitForHydration(page);
+  const controls = await page.locator('.build-panel').evaluate((panel) =>
+    [...panel.querySelectorAll('button, select, a')].map((control) => ({
+      name: control.getAttribute('aria-label') || control.textContent,
+      height: control.getBoundingClientRect().height
+    }))
+  );
+  for (const control of controls) expect(control.height, control.name).toBeGreaterThanOrEqual(44);
+  const panel = await page.locator('.build-panel').boundingBox();
+  const shop = await page.locator('.catalog-shell').boundingBox();
+  expect(panel.y + panel.height).toBeLessThanOrEqual(shop.y);
 });
 
 test('places the shop catalog close to the builder panel on desktop', async ({ page }) => {

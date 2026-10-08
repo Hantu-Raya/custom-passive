@@ -17,7 +17,7 @@ const PAK01 = 'G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/pak01_dir.
 const SOURCE2_VIEWER_CLI = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/.tmp/source2viewer-cli/Source2Viewer-CLI.exe';
 const VPKEDIT_CLI = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/vpk cli/vpkeditcli.exe';
 const SHOP_FONT_ROOT = path.join(path.dirname(PAK01), 'panorama/fonts');
-const SHOP_FONT_NAMES = Object.freeze(['valvepulp-bold.ttf', 'valveoracle-semibold.ttf', 'valveoracle-medium.ttf']);
+const SHOP_FONT_NAMES = Object.freeze(['valvepulp-bold.ttf', 'valveoracle-semibold.ttf', 'valveoracle-medium.ttf', 'radiance-regular.otf', 'radiance-bold.otf', 'radiance-semibold.otf']);
 const SHOP_LAYOUT_PATHS = Object.freeze([
   'panorama/styles/citadel_hud_hero_shop.vcss_c',
   'panorama/styles/citadel_shop_mods_filtered.vcss_c',

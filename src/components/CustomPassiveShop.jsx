@@ -829,18 +829,57 @@ function BuildDownloadPanel({
 
   return (
     <aside class="build-panel" aria-label="Build panel">
-      <div class="build-panel-heading">
-        <span class="eyebrow">Passive Builder</span>
-        <h1>Custom shop passives</h1>
-        <p>Choose which generated item records set <code>m_bShowInPassiveItemsArea</code>, then download a compressed archive containing the ready VPK.</p>
-      </div>
-      <dl class="build-stats">
-        <div>
-          <dt>Selected</dt>
-          <dd data-testid="selected-count">{selectedCount}</dd>
+      <header class="build-panel-heading">
+        <h1>Custom Passives</h1>
+        <button
+          type="button"
+          class="preset-template-toggle"
+          data-testid="preset-template-details-toggle"
+          aria-label="Build details"
+          aria-expanded={showPresetDetails}
+          aria-controls="preset-template-details"
+          onClick={() => setShowPresetDetails((isShown) => !isShown)}
+        >
+          <span aria-hidden="true">ⓘ</span>
+        </button>
+      </header>
+      <dl class="build-selection">
+        <dt>Selected</dt>
+        <dd data-testid="selected-count">{selectedCount}</dd>
+      </dl>
+      <div class="preset-template-panel">
+        <div class="preset-template-header">
+          <label for="preset-template-select">Preset</label>
+          <span><b data-testid="preset-template-count">{selectedPresetTemplate.presetItemIds.length}</b> items</span>
         </div>
+        <div class="preset-template-select-wrap">
+          <select
+            id="preset-template-select"
+            data-testid="preset-template-select"
+            value={presetTemplateId}
+            title={selectedPresetTemplate.label}
+            onInput={(event) => onPresetTemplateChange(event.currentTarget.value)}
+            onChange={(event) => onPresetTemplateChange(event.currentTarget.value)}
+          >
+            {PRESET_TEMPLATES.map((preset) => (
+              <option key={preset.id} value={preset.id}>{preset.label}</option>
+            ))}
+          </select>
+          <span aria-hidden="true">↓</span>
+        </div>
+      </div>
+      <div class="build-actions">
+        <button type="button" class="primary-build" data-testid="build-download" onClick={onBuild} disabled={!templateReady}>Build &amp; Download</button>
+        <div class="build-secondary-actions">
+          <button type="button" data-testid="reset-defaults" onClick={onReset}>Reset</button>
+          <button type="button" data-testid="clear-selection" onClick={onClear}>Clear</button>
+          <button type="button" aria-label="Select all shown" onClick={onSelectVisible} disabled={visibleCount === 0}>Select shown</button>
+        </div>
+      </div>
+      <p class="build-status" role="status" title={status}>{status}</p>
+      <dl id="preset-template-details" class="preset-template-details build-template-details" hidden={!showPresetDetails}>
         <div>
-          <dt>Archive</dt>
+          <dt>Archive output</dt>
           <dd data-testid="output-filename">{selectedPresetTemplate.archiveOutputFileName}</dd>
         </div>
         <div>
@@ -851,73 +890,39 @@ function BuildDownloadPanel({
           <dt>Internal file</dt>
           <dd>scripts/abilities.vdata_c</dd>
         </div>
-      </dl>
-      <section class="preset-template-panel" aria-labelledby="preset-template-heading">
-        <div class="preset-template-header">
-          <h2 id="preset-template-heading">Build mode</h2>
-          <span data-testid="preset-template-count">{selectedPresetTemplate.presetItemIds.length}</span>
+        <div>
+          <dt>Required archive</dt>
+          <dd>{REQUIRED_GAMEBANANA_TEMPLATE.fileName}</dd>
         </div>
-        <label for="preset-template-select">Preset</label>
-        <select
-          id="preset-template-select"
-          data-testid="preset-template-select"
-          value={presetTemplateId}
-          onInput={(event) => onPresetTemplateChange(event.currentTarget.value)}
-          onChange={(event) => onPresetTemplateChange(event.currentTarget.value)}
-        >
-          {PRESET_TEMPLATES.map((preset) => (
-            <option key={preset.id} value={preset.id}>{preset.label}</option>
-          ))}
-        </select>
-        <p>{selectedPresetTemplate.description} Preset selects {selectedPresetTemplate.presetItemIds.length} item{selectedPresetTemplate.presetItemIds.length === 1 ? '' : 's'}.</p>
-        <button
-          type="button"
-          class="preset-template-toggle"
-          data-testid="preset-template-details-toggle"
-          aria-expanded={showPresetDetails}
-          aria-controls="preset-template-details"
-          onClick={() => setShowPresetDetails((isShown) => !isShown)}
-        >
-          {showPresetDetails ? 'Hide details' : 'Show details'}
-        </button>
-        <dl id="preset-template-details" class="preset-template-details" hidden={!showPresetDetails}>
-          <div>
-            <dt>Required archive</dt>
-            <dd>{REQUIRED_GAMEBANANA_TEMPLATE.fileName}</dd>
-          </div>
-          <div>
-            <dt>Archive SHA-256</dt>
-            <dd data-testid="preset-template-archive-sha">{REQUIRED_GAMEBANANA_TEMPLATE.sha256}</dd>
-          </div>
-          <div>
-            <dt>Build template SHA-256</dt>
-            <dd data-testid="preset-template-sha">{selectedPresetTemplate.templateSha256}</dd>
-          </div>
-        </dl>
-        <a
-          class="gamebanana-template-link"
-          data-testid="gamebanana-template-link"
-          href={REQUIRED_GAMEBANANA_TEMPLATE.downloadPageUrl}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Open GameBanana page
-        </a>
-      </section>
-      <div class="build-actions">
-        <button type="button" data-testid="reset-defaults" onClick={onReset}>Reset selection</button>
-        <button type="button" data-testid="clear-selection" onClick={onClear}>Clear all</button>
-        <button type="button" onClick={onSelectVisible} disabled={visibleCount === 0}>Select all shown</button>
-        <button type="button" class="primary-build" data-testid="build-download" onClick={onBuild} disabled={!templateReady}>Build / download archive</button>
-      </div>
-      <p class="build-status" role="status">{status}</p>
+        <div>
+          <dt>Archive SHA-256</dt>
+          <dd data-testid="preset-template-archive-sha">{REQUIRED_GAMEBANANA_TEMPLATE.sha256}</dd>
+        </div>
+        <div>
+          <dt>Build template SHA-256</dt>
+          <dd data-testid="preset-template-sha">{selectedPresetTemplate.templateSha256}</dd>
+        </div>
+        <div class="build-details-status">
+          <dt>Status</dt>
+          <dd>{status}</dd>
+        </div>
+      </dl>
+      <a
+        class="gamebanana-template-link"
+        data-testid="gamebanana-template-link"
+        href={REQUIRED_GAMEBANANA_TEMPLATE.downloadPageUrl}
+        target="_blank"
+        rel="noreferrer"
+      >
+        GameBanana ↗
+      </a>
       <footer class="page-footer" aria-label="Project notices">
+        <p>Unofficial · Not affiliated with Valve.<br />Archives stay local · Popular tab contacts deadlock-api.com.</p>
         <p>
-          Unofficial, not affiliated with Valve. Archives stay local; the Popular tab contacts deadlock-api.com. Built by{' '}
-          <a href="https://github.com/Hantu-Raya" target="_blank" rel="noreferrer">Hantu-Raya</a>.
-          {' '}Source on{' '}
-          <a href="https://github.com/Hantu-Raya/custom-passive" target="_blank" rel="noreferrer">GitHub</a>.
-          {' '}Apache-2.0 licensed; see LICENSE and NOTICE.
+          <a href="https://github.com/Hantu-Raya" target="_blank" rel="noreferrer">Hantu-Raya</a>
+          {' · '}<a href="https://github.com/Hantu-Raya/custom-passive" target="_blank" rel="noreferrer">GitHub</a>
+          {' · '}<a href="https://github.com/Hantu-Raya/custom-passive/blob/main/LICENSE" target="_blank" rel="noreferrer">LICENSE</a>
+          {' / '}<a href="https://github.com/Hantu-Raya/custom-passive/blob/main/NOTICE" target="_blank" rel="noreferrer">NOTICE</a>
         </p>
       </footer>
     </aside>

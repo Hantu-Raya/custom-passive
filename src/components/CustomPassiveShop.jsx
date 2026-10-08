@@ -939,70 +939,93 @@ function TemplateGate({
   return (
     <div class="template-gate-backdrop" data-testid="template-gate">
       <section class="template-gate-dialog" role="dialog" aria-modal="true" aria-labelledby="template-gate-heading">
-        <span class="eyebrow">Template required</span>
-        <h2 id="template-gate-heading">Link {REQUIRED_GAMEBANANA_TEMPLATE.fileName}</h2>
-        <p>The builder needs the verified GameBanana template archive listed below before any VPK can be built.</p>
-        <label for="template-gate-preset">Template type</label>
-        <select
-          id="template-gate-preset"
-          data-testid="template-gate-preset"
-          value={presetTemplateId}
-          onInput={(event) => onPresetTemplateChange(event.currentTarget.value)}
-          onChange={(event) => onPresetTemplateChange(event.currentTarget.value)}
-        >
-          {PRESET_TEMPLATES.map((preset) => (
-            <option key={preset.id} value={preset.id}>{preset.label}</option>
-          ))}
-        </select>
-        <dl class="preset-template-details">
-          <div>
-            <dt>Required archive</dt>
-            <dd>{REQUIRED_GAMEBANANA_TEMPLATE.fileName}</dd>
+        <header class="template-gate-heading">
+          <h2 id="template-gate-heading">Template required</h2>
+        </header>
+        <div class="template-gate-body">
+          <div class="template-gate-row preset-template-panel">
+            <div class="preset-template-header">
+              <label for="template-gate-preset">Template type</label>
+              <p class="template-gate-hint">Choose your preset.</p>
+            </div>
+            <div class="preset-template-select-wrap">
+              <select
+                id="template-gate-preset"
+                data-testid="template-gate-preset"
+                value={presetTemplateId}
+                title={selectedPresetTemplate.label}
+                onInput={(event) => onPresetTemplateChange(event.currentTarget.value)}
+                onChange={(event) => onPresetTemplateChange(event.currentTarget.value)}
+              >
+                {PRESET_TEMPLATES.map((preset) => (
+                  <option key={preset.id} value={preset.id}>{preset.label}</option>
+                ))}
+              </select>
+              <span aria-hidden="true">↓</span>
+            </div>
           </div>
-          <div>
-            <dt>Archive SHA-256</dt>
-            <dd>{REQUIRED_GAMEBANANA_TEMPLATE.sha256}</dd>
+          <dl class="template-gate-details">
+            <div class="template-gate-row">
+              <dt>Required archive</dt>
+              <dd>{REQUIRED_GAMEBANANA_TEMPLATE.fileName}</dd>
+            </div>
+            <div class="template-gate-row">
+              <dt>SHA-256</dt>
+              <dd class="template-gate-sha">{REQUIRED_GAMEBANANA_TEMPLATE.sha256}</dd>
+            </div>
+            <div class="template-gate-row">
+              <dt>Preset selected</dt>
+              <dd>{selectedPresetTemplate.presetItemIds.length} item{selectedPresetTemplate.presetItemIds.length === 1 ? '' : 's'}</dd>
+            </div>
+          </dl>
+          <div class="template-gate-row">
+            <div class="template-gate-row-label">
+              <strong>GameBanana template</strong>
+              <p class="template-gate-hint">Get the required archive.</p>
+            </div>
+            <a
+              class="gamebanana-template-link"
+              data-testid="template-gate-link"
+              href={REQUIRED_GAMEBANANA_TEMPLATE.downloadPageUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Open GameBanana page
+            </a>
           </div>
-          <div>
-            <dt>Preset selected</dt>
-            <dd>{selectedPresetTemplate.presetItemIds.length} item{selectedPresetTemplate.presetItemIds.length === 1 ? '' : 's'}</dd>
+          <div class="template-gate-row">
+            <div class="template-gate-row-label">
+              <strong>Link template</strong>
+              <p class="template-gate-hint">Files stay local.</p>
+            </div>
+            <label
+              class="template-gate-dropzone"
+              for="template-gate-file"
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={(event) => {
+                event.preventDefault();
+                const file = event.dataTransfer?.files?.[0];
+                if (file) onTemplateFile(file);
+              }}
+            >
+              <span>Choose archive</span>
+              <em>or drop it here</em>
+              <input
+                id="template-gate-file"
+                class="template-gate-file"
+                data-testid="template-gate-file"
+                type="file"
+                accept=".7z,application/x-7z-compressed"
+                onChange={(event) => {
+                  const file = event.currentTarget.files?.[0];
+                  if (file) onTemplateFile(file);
+                  event.currentTarget.value = '';
+                }}
+              />
+            </label>
           </div>
-        </dl>
-        <a
-          class="gamebanana-template-link"
-          data-testid="template-gate-link"
-          href={REQUIRED_GAMEBANANA_TEMPLATE.downloadPageUrl}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Open GameBanana page
-        </a>
-        <label
-          class="template-gate-dropzone"
-          for="template-gate-file"
-          onDragOver={(event) => event.preventDefault()}
-          onDrop={(event) => {
-            event.preventDefault();
-            const file = event.dataTransfer?.files?.[0];
-            if (file) onTemplateFile(file);
-          }}
-        >
-          <span>Upload / link {REQUIRED_GAMEBANANA_TEMPLATE.fileName}</span>
-          <em>Use the exact archive listed above from GameBanana</em>
-        </label>
-        <input
-          id="template-gate-file"
-          class="template-gate-file"
-          data-testid="template-gate-file"
-          type="file"
-          accept=".7z,application/x-7z-compressed"
-          onChange={(event) => {
-            const file = event.currentTarget.files?.[0];
-            if (file) onTemplateFile(file);
-            event.currentTarget.value = '';
-          }}
-        />
-        <p class="template-gate-status" data-testid="template-gate-status" aria-live="polite">{status}</p>
+          <p class="template-gate-status" data-testid="template-gate-status" aria-live="polite">{status}</p>
+        </div>
       </section>
     </div>
   );

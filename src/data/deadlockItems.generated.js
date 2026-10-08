@@ -8,6 +8,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Spirit/Cooldown & Charges",
+      "Spirit/Spirit Power"
+    ],
     "label": "Extra Charge",
     "description": "Adds one to your ability max <span class=\"highlight\">charges</span>.",
     "imagePath": "items/spirit/extra_charge.png",
@@ -22,6 +26,9 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Spirit/Spirit Power"
+    ],
     "label": "Extra Spirit",
     "description": "",
     "imagePath": "items/spirit/extra_spirit.png",
@@ -36,6 +43,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Out of Combat Regen",
+      "Misc/Active Items",
+      "Mobility/Sprint"
+    ],
     "label": "Golden Goose Egg",
     "description": "Gain <span class=\"highlight\">souls over time</span>, as long as you are alive.",
     "imagePath": "items/spirit/goose_egg.png",
@@ -50,6 +62,9 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Spirit/Spirit Damage"
+    ],
     "label": "Mystic Burst",
     "description": "Charges up over time with {g:citadel_inline_attribute:'BonusSpiritDamage'}, causing abilities dealing more than <span class=\"highlight\">{s:MinimumDamage}</span> damage to deal additional damage.",
     "imagePath": "items/spirit/mystic_burst.png",
@@ -64,6 +79,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "imbue",
+    "shopFilters": [
+      "Misc/Imbue Items",
+      "Spirit/Range"
+    ],
     "label": "Mystic Expansion",
     "description": "Imbue an ability to increase its <span class=\"highlight\">range</span> and <span class=\"highlight\">effect radius</span>.",
     "imagePath": "items/spirit/mystic_reach.png",
@@ -78,6 +97,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Healing",
+      "Defense/Regen"
+    ],
     "label": "Mystic Regeneration",
     "description": "Dealing {g:citadel_inline_attribute:'SpiritDamage'} to enemy Heroes grants you Bonus {g:citadel_inline_attribute:'Regen'}. Stacks when dealing damage to different heroes.",
     "imagePath": "items/spirit/mystic_regen.png",
@@ -92,6 +116,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/HP",
+      "Disruption/Fire Rate Reduction",
+      "Disruption/Physical Vulnerability",
+      "Misc/Active Items",
+      "Mobility/Sprint"
+    ],
     "label": "Rusted Barrel",
     "description": "Target an enemy to reduce their <span class=\"highlight\">Fire Rate</span> and <span class=\"highlight\">Bullet Resistance</span>.",
     "imagePath": "items/spirit/rusted_barrel.png",
@@ -106,6 +137,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Disruption/Spirit Vulnerability",
+      "Physical/Melee",
+      "Spirit/Spirit Damage"
+    ],
     "label": "Spirit Strike",
     "description": "When you perform a <span class=\"highlight\">Light or Heavy Melee</span> attack against a hero, deal extra {g:citadel_inline_attribute:'SpiritDamage'} with the attack and reduce the target's <span class=\"highlight\">Spirit Resist</span>.<span class=\"diminish\"><br><br>Cooldown is {s:LightMeleeCooldownMult}x longer for Light Melee hits.</span>",
     "imagePath": "items/spirit/spirit_strike.png",
@@ -120,6 +156,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": true,
     "activationBadge": "",
+    "shopFilters": [
+      "Mobility/Jump/Dash/Slide",
+      "Mobility/Stamina",
+      "Spirit/Duration",
+      "Spirit/Range",
+      "Spirit/Spirit Power"
+    ],
     "label": "Arcane Surge",
     "description": "After you <span class=\"highlight\">Dash-Jump</span>, the <span class=\"highlight\">next ability you use</span> within {s:ArcaneSurgeWindow}s will have bonus <span class=\"highlight\">Range, Duration,</span> and <span class=\"highlight\">Spirit Power</span>.",
     "imagePath": "items/spirit/arcane_surge.png",
@@ -134,6 +177,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Physical Resistance",
+      "Disruption/Physical Vulnerability",
+      "Physical/Weapon Damage"
+    ],
     "label": "Bullet Resist Shredder",
     "description": "Reduces <span class=\"highlight\">Bullet Resist</span> on enemies when you deal {g:citadel_inline_attribute:'SpiritDamage'}.",
     "imagePath": "items/spirit/bullet_resist_shredder.png",
@@ -148,6 +196,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Spirit Resistance",
+      "Disruption/Slow",
+      "Misc/Active Items",
+      "Spirit/Spirit Damage"
+    ],
     "label": "Cold Front",
     "description": "Release an expanding ice blast that deals {g:citadel_inline_attribute:'SpiritDamage'} and <span class=\"highlight\">Slows</span> targets it hits.",
     "imagePath": "items/spirit/cold_front.png",
@@ -162,6 +216,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "imbue",
+    "shopFilters": [
+      "Misc/Imbue Items",
+      "Spirit/Cooldown & Charges"
+    ],
     "label": "Compress Cooldown",
     "description": "Imbue an ability to reduce its <span class=\"highlight\">Cooldown</span>.",
     "imagePath": "items/spirit/improved_cooldown.png",
@@ -176,6 +234,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "imbue",
+    "shopFilters": [
+      "Misc/Imbue Items",
+      "Spirit/Duration"
+    ],
     "label": "Duration Extender",
     "description": "Imbue an ability to increase its <span class=\"highlight\">Duration</span>.",
     "imagePath": "items/spirit/duration_extender.png",
@@ -190,6 +252,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Out of Combat Regen",
+      "Spirit/Spirit Power"
+    ],
     "label": "Improved Spirit",
     "description": "",
     "imagePath": "items/spirit/improved_spirit.png",
@@ -204,6 +270,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Disruption/Slow",
+      "Mobility/Sprint"
+    ],
     "label": "Mystic Slow",
     "description": "When the target takes {g:citadel_inline_attribute:'SpiritDamage'}, they have their <span class=\"highlight\">Move Speed</span> reduced.",
     "imagePath": "items/spirit/mystic_slow.png",
@@ -218,6 +289,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Spirit Resistance",
+      "Disruption/Spirit Vulnerability"
+    ],
     "label": "Mystic Vulnerability",
     "description": "When an enemy takes {g:citadel_inline_attribute:'SpiritDamage'}, they have their {g:citadel_inline_attribute:'SpiritResist'} reduced.",
     "imagePath": "items/spirit/mystic_vulnerability.png",
@@ -232,6 +307,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "imbue",
+    "shopFilters": [
+      "Misc/Imbue Items",
+      "Physical/Ammo",
+      "Physical/Fire Rate",
+      "Spirit/Spirit Damage"
+    ],
     "label": "Quicksilver Reload",
     "description": "Your imbued ability charges up over time with {g:citadel_inline_attribute:'BonusSpiritDamage'}, {g:citadel_inline_attribute:'BonusFireRate'}, and <span class=\"highlight\">reloads bullets</span> on use.",
     "imagePath": "items/spirit/quicksilver_reload.png",
@@ -246,6 +327,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Disruption/Slow",
+      "Misc/Active Items",
+      "Mobility/Sprint"
+    ],
     "label": "Slowing Hex",
     "description": "<span class=\"highlight\">Slows movement</span> of enemy target. Also <span class=\"highlight\">Silences</span> their <span class=\"highlight\">movement-based items and abilities</span>.<br><span class=\"diminish\">Increases the target's gravity.<br>Does not affect target's stamina usage.</span>",
     "imagePath": "items/spirit/slowing_hex.png",
@@ -260,6 +346,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/HP",
+      "Disruption/Spirit Damage Reduction",
+      "Disruption/Spirit Vulnerability",
+      "Misc/Active Items"
+    ],
     "label": "Spirit Sap",
     "description": "Target an enemy to <span class=\"highlight\">reduce their Spirit Resist</span> and <span class=\"highlight\">Spirit Power</span>.",
     "imagePath": "items/spirit/spirit_sap.png",
@@ -274,6 +366,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Physical Resistance",
+      "Disruption/Fire Rate Reduction",
+      "Spirit/Spirit Power"
+    ],
     "label": "Suppressor",
     "description": "When you deal {g:citadel_inline_attribute:'SpiritDamage'} to enemies, you also reduce their <span class=\"highlight\">Fire Rate</span>.",
     "imagePath": "items/spirit/suppressor.png",
@@ -288,6 +385,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/HP",
+      "Disruption/Anti-Healing",
+      "Misc/Active Items",
+      "Spirit/Health % Damage",
+      "Spirit/Spirit Power"
+    ],
     "label": "Decay",
     "description": "Inflict <span class=\"highlight\">damage over time</span> to a target, dealing damage based on their current health.<br>Decay's damage is non-lethal and does not apply item procs.",
     "imagePath": "items/spirit/decay.png",
@@ -302,6 +406,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/HP",
+      "Disruption/Disarm",
+      "Disruption/Physical Vulnerability",
+      "Misc/Active Items",
+      "Mobility/Sprint"
+    ],
     "label": "Disarming Hex",
     "description": "<span class=\"highlight\">Disarms</span> enemy target and reduces their <span class=\"highlight\">Bullet Resist</span>.",
     "imagePath": "items/spirit/disarming_hex.png",
@@ -316,6 +427,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "imbue",
+    "shopFilters": [
+      "Defense/Spirit Resistance",
+      "Spirit/Range"
+    ],
     "label": "Greater Expansion",
     "description": "Increases the <span class=\"highlight\">range</span> and <span class=\"highlight\">effect radius</span> of your abilities and items.",
     "imagePath": "items/spirit/greater_expansion.png",
@@ -330,6 +445,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/HP",
+      "Disruption/Stun",
+      "Misc/Active Items",
+      "Spirit/Range"
+    ],
     "label": "Knockdown",
     "description": "Apply a <span class=\"highlight\">Stun</span> after <span class=\"highlight\">{s:StunDelay}s</span>. Stun duration is increased against <span class=\"highlight\">airborne</span> targets.<br><br><span class=\"diminish\">Increases the target's gravity for the duration of the stun.</span>",
     "imagePath": "items/spirit/knockdown.png",
@@ -344,6 +465,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Healing",
+      "Defense/Regen",
+      "Mobility/Move Speed"
+    ],
     "label": "Radiant Regeneration",
     "description": "<span class=\"highlight\">Heal</span> and gain bonus <span class=\"highlight\">Movement Speed</span> for a short duration when you cast an ability.",
     "imagePath": "items/spirit/radiant_regeneration.png",
@@ -358,6 +485,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Spirit/Cooldown & Charges",
+      "Spirit/Spirit Power"
+    ],
     "label": "Rapid Recharge",
     "description": "",
     "imagePath": "items/spirit/rapid_recharge.png",
@@ -372,6 +503,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/HP",
+      "Disruption/Silence",
+      "Misc/Active Items",
+      "Spirit/Spirit Damage"
+    ],
     "label": "Silence Wave",
     "description": "Launch an expanding projectile which <span class=\"highlight\">Silences</span> enemies for a short duration and deals impact damage. <br><br><span class=\"diminish\">Silence does not interrupt channeling abilities.</span>",
     "imagePath": "items/spirit/silence_glyph.png",
@@ -386,6 +523,15 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Spirit Resistance",
+      "Disruption/Spirit Damage Reduction",
+      "Disruption/Spirit Vulnerability",
+      "Physical/Melee",
+      "Spirit/Spirit Damage",
+      "Spirit/Spirit Power"
+    ],
     "label": "Spirit Snatch",
     "description": "When you perform a <span class=\"highlight\">Light or Heavy Melee</span> attack against a hero, the attack deals extra {g:citadel_inline_attribute:'SpiritDamage'} and steals <span class=\"highlight\">Spirit Resist</span> and <span class=\"highlight\">Spirit Power</span>.<span class=\"diminish\"><br><br>Effects are reduced by {s:LightMeleeReduction}% for Light Melee hits.</span>",
     "imagePath": "items/spirit/spirit_snatch.png",
@@ -400,6 +546,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Out of Combat Regen",
+      "Spirit/Cooldown & Charges"
+    ],
     "label": "Superior Cooldown",
     "description": "Reduces the <span class=\"highlight\">Cooldown</span> of your abilities.",
     "imagePath": "items/spirit/superior_cooldown.png",
@@ -414,6 +564,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "imbue",
+    "shopFilters": [
+      "Defense/Physical Resistance",
+      "Spirit/Duration"
+    ],
     "label": "Superior Duration",
     "description": "Increases the <span class=\"highlight\">duration</span> of your abilities and items.",
     "imagePath": "items/spirit/superior_duration.png",
@@ -428,6 +582,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "imbue",
+    "shopFilters": [
+      "Misc/Imbue Items",
+      "Mobility/Move Speed",
+      "Physical/Fire Rate",
+      "Spirit/Spirit Power"
+    ],
     "label": "Surge of Power",
     "description": "Imbue an ability with <span class=\"highlight\">permanent Spirit Power</span>. When that ability is used, gain bonus <span class=\"highlight\">Move Speed</span> and maintain full speed while attacking.",
     "imagePath": "items/spirit/surge_of_power.png",
@@ -442,6 +602,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Spirit/Health % Damage",
+      "Spirit/Spirit Damage"
+    ],
     "label": "Tankbuster",
     "description": "Charges up over time with {g:citadel_inline_attribute:'BonusSpiritDamage'}, causing abilities dealing more than <span class=\"highlight\">{s:MinimumDamage}</span> damage to deal additional damage. <span class=\"highlight\">Ignores Spirit Resistance.</span>",
     "imagePath": "items/spirit/tankbuster.png",
@@ -456,6 +621,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Melee Resistance",
+      "Spirit/Spirit Damage"
+    ],
     "label": "Torment Pulse",
     "description": "Periodically deals {g:citadel_inline_attribute:'SpiritDamage'} to the closest two enemies nearby.",
     "imagePath": "items/spirit/torment_pulse.png",
@@ -470,6 +640,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Spirit Resistance",
+      "Disruption/Immobilize",
+      "Disruption/Slow",
+      "Misc/Active Items",
+      "Spirit/Spirit Damage"
+    ],
     "label": "Arctic Blast",
     "description": "Release an expanding ice blast that deals {g:citadel_inline_attribute:'SpiritDamage'}, <span class=\"highlight\">Freezing</span> and then <span class=\"highlight\">Slowing</span> targets it hits.<br><br>Slowed targets have their <span class=\"highlight\">stamina regen frozen</span>",
     "imagePath": "items/spirit/arctic_blast.png",
@@ -484,6 +661,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Out of Combat Regen",
+      "Spirit/Spirit Power"
+    ],
     "label": "Boundless Spirit",
     "description": "",
     "imagePath": "items/spirit/boundless_spirit.png",
@@ -498,6 +680,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Disruption/Curse",
+      "Disruption/Disarm",
+      "Disruption/Silence",
+      "Misc/Active Items"
+    ],
     "label": "Cursed Relic",
     "description": "Curses an enemy - <span class=\"highlight\">interrupting, Silencing, Disarming</span>, and <span class=\"highlight\">preventing item usage</span>. <span class=\"highlight\">Removes all non-ultimate buffs</span>.<br><br>Your own <span class=\"highlight\">Damage Output</span> is reduced for the duration.",
     "imagePath": "items/spirit/curse.png",
@@ -512,6 +700,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "imbue",
+    "shopFilters": [
+      "Defense/Physical Resistance",
+      "Defense/Spirit Resistance",
+      "Misc/Active Items",
+      "Misc/Imbue Items"
+    ],
     "label": "Echo Shard",
     "description": "",
     "imagePath": "items/spirit/echo_shard.png",
@@ -526,6 +720,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Spirit Resistance",
+      "Disruption/Spirit Vulnerability"
+    ],
     "label": "Escalating Exposure",
     "description": "Dealing {g:citadel_inline_attribute:'SpiritDamage'} applies a stacking <span class=\"highlight\">Spirit Amp</span> that increases your {g:citadel_inline_attribute:'SpiritDamage'} to the target.",
     "imagePath": "items/spirit/escalating_exposure.png",
@@ -540,6 +738,14 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Anti-CC",
+      "Defense/Invulnerability",
+      "Defense/Spirit Resistance",
+      "Misc/Active Items",
+      "Mobility/Move Speed",
+      "Spirit/Spirit Power"
+    ],
     "label": "Ethereal Shift",
     "description": "Instantly enter a void state and become Invulnerable for a short duration.",
     "imagePath": "items/spirit/ethereal_shift.png",
@@ -554,6 +760,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Disruption/Silence",
+      "Disruption/Spirit Damage Reduction",
+      "Disruption/Spirit Vulnerability",
+      "Misc/Active Items",
+      "Physical/Fire Rate"
+    ],
     "label": "Focus Lens",
     "description": "Target an enemy to <span class=\"highlight\">Silence</span> them. A portion of <span class=\"highlight\">all damage dealt</span> during the silence gets applied to the target when the silence wears off.",
     "imagePath": "items/spirit/focus_lens.png",
@@ -568,6 +781,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": true,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Disruption/Slow",
+      "Disruption/Stun",
+      "Mobility/Sprint",
+      "Spirit/Spirit Damage"
+    ],
     "label": "Lightning Scroll",
     "description": "Damage from your ultimate applies a {g:citadel_inline_attribute:'Stun'} and deals {g:citadel_inline_attribute:'BonusSpiritDamage'} after a short delay.</span>",
     "imagePath": "items/spirit/lightning_scroll.png",
@@ -582,6 +802,14 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/HP",
+      "Misc/Active Items",
+      "Mobility/Jump/Dash/Slide",
+      "Mobility/Move Speed",
+      "Spirit/Duration",
+      "Spirit/Spirit Power"
+    ],
     "label": "Magic Carpet",
     "description": "Summon a Magic Carpet that will <span class=\"highlight\">fly</span> you away. While flying you are immune to slows and doing any action will dismiss the carpet. <span class=\"diminish\"><br>Cannot use abilities while the carpet is being summoned.</span>",
     "imagePath": "items/spirit/magic_carpet.png",
@@ -596,6 +824,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "imbue",
+    "shopFilters": [
+      "Misc/Imbue Items",
+      "Physical/Ammo",
+      "Physical/Fire Rate",
+      "Spirit/Spirit Damage",
+      "Spirit/Spirit Power"
+    ],
     "label": "Mercurial Magnum",
     "description": "Your imbued ability charges up over time with {g:citadel_inline_attribute:'BonusSpiritDamage'}, {g:citadel_inline_attribute:'BonusFireRate'}, and <span class=\"highlight\">reloads bullets</span> on use. Until your next reload, your <span class=\"highlight\">bullets deal {g:citadel_inline_attribute:'BonusSpiritDamage'}</span> based on your Spirit Power.",
     "imagePath": "items/spirit/mercurial_magnum.png",
@@ -610,6 +845,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "imbue",
+    "shopFilters": [
+      "Defense/Lifesteal",
+      "Disruption/Slow",
+      "Misc/Imbue Items",
+      "Spirit/Spirit Damage"
+    ],
     "label": "Mystic Reverb",
     "description": "",
     "imagePath": "items/spirit/mystic_reverb.png",
@@ -624,6 +865,9 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Misc/Active Items"
+    ],
     "label": "Refresher",
     "description": "<span class=\"highlight\">Reset the cooldown</span> of all your abilities and <span class=\"highlight\">restore all your charges</span>.",
     "imagePath": "items/spirit/refresher.png",
@@ -638,6 +882,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Debuff Resistance",
+      "Defense/HP",
+      "Defense/Spirit Resistance",
+      "Misc/Active Items",
+      "Spirit/Health % Damage"
+    ],
     "label": "Scourge",
     "description": "Apply <span class=\"highlight\">Spirit Resist</span>, <span class=\"highlight\">Debuff Resist</span> and an aura on a friendly target that deals <span class=\"highlight\">{g:citadel_inline_attribute:'SpiritIcon'}damage</span> to enemies proportional to their max health. Existing debuffs on the target are reduced.<br>Can be self cast.",
     "imagePath": "items/spirit/scourge.png",
@@ -652,6 +903,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Disruption/Anti-Healing",
+      "Spirit/Range",
+      "Spirit/Spirit Damage"
+    ],
     "label": "Spirit Burn",
     "description": "Dealing significant {g:citadel_inline_attribute:'SpiritDamage'} to an enemy within {s:DamageThresholdDuration}s causes an explosion dealing damage and a burn to that enemy. While burning, enemies take damage over time and receive reduced healing.<br><span class=\"diminish\">The cooldown is per enemy, so each target can only be burned once per cooldown. Deals half-damage on non-heroes.</span>",
     "imagePath": "items/spirit/spirit_burn.png",
@@ -666,6 +922,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Out of Combat Regen",
+      "Spirit/Cooldown & Charges"
+    ],
     "label": "Transcendent Cooldown",
     "description": "Reduces the <span class=\"highlight\">Cooldown</span> of your abilities and items.",
     "imagePath": "items/spirit/transcendent_cooldown.png",
@@ -680,6 +940,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Disruption/Immobilize",
+      "Disruption/Slow",
+      "Misc/Active Items",
+      "Mobility/Sprint",
+      "Spirit/Range"
+    ],
     "label": "Vortex Web",
     "description": "",
     "imagePath": "items/spirit/vortex_web.png",
@@ -694,6 +961,9 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP"
+    ],
     "label": "Extra Health",
     "description": "",
     "imagePath": "items/vitality/extra_health.png",
@@ -708,6 +978,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Out of Combat Regen",
+      "Defense/Regen"
+    ],
     "label": "Extra Regen",
     "description": "",
     "imagePath": "items/vitality/extra_regen.png",
@@ -722,6 +996,9 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Mobility/Stamina"
+    ],
     "label": "Extra Stamina",
     "description": "",
     "imagePath": "items/vitality/extra_stamina.png",
@@ -736,6 +1013,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Barrier",
+      "Defense/Out of Combat Regen",
+      "Misc/Active Items"
+    ],
     "label": "Grit",
     "description": "Gain a <span class=\"highlight\">Barrier</span> for a short duration.",
     "imagePath": "items/vitality/grit.png",
@@ -750,6 +1032,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Healing",
+      "Defense/Regen",
+      "Misc/Active Items",
+      "Mobility/Sprint"
+    ],
     "label": "Healing Rite",
     "description": "Grant <span class=\"highlight\">Regen</span> and <span class=\"highlight\">Sprint Speed</span> to the target. Gets dispelled if you take damage from enemy players or objectives. Can be self-cast.",
     "imagePath": "items/vitality/healing_rite.png",
@@ -764,6 +1052,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Lifesteal",
+      "Physical/Melee"
+    ],
     "label": "Melee Lifesteal",
     "description": "Your next <span class=\"highlight\">Melee</span> attack <span class=\"highlight\">heals you</span>. <span class=\"diminish\"><br><br>This heal is {s:NonHeroHealPct}% effective vs non-heroes. <br>Cooldown is {s:LightMeleeCooldownMult}x as long for Light Melee hits.</span>",
     "imagePath": "items/vitality/melee_lifesteal.png",
@@ -778,6 +1070,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Healing",
+      "Defense/Melee Resistance"
+    ],
     "label": "Rebuttal",
     "description": "On a successful <span class=\"highlight\">Parry</span> against an enemy Hero, <span class=\"highlight\">Heal</span> yourself for the damage parried and returns that damage to the target, and temporarily gain increased <span class=\"highlight\">damage.</span>",
     "imagePath": "items/vitality/rebuttal.png",
@@ -792,6 +1089,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Out of Combat Regen",
+      "Mobility/Sprint"
+    ],
     "label": "Sprint Boots",
     "description": "",
     "imagePath": "items/vitality/sprint_boots.png",
@@ -806,6 +1107,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": true,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Out of Combat Regen",
+      "Defense/Physical Resistance",
+      "Physical/Fire Rate",
+      "Physical/Weapon Damage"
+    ],
     "label": "Battle Vest",
     "description": "While you are <span class=\"highlight\">above {s:LifeThreshold}% health</span>, gain <span class=\"highlight\">{g:citadel_inline_attribute:'WeaponDamage'}</span> and <span class=\"highlight\">{g:citadel_inline_attribute:'BonusFireRate'}</span>.",
     "imagePath": "items/vitality/battle_vest.png",
@@ -820,6 +1127,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Lifesteal",
+      "Physical/Weapon Damage"
+    ],
     "label": "Bullet Lifesteal",
     "description": "",
     "imagePath": "items/vitality/bullet_lifesteal.png",
@@ -834,6 +1146,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Debuff Resistance",
+      "Defense/HP"
+    ],
     "label": "Debuff Reducer",
     "description": "Reduces the <span class=\"highlight\">duration</span> of all negative effects applied to you.",
     "imagePath": "items/vitality/debuff_reducer.png",
@@ -848,6 +1164,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": true,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Out of Combat Regen",
+      "Defense/Spirit Resistance",
+      "Spirit/Cooldown & Charges",
+      "Spirit/Spirit Power"
+    ],
     "label": "Enchanter's Emblem",
     "description": "While you are <span class=\"highlight\">above {s:LifeThreshold}% health</span>, gain bonus <span class=\"highlight\">{g:citadel_inline_attribute:'Spirit'}</span> and <span class=\"highlight\">Cooldown Reduction</span>.",
     "imagePath": "items/vitality/enchanters_emblem.png",
@@ -862,6 +1184,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Out of Combat Regen",
+      "Defense/Slow Resistance",
+      "Mobility/Move Speed"
+    ],
     "label": "Enduring Speed",
     "description": "Reduces the effect of enemy <span class=\"highlight\">Move Speed</span> penalties.",
     "imagePath": "items/vitality/enduring_speed.png",
@@ -876,6 +1203,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Barrier",
+      "Defense/Out of Combat Regen",
+      "Misc/Active Items",
+      "Mobility/Move Speed",
+      "Spirit/Range"
+    ],
     "label": "Guardian Ward",
     "description": "Provide the target with a <span class=\"highlight\">Barrier</span> and temporary <span class=\"highlight\">Move Speed</span>. <span class=\"diminish\"><br>Can be self-cast.<br>Cooldown is reduced by half when cast on someone else.</span>",
     "imagePath": "items/vitality/guardian_ward.png",
@@ -890,6 +1224,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Healing",
+      "Disruption/Anti-Healing",
+      "Spirit/Spirit Power"
+    ],
     "label": "Healbane",
     "description": "Your {g:citadel_inline_attribute:'SpiritDamage'} reduces the enemy's <span class=\"highlight\">Incoming Healing</span>. If an enemy hero dies under this effect, you receive a large heal.",
     "imagePath": "items/vitality/healbane.png",
@@ -904,6 +1243,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Healing",
+      "Defense/Out of Combat Regen",
+      "Defense/Regen"
+    ],
     "label": "Healing Booster",
     "description": "Increases the effectiveness of your <span class=\"highlight\">healing</span>.",
     "imagePath": "items/vitality/healing_booster.png",
@@ -918,6 +1262,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Anti-CC",
+      "Defense/Barrier",
+      "Defense/Out of Combat Regen"
+    ],
     "label": "Reactive Barrier",
     "description": "Gain a <span class=\"highlight\">Barrier</span> when you are <span class=\"highlight\">Stunned, Chained, Immobilized, Slept or Silenced</span>.",
     "imagePath": "items/vitality/reactive_barrier.png",
@@ -932,6 +1281,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Healing",
+      "Defense/Spirit Resistance",
+      "Misc/Active Items",
+      "Mobility/Stamina"
+    ],
     "label": "Restorative Locket",
     "description": "",
     "imagePath": "items/vitality/restorative_locket.png",
@@ -946,6 +1301,9 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Misc/Active Items"
+    ],
     "label": "Return Fire",
     "description": "Automatically <span class=\"highlight\">fire a bullet</span> towards any attacker who damages you with their abilities or weapon.",
     "imagePath": "items/vitality/return_fire.png",
@@ -960,6 +1318,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Lifesteal",
+      "Spirit/Spirit Power"
+    ],
     "label": "Spirit Lifesteal",
     "description": "",
     "imagePath": "items/vitality/spirit_lifesteal.png",
@@ -974,6 +1337,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Barrier",
+      "Defense/Out of Combat Regen",
+      "Defense/Physical Resistance",
+      "Defense/Spirit Resistance"
+    ],
     "label": "Spirit Shielding",
     "description": "Gain a <span class=\"highlight\">Barrier</span> whenever you take significant {g:citadel_inline_attribute:'SpiritDamage'} from enemy Heroes in a small time frame.",
     "imagePath": "items/vitality/spirit_shielding.png",
@@ -988,6 +1357,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Out of Combat Regen",
+      "Mobility/Sprint",
+      "Spirit/Range"
+    ],
     "label": "Trophy Collector",
     "description": "Whenever you score an <span class=\"highlight\">assist or kill</span>, gain extra <span class=\"highlight\">sprint</span>, <span class=\"highlight\">ability range</span> and <span class=\"highlight\">passive soul generation</span>. This effect stacks and persists through death.",
     "imagePath": "items/vitality/trophy_collector.png",
@@ -1002,6 +1376,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Barrier",
+      "Defense/Out of Combat Regen",
+      "Defense/Physical Resistance"
+    ],
     "label": "Weapon Shielding",
     "description": "Gain a <span class=\"highlight\">Barrier</span> whenever you take significant {g:citadel_inline_attribute:'WeaponDamage'} from enemy Heroes in a small time frame.",
     "imagePath": "items/vitality/weapon_shielding.png",
@@ -1016,6 +1395,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Out of Combat Regen",
+      "Defense/Physical Resistance"
+    ],
     "label": "Bullet Resilience",
     "description": "When below <span class=\"highlight\">{s:HealthThreshold}% health</span>, gain additional <span class=\"highlight\">Bullet Resist</span>.",
     "imagePath": "items/vitality/bullet_resilience.png",
@@ -1030,6 +1413,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Anti-CC",
+      "Defense/HP",
+      "Defense/Healing",
+      "Mobility/Move Speed",
+      "Spirit/Spirit Power"
+    ],
     "label": "Counterspell",
     "description": "Your next parry <span class=\"highlight\">protects you from the damage and effects of enemy abilities and items</span>. On a successful spell parry {g:citadel_inline_attribute:'Heal'} and gain {g:citadel_inline_attribute:'MoveSpeed'} and {g:citadel_inline_attribute:'Spirit'}.",
     "imagePath": "items/vitality/counterspell.png",
@@ -1044,6 +1434,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Debuff Resistance",
+      "Defense/Healing",
+      "Defense/Spirit Resistance",
+      "Misc/Active Items",
+      "Mobility/Move Speed"
+    ],
     "label": "Dispel Magic",
     "description": "",
     "imagePath": "items/vitality/debuff_remover.png",
@@ -1058,6 +1455,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": true,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Out of Combat Regen",
+      "Mobility/Move Speed"
+    ],
     "label": "Fortitude",
     "description": "After not taking damage for a period, gain health regen.",
     "imagePath": "items/vitality/fortitude.png",
@@ -1072,6 +1474,15 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Lifesteal",
+      "Defense/Spirit Resistance",
+      "Misc/Active Items",
+      "Mobility/Move Speed",
+      "Physical/Fire Rate",
+      "Physical/Weapon Damage"
+    ],
     "label": "Fury Trance",
     "description": "",
     "imagePath": "items/vitality/fury_trance.png",
@@ -1086,6 +1497,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Healing",
+      "Misc/Active Items",
+      "Spirit/Range",
+      "Spirit/Spirit Power"
+    ],
     "label": "Healing Nova",
     "description": "<span class=\"highlight\">Heal</span> yourself and nearby allies.",
     "imagePath": "items/vitality/healing_nova.png",
@@ -1100,6 +1517,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Lifesteal",
+      "Disruption/Slow",
+      "Physical/Melee"
+    ],
     "label": "Lifestrike",
     "description": "Your <span class=\"highlight\">Melee Attack</span> applies <span class=\"highlight\">Movement Slow</span> and <span class=\"highlight\">heals you</span> for a percentage of the <span class=\"highlight\">Melee Damage</span> dealt plus a fixed amount. <span class=\"diminish\"><br><br>This heal is {s:NonHeroHealPct}% effective vs non-heroes. <br>Cooldown is {s:LightMeleeCooldownMult}x as long for Light Melee hits.</span>",
     "imagePath": "items/vitality/lifestrike.png",
@@ -1114,6 +1537,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Barrier",
+      "Misc/Active Items",
+      "Mobility/Jump/Dash/Slide"
+    ],
     "label": "Majestic Leap",
     "description": "<span class=\"highlight\">Launch yourself</span> high into the air and grant yourself a <span class=\"highlight\">Barrier</span>. While in the air, you can use the active again to drop down faster.<br><br><span class=\"diminish\">Cannot be used for {s:InterruptCooldown}s if attacked by enemy Hero.</span>",
     "imagePath": "items/vitality/majestic_leap.png",
@@ -1128,6 +1556,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Physical Resistance",
+      "Misc/Active Items"
+    ],
     "label": "Metal Skin",
     "description": "Become <span class=\"highlight\">immune to bullets</span>.",
     "imagePath": "items/vitality/metal_skin.png",
@@ -1142,6 +1574,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Healing",
+      "Misc/Active Items",
+      "Mobility/Sprint",
+      "Spirit/Range"
+    ],
     "label": "Rescue Beam",
     "description": "<span class=\"highlight\">Heals</span> a target allied hero and yourself for a percentage of <span class=\"highlight\">Max Health</span>. Once while healing, you can <span class=\"highlight\">Pull</span> the target towards you. Can be self-cast.",
     "imagePath": "items/vitality/rescue_beam.png",
@@ -1156,6 +1594,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Out of Combat Regen",
+      "Defense/Spirit Resistance"
+    ],
     "label": "Spirit Resilience",
     "description": "When below <span class=\"highlight\">{s:HealthThreshold}% health</span>, gain additional Spirit Resist.",
     "imagePath": "items/vitality/spirit_resilience.png",
@@ -1170,6 +1612,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Mobility/Jump/Dash/Slide",
+      "Mobility/Stamina"
+    ],
     "label": "Stamina Mastery",
     "description": "",
     "imagePath": "items/vitality/stamina_mastery.png",
@@ -1184,6 +1630,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Healing",
+      "Mobility/Move Speed",
+      "Mobility/Stealth",
+      "Spirit/Spirit Power"
+    ],
     "label": "Veil Walker",
     "description": "Walking through a <span class=\"highlight\">cosmic veil</span> grants you <span class=\"highlight\">Stealth</span>, <span class=\"highlight\">Heal</span> and increased <span class=\"highlight\">Move Speed</span>.",
     "imagePath": "items/vitality/veil_walker.png",
@@ -1198,6 +1651,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Physical Resistance",
+      "Misc/Active Items",
+      "Mobility/Teleport"
+    ],
     "label": "Warp Stone",
     "description": "<span class=\"highlight\">Teleport</span> straight ahead, gaining <span class=\"highlight\">Bullet Resist</span>.",
     "imagePath": "items/vitality/warp_stone.png",
@@ -1212,6 +1670,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Debuff Resistance",
+      "Defense/HP",
+      "Defense/Invulnerability",
+      "Defense/Physical Resistance"
+    ],
     "label": "Cheat Death",
     "description": "",
     "imagePath": "items/vitality/cheat_death.png",
@@ -1226,6 +1690,15 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Physical Resistance",
+      "Defense/Spirit Resistance",
+      "Disruption/Slow",
+      "Misc/Active Items",
+      "Physical/Melee",
+      "Physical/Weapon Damage"
+    ],
     "label": "Colossus",
     "description": "Grow <span class=\"highlight\">larger in size</span>, gaining {g:citadel_inline_attribute:'BulletResist'}, {g:citadel_inline_attribute:'SpiritResist'}, and {g:citadel_inline_attribute:'MeleeDamage'}. <br><br>Nearby enemies suffer from {g:citadel_inline_attribute:'Slow'} and have reduced <span class=\"highlight\">dash speed</span>.",
     "imagePath": "items/vitality/colossus.png",
@@ -1240,6 +1713,14 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Barrier",
+      "Defense/Debuff Resistance",
+      "Defense/Out of Combat Regen",
+      "Misc/Active Items",
+      "Mobility/Move Speed",
+      "Spirit/Range"
+    ],
     "label": "Divine Barrier",
     "description": "<span class=\"highlight\">Remove all non-stun debuffs</span> from the target and provide them with a <span class=\"highlight\">Barrier</span> and <span class=\"highlight\">Move Speed</span>. <span class=\"diminish\"><br>Can be self-cast. Cooldown is reduced by half when cast on someone else.</span>",
     "imagePath": "items/vitality/divine_barrier.png",
@@ -1254,6 +1735,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Barrier",
+      "Spirit/Cooldown & Charges",
+      "Spirit/Duration",
+      "Spirit/Spirit Power"
+    ],
     "label": "Diviner's Kevlar",
     "description": "Upon casting an <span class=\"highlight\">ultimate ability</span> gain a <span class=\"highlight\">Barrier</span> and temporary <span class=\"highlight\">Spirit Power</span>.",
     "imagePath": "items/vitality/diviners_kevlar.png",
@@ -1268,6 +1755,14 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Healing",
+      "Defense/Out of Combat Regen",
+      "Defense/Regen",
+      "Defense/Spirit Resistance",
+      "Mobility/Move Speed",
+      "Physical/Fire Rate"
+    ],
     "label": "Healing Tempo",
     "description": "Applying {g:citadel_inline_attribute:'Heal'} to yourself or an ally grants the target {g:citadel_inline_attribute:'BonusFireRate'} and {g:citadel_inline_attribute:'BonusMoveSpeed'}.<br><br><span class=\"diminish\">Does not apply on innate Regen or passive Bullet/Spirit Lifesteals.</span>",
     "imagePath": "items/vitality/healing_tempo.png",
@@ -1282,6 +1777,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Anti-CC",
+      "Defense/Barrier",
+      "Defense/Out of Combat Regen",
+      "Defense/Physical Resistance",
+      "Defense/Spirit Resistance"
+    ],
     "label": "Indomitable",
     "description": "",
     "imagePath": "items/vitality/indomitable.png",
@@ -1296,6 +1798,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Lifesteal",
+      "Defense/Spirit Resistance",
+      "Misc/Active Items",
+      "Spirit/Spirit Power"
+    ],
     "label": "Infuser",
     "description": "Gain <span class=\"highlight\">Spirit Lifesteal</span> and <span class=\"highlight\">Spirit Power</span>.",
     "imagePath": "items/vitality/infuser.png",
@@ -1310,6 +1819,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Disruption/Anti-Healing",
+      "Disruption/Bullet Damage Reduction",
+      "Disruption/Spirit Damage Reduction",
+      "Physical/Weapon Damage"
+    ],
     "label": "Inhibitor",
     "description": "Your bullets build up to reduce the target's <span class=\"highlight\">outgoing damage</span> and apply <span class=\"highlight\">healing reduction</span>.",
     "imagePath": "items/vitality/inhibitor.png",
@@ -1324,6 +1840,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Melee Resistance",
+      "Defense/Regen",
+      "Defense/Slow Resistance",
+      "Disruption/Fire Rate Reduction",
+      "Mobility/Move Speed"
+    ],
     "label": "Juggernaut",
     "description": "",
     "imagePath": "items/vitality/juggernaut.png",
@@ -1338,6 +1861,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Lifesteal",
+      "Physical/Weapon Damage",
+      "Spirit/Spirit Power"
+    ],
     "label": "Leech",
     "description": "Reduces the effect of enemy applied <span class=\"highlight\">healing reduction</span>.",
     "imagePath": "items/vitality/leech.png",
@@ -1352,6 +1881,15 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Disruption/Disarm",
+      "Disruption/Slow",
+      "Misc/Active Items",
+      "Mobility/Teleport",
+      "Physical/Weapon Damage",
+      "Spirit/Spirit Damage",
+      "Spirit/Spirit Power"
+    ],
     "label": "Phantom Strike",
     "description": "<span class=\"highlight\">Teleport</span> to an enemy target and pull them to the ground. Dealing <span class=\"highlight\">damage</span>, <span class=\"highlight\">Move speed</span> reduction and <span class=\"highlight\">Disarm</span>.",
     "imagePath": "items/vitality/phantom_strike.png",
@@ -1366,6 +1904,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Physical Resistance"
+    ],
     "label": "Plated Armor",
     "description": "Gain a chance to either deflect incoming bullets, preventing all {g:citadel_inline_attribute:'WeaponDamage'} or prevent all <span class=\"highlight\">on-hit effects</span> from bullets.",
     "imagePath": "items/vitality/plated_armor.png",
@@ -1380,6 +1922,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Healing",
+      "Defense/Physical Resistance",
+      "Physical/Weapon Damage",
+      "Spirit/Health % Damage"
+    ],
     "label": "Siphon Bullets",
     "description": "",
     "imagePath": "items/vitality/siphon_bullets.png",
@@ -1394,6 +1943,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Debuff Resistance",
+      "Defense/HP",
+      "Defense/Spirit Resistance"
+    ],
     "label": "Spellbreaker",
     "description": "The next instance of high {g:citadel_inline_attribute:'SpiritDamage'} you take is significantly reduced.",
     "imagePath": "items/vitality/spellbreaker.png",
@@ -1408,6 +1962,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Anti-CC",
+      "Defense/Debuff Resistance",
+      "Defense/HP",
+      "Misc/Active Items"
+    ],
     "label": "Unstoppable",
     "description": "Temporarily suppress <span class=\"highlight\">negative status effects</span> and become <span class=\"highlight\">immune</span> to <span class=\"highlight\">Stun, Silence, Sleep, Root, and Disarm</span>. <br>Cannot be used while <span class=\"highlight\">Stunned</span> or <span class=\"highlight\">Slept</span>.",
     "imagePath": "items/vitality/unstoppable.png",
@@ -1422,6 +1982,14 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Lifesteal",
+      "Defense/Physical Resistance",
+      "Misc/Active Items",
+      "Physical/Fire Rate",
+      "Physical/Weapon Damage"
+    ],
     "label": "Vampiric Burst",
     "description": "",
     "imagePath": "items/vitality/vampiric_burst.png",
@@ -1436,6 +2004,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Spirit Resistance",
+      "Spirit/Cooldown & Charges",
+      "Spirit/Spirit Damage"
+    ],
     "label": "Witchmail",
     "description": "Taking heavy hits of {g:citadel_inline_attribute:'SpiritDamage'} from an enemy reduces a <span class=\"highlight\">random ability cooldown</span>.",
     "imagePath": "items/vitality/witchmail.png",
@@ -1450,6 +2023,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Melee Resistance",
+      "Physical/Range",
+      "Physical/Weapon Damage"
+    ],
     "label": "Close Quarters",
     "description": "Deal additional <span class=\"highlight\">Weapon Damage</span> when in <span class=\"highlight\">close range</span> to your target.",
     "imagePath": "items/weapon/close_quarters.png",
@@ -1464,6 +2042,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Physical/Ammo",
+      "Physical/Weapon Damage"
+    ],
     "label": "Extended Magazine",
     "description": "",
     "imagePath": "items/weapon/basic_magazine.png",
@@ -1478,6 +2060,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Physical/Additional Physical Damage"
+    ],
     "label": "Headshot Booster",
     "description": "Your next <span class=\"highlight\">headshot</span> against an enemy Hero deals {g:citadel_inline_attribute:'BonusWeaponDamage'}.",
     "imagePath": "items/weapon/headshot_booster.png",
@@ -1492,6 +2078,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Physical/Bullet Velocity",
+      "Physical/Weapon Damage"
+    ],
     "label": "High-Velocity Rounds",
     "description": "",
     "imagePath": "items/weapon/high_velocity_rounds.png",
@@ -1506,6 +2096,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Out of Combat Regen",
+      "Defense/Physical Resistance",
+      "Physical/Weapon Damage"
+    ],
     "label": "Monster Rounds",
     "description": "",
     "imagePath": "items/weapon/monster_rounds.png",
@@ -1520,6 +2115,9 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Physical/Fire Rate"
+    ],
     "label": "Rapid Rounds",
     "description": "",
     "imagePath": "items/weapon/rapid_rounds.png",
@@ -1534,6 +2132,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Healing",
+      "Physical/Weapon Damage"
+    ],
     "label": "Restorative Shot",
     "description": "Your next bullet will <span class=\"highlight\">heal</span> you based on what target you hit.",
     "imagePath": "items/weapon/restorative_shot.png",
@@ -1548,6 +2150,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Lifesteal",
+      "Mobility/Move Speed",
+      "Physical/Ammo",
+      "Physical/Fire Rate"
+    ],
     "label": "Active Reload",
     "description": "While reloading, pressing {g:citadel_binding:'Reload'} during the highlighted portion will <span class=\"highlight\">instantly finish your reload</span> and grant you <span class=\"highlight\">Fire Rate</span>, <span class=\"highlight\">Bullet Lifesteal</span> and <span class=\"highlight\">Move Speed</span>.",
     "imagePath": "items/weapon/active_reload.png",
@@ -1562,6 +2170,14 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Physical Resistance",
+      "Defense/Slow Resistance",
+      "Misc/Active Items",
+      "Mobility/Jump/Dash/Slide",
+      "Mobility/Move Speed",
+      "Physical/Weapon Damage"
+    ],
     "label": "Fleetfoot",
     "description": "",
     "imagePath": "items/weapon/fleetfoot.png",
@@ -1576,6 +2192,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Physical/Ammo",
+      "Physical/Weapon Damage"
+    ],
     "label": "Intensifying Magazine",
     "description": "Increases <span class=\"highlight\">Weapon Damage</span> as you continuously fire your weapon.",
     "imagePath": "items/weapon/intensifying_magazine.png",
@@ -1590,6 +2210,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": true,
     "activationBadge": "",
+    "shopFilters": [
+      "Mobility/Jump/Dash/Slide",
+      "Mobility/Stamina",
+      "Physical/Ammo",
+      "Physical/Fire Rate"
+    ],
     "label": "Kinetic Dash",
     "description": "When you <span class=\"highlight\">Dash-Jump</span> you gain <span class=\"highlight\">Fire Rate</span> and bonus <span class=\"highlight\">Ammo</span> until your next reload. Lasts up to {s:AbilityDuration}s.",
     "imagePath": "items/weapon/kinetic_dash.png",
@@ -1604,6 +2230,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Mobility/Sprint",
+      "Physical/Range",
+      "Physical/Weapon Damage"
+    ],
     "label": "Long Range",
     "description": "Deal additional <span class=\"highlight\">Weapon Damage</span> when <span class=\"highlight\">beyond a minimum distance</span> from your target.",
     "imagePath": "items/weapon/long_range.png",
@@ -1618,6 +2249,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Physical Resistance",
+      "Physical/Melee"
+    ],
     "label": "Melee Charge",
     "description": "Your next <span class=\"highlight\">Heavy Melee</span> attack against an enemy <span class=\"highlight\">deals increased damage</span>.",
     "imagePath": "items/weapon/melee_charge.png",
@@ -1632,6 +2267,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Spirit/Spirit Damage",
+      "Spirit/Spirit Power"
+    ],
     "label": "Mystic Shot",
     "description": "Your next bullet deals bonus {g:citadel_inline_attribute:'SpiritDamage'}.",
     "imagePath": "items/weapon/mystic_shot.png",
@@ -1646,6 +2285,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Physical/Bullet Velocity",
+      "Physical/Weapon Damage",
+      "Spirit/Spirit Power"
+    ],
     "label": "Opening Rounds",
     "description": "Your attacks have additional <span class=\"highlight\">Weapon Damage</span> against <span class=\"highlight\">enemies above {s:EnemyLifeThreshold}% health</span>.",
     "imagePath": "items/weapon/opening_rounds.png",
@@ -1660,6 +2304,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Physical/Ammo",
+      "Physical/Weapon Damage"
+    ],
     "label": "Recharging Rush",
     "description": "Dealing significant {g:citadel_inline_attribute:'WeaponDamage'} replenishes a charge for <span class=\"highlight\">each of your charged abilities</span>.",
     "imagePath": "items/weapon/recharging_rounds.png",
@@ -1674,6 +2322,9 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Disruption/Slow"
+    ],
     "label": "Slowing Bullets",
     "description": "Your bullets build up a <span class=\"highlight\">Movement Slow</span> on enemies.",
     "imagePath": "items/weapon/slowing_bullets.png",
@@ -1688,6 +2339,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Lifesteal",
+      "Disruption/Spirit Vulnerability"
+    ],
     "label": "Spirit Shredder",
     "description": "Your bullets apply a debuff that reduces the <span class=\"highlight\">Spirit Resist</span> of the target and grants you and your allies <span class=\"highlight\">Spirit Lifesteal</span> against them.",
     "imagePath": "items/weapon/spirit_shredder_bullets.png",
@@ -1702,6 +2357,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Misc/Active Items",
+      "Physical/Additional Physical Damage",
+      "Physical/Weapon Damage"
+    ],
     "label": "Split Shot",
     "description": "Make your weapon fire <span class=\"highlight\">multishot</span>. <br><br> Hitting more than one Hero per attack will grant a <span class=\"highlight\">stacking weapon damage bonus</span>. <br><br><span class=\"diminish\">Targets can only be hit once per multishot.</span>",
     "imagePath": "items/weapon/split_shot.png",
@@ -1716,6 +2376,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Disruption/Physical Vulnerability",
+      "Mobility/Move Speed",
+      "Spirit/Spirit Damage"
+    ],
     "label": "Stalker",
     "description": "Dealing {g:citadel_inline_attribute:'WeaponDamage'} at close range opens a wound and grants you {g:citadel_inline_attribute:'BonusMoveSpeed'}. <br><br>Wounded enemies take {g:citadel_inline_attribute:'SpiritDPS'}, have reduced {g:citadel_inline_attribute:'BulletResist'}, and are revealed <span class=\"highlight\">through walls</span>.",
     "imagePath": "items/weapon/backstabber.png",
@@ -1730,6 +2396,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Mobility/Sprint",
+      "Physical/Fire Rate"
+    ],
     "label": "Swift Striker",
     "description": "",
     "imagePath": "items/weapon/swift_striker.png",
@@ -1744,6 +2414,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Physical/Ammo",
+      "Physical/Weapon Damage"
+    ],
     "label": "Titanic Magazine",
     "description": "",
     "imagePath": "items/weapon/titanic_magazine.png",
@@ -1758,6 +2432,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": true,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Disruption/Physical Vulnerability"
+    ],
     "label": "Weakening Headshot",
     "description": "Landing a <span class=\"highlight\">Headshot</span> reduces their <span class=\"highlight\">Bullet Resist</span>.",
     "imagePath": "items/weapon/weakening_headshot.png",
@@ -1772,6 +2450,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Disruption/Physical Vulnerability",
+      "Misc/Active Items",
+      "Spirit/Spirit Damage",
+      "Spirit/Spirit Power"
+    ],
     "label": "Alchemical Fire",
     "description": "Throw a flask that explodes on contact, creating an area that does increasing {g:citadel_inline_attribute:'SpiritDamage'} <span class=\"highlight\">per second</span> and reduces enemy <span class=\"highlight\">Bullet Resist</span>.<br><br>{s:NonHeroReductionPercent}% less effective vs non-heroes.",
     "imagePath": "items/weapon/alchemical_fire.png",
@@ -1786,6 +2470,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": true,
     "activationBadge": "imbue",
+    "shopFilters": [
+      "Misc/Imbue Items",
+      "Physical/Weapon Damage",
+      "Spirit/Range"
+    ],
     "label": "Ballistic Enchantment",
     "description": "Imbue an ability with increased <span class=\"highlight\">range</span>. Dealing damage with that ability grants you increased <span class=\"highlight\">weapon damage</span> per <span class=\"highlight\">unique hero hit</span>. Has reduced effect on non-heroes.",
     "imagePath": "items/weapon/alchemical_seal.png",
@@ -1800,6 +2489,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Physical Resistance",
+      "Physical/Weapon Damage"
+    ],
     "label": "Berserker",
     "description": "Your <span class=\"highlight\">Weapon Damage</span> increases as you take sustained damage.",
     "imagePath": "items/weapon/berserker.png",
@@ -1814,6 +2507,14 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Debuff Resistance",
+      "Defense/Out of Combat Regen",
+      "Defense/Spirit Resistance",
+      "Misc/Active Items",
+      "Mobility/Move Speed",
+      "Physical/Fire Rate"
+    ],
     "label": "Blood Tribute",
     "description": "Toggle: Continually sacrifice Health to improve {g:citadel_inline_attribute:'FireRate'}, <span class=\"highlight\">Debuff Resistance</span> and <span class=\"highlight\">Move Speed</span>.",
     "imagePath": "items/weapon/blood_tribute.png",
@@ -1828,6 +2529,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Mobility/Jump/Dash/Slide",
+      "Mobility/Move Speed",
+      "Physical/Fire Rate"
+    ],
     "label": "Burst Fire",
     "description": "Briefly gain <span class=\"highlight\">Fire Rate</span> and <span class=\"highlight\">Move Speed</span> when one of your bullets hits an enemy hero.",
     "imagePath": "items/weapon/burst_fire.png",
@@ -1842,6 +2548,14 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": true,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Out of Combat Regen",
+      "Defense/Physical Resistance",
+      "Misc/Active Items",
+      "Physical/Weapon Damage",
+      "Spirit/Range"
+    ],
     "label": "Cultist Sacrifice",
     "description": "Target an enemy NPC and consume it for <span class=\"highlight\">{s:BonusSoulsPct}% Bonus Souls</span> and grants a powerful long lasting buff.",
     "imagePath": "items/weapon/cultist_sacrifice.png",
@@ -1856,6 +2570,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Physical Resistance",
+      "Physical/Ammo",
+      "Physical/Weapon Damage"
+    ],
     "label": "Escalating Resilience",
     "description": "Grants <span class=\"highlight\">Bullet Resist</span> when your bullets hit an enemy hero. <span class=\"highlight\">Each shot can only grant one stack.</span>",
     "imagePath": "items/weapon/escalating_resilience.png",
@@ -1870,6 +2590,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Physical/Bullet Velocity",
+      "Physical/Weapon Damage"
+    ],
     "label": "Express Shot",
     "description": "Your next attack will <span class=\"highlight\">fire twice</span> in quick succession with <span class=\"highlight\">increased damage</span> and velocity. This attack consumes extra ammo.",
     "imagePath": "items/weapon/express_shot.png",
@@ -1884,6 +2608,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Healing",
+      "Mobility/Move Speed",
+      "Physical/Additional Physical Damage",
+      "Physical/Weapon Damage"
+    ],
     "label": "Headhunter",
     "description": "Your next <span class=\"highlight\">headshot</span> against an enemy Hero deals {g:citadel_inline_attribute:'BonusWeaponDamage'}, {g:citadel_inline_attribute:'Heal'} you, and briefly grants {g:citadel_inline_attribute:'BonusMoveSpeed'}.",
     "imagePath": "items/weapon/headhunter.png",
@@ -1898,6 +2629,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Physical Resistance",
+      "Misc/Active Items",
+      "Mobility/Move Speed",
+      "Mobility/Sprint",
+      "Physical/Fire Rate"
+    ],
     "label": "Heroic Aura",
     "description": "Provides <span class=\"highlight\">Bullet Resist</span> to nearby friendly units.",
     "imagePath": "items/weapon/heroic_aura.png",
@@ -1912,6 +2650,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Out of Combat Regen",
+      "Disruption/Physical Vulnerability",
+      "Physical/Weapon Damage"
+    ],
     "label": "Hollow Point",
     "description": "When you are <span class=\"highlight\">above {s:LifeThreshold}% health</span>, deal additional <span class=\"highlight\">Weapon Damage</span> and your bullets reduce enemy <span class=\"highlight\">Bullet Resist</span>.",
     "imagePath": "items/weapon/hollow_point.png",
@@ -1926,6 +2670,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Disruption/Fire Rate Reduction",
+      "Disruption/Physical Vulnerability",
+      "Mobility/Sprint"
+    ],
     "label": "Hunter's Aura",
     "description": "Reduces nearby enemies' <span class=\"highlight\">Bullet Resist and Fire Rate</span>. If there is only one enemy hero nearby, this <span class=\"highlight\">effect is doubled</span>.",
     "imagePath": "items/weapon/hunters_aura.png",
@@ -1940,6 +2690,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": true,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Melee Resistance",
+      "Disruption/Slow",
+      "Physical/Range",
+      "Physical/Weapon Damage"
+    ],
     "label": "Point Blank",
     "description": "When in <span class=\"highlight\">close range</span> to your target, gain <span class=\"highlight\">Weapon Damage</span> and your bullets apply a <span class=\"highlight\">Movement Slow</span>.",
     "imagePath": "items/weapon/point_blank.png",
@@ -1954,6 +2711,16 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Defense/Out of Combat Regen",
+      "Misc/Active Items",
+      "Mobility/Move Speed",
+      "Mobility/Sprint",
+      "Mobility/Stealth",
+      "Physical/Fire Rate",
+      "Physical/Melee",
+      "Spirit/Spirit Power"
+    ],
     "label": "Shadow Weave",
     "description": "Become <span class=\"highlight\">Stealthed</span>. Whenever you take damage while Stealthed you get briefly revealed.",
     "imagePath": "items/weapon/shadow_weave.png",
@@ -1968,6 +2735,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Mobility/Sprint",
+      "Physical/Bullet Velocity",
+      "Physical/Range",
+      "Physical/Weapon Damage"
+    ],
     "label": "Sharpshooter",
     "description": "Deal additional <span class=\"highlight\">Weapon Damage</span> when <span class=\"highlight\">beyond a minimum distance</span> from your target.",
     "imagePath": "items/weapon/sharp_shooter.png",
@@ -1982,6 +2755,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": true,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Lifesteal",
+      "Disruption/Spirit Vulnerability"
+    ],
     "label": "Spirit Rend",
     "description": "",
     "imagePath": "items/weapon/spellslinger_headshots.png",
@@ -1996,6 +2774,9 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Spirit/Spirit Damage"
+    ],
     "label": "Tesla Bullets",
     "description": "Your bullets have a chance to <span class=\"highlight\">shock</span> your target. The <span class=\"highlight\">shock</span> will jump to a nearby enemy.",
     "imagePath": "items/weapon/tesla_bullets.png",
@@ -2010,6 +2791,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Disruption/Anti-Healing",
+      "Spirit/Health % Damage"
+    ],
     "label": "Toxic Bullets",
     "description": "Your bullets build up a <span class=\"highlight\">Bleed</span> on enemies, causing them to lose a <span class=\"highlight\">percentage</span> of their <span class=\"highlight\">Max Health</span> over time. Also reduces <span class=\"highlight\">Incoming Healing</span> on the bleeding target.",
     "imagePath": "items/weapon/toxic_bullets.png",
@@ -2024,6 +2809,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Debuff Resistance",
+      "Disruption/Slow",
+      "Physical/Weapon Damage"
+    ],
     "label": "Weighted Shots",
     "description": "Your bullets build up a <span class=\"highlight\">Movement Slow</span> on enemies.",
     "imagePath": "items/weapon/weighted_shots.png",
@@ -2038,6 +2828,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Physical/Bullet Velocity",
+      "Physical/Weapon Damage"
+    ],
     "label": "Armor Piercer",
     "description": "Your Bullets have a chance to become unavoidable, <span class=\"highlight\">piercing through</span> enemies and <span class=\"highlight\">ignoring their Bullet Resistance</span>.",
     "imagePath": "items/weapon/armor_piercing_rounds.png",
@@ -2052,6 +2846,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "active",
+    "shopFilters": [
+      "Disruption/Slow",
+      "Misc/Active Items",
+      "Physical/Fire Rate",
+      "Spirit/Spirit Damage"
+    ],
     "label": "Capacitor",
     "description": "Launch a projectile that deals <span class=\"highlight\">{g:citadel_inline_attribute:'SpiritIcon'}damage</span>, applies a strong slow that recovers over time, <span class=\"highlight\">prevents Stamina usage</span> and <span class=\"highlight\">Silences</span> their <span class=\"highlight\">movement-based items and abilities</span>.",
     "imagePath": "items/weapon/capacitor.png",
@@ -2066,6 +2866,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Disruption/Anti-Healing",
+      "Disruption/Physical Vulnerability",
+      "Disruption/Spirit Vulnerability"
+    ],
     "label": "Crippling Headshot",
     "description": "",
     "imagePath": "items/weapon/crippling_headshot.png",
@@ -2080,6 +2886,12 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Physical Resistance",
+      "Disruption/Physical Vulnerability",
+      "Disruption/Stun",
+      "Physical/Melee"
+    ],
     "label": "Crushing Fists",
     "description": "Your <span class=\"highlight\">{g:citadel_inline_attribute:'MeleeDamage'}</span> will <span class=\"highlight\">restore ammo</span> and apply a <span class=\"highlight\">stacking bullet resist debuff</span> on enemies. Heavy melee applies 2 stacks. <br><br>If the target reaches max stacks, they will be <span class=\"highlight\">stunned</span>.",
     "imagePath": "items/weapon/crushing_fists.png",
@@ -2094,6 +2906,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Debuff Resistance",
+      "Defense/HP",
+      "Defense/Lifesteal",
+      "Mobility/Move Speed",
+      "Physical/Fire Rate"
+    ],
     "label": "Frenzy",
     "description": "",
     "imagePath": "items/weapon/frenzy.png",
@@ -2108,6 +2927,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Physical/Fire Rate",
+      "Physical/Weapon Damage"
+    ],
     "label": "Glass Cannon",
     "description": "Each hero kill grants <span class=\"highlight\">permanent Fire Rate</span> (up to a max of {s:MaxStacks} times). Death results in the loss of 1 stack.",
     "imagePath": "items/weapon/glass_cannon.png",
@@ -2122,6 +2945,10 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": true,
     "legacyRemoveWarning": true,
     "activationBadge": "",
+    "shopFilters": [
+      "Physical/Additional Physical Damage",
+      "Physical/Ammo"
+    ],
     "label": "Lucky Shot",
     "description": "Your bullets have a chance to be empowered, causing them to deal <span class=\"highlight\">bonus weapon damage</span> on hit.<br><span class=\"diminish\">Bonus damage cannot Crit.</span>",
     "imagePath": "items/weapon/lucky_shot.png",
@@ -2136,6 +2963,9 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Physical/Fire Rate"
+    ],
     "label": "Ricochet",
     "description": "Your bullets will <span class=\"highlight\">ricochet</span> on enemies near your target, <span class=\"highlight\">applying any bullet procs</span> and <span class=\"highlight\">dealing a percentage of the original damage.</span>",
     "imagePath": "items/weapon/ricochet.png",
@@ -2150,6 +2980,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/Spirit Resistance",
+      "Disruption/Silence",
+      "Disruption/Spirit Damage Reduction"
+    ],
     "label": "Silencer",
     "description": "Your bullets build up to a <span class=\"highlight\">Silence</span>. Victims are immune to the build up for <span class=\"highlight\">{s:ImmunityDuration}s</span> after silence expires.",
     "imagePath": "items/weapon/silencer.png",
@@ -2164,6 +2999,11 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Physical/Ammo",
+      "Physical/Fire Rate",
+      "Spirit/Cooldown & Charges"
+    ],
     "label": "Spellslinger",
     "description": "While in-combat whenever you cast an ability or item, gain a stacking buff that improves fire rate and reload speed. <br><span class=\"diminish\">Each stack refreshes the duration.</span>",
     "imagePath": "items/weapon/spell_slinger.png",
@@ -2178,6 +3018,13 @@ export const DEADLOCK_ITEMS = Object.freeze([
     "defaultSelected": false,
     "legacyRemoveWarning": false,
     "activationBadge": "",
+    "shopFilters": [
+      "Defense/HP",
+      "Defense/Lifesteal",
+      "Physical/Fire Rate",
+      "Spirit/Duration",
+      "Spirit/Spirit Power"
+    ],
     "label": "Spiritual Overflow",
     "description": "Gain bonus <span class=\"highlight\">Fire Rate</span>, <span class=\"highlight\">Spirit Power</span> and <span class=\"highlight\">Spirit Lifesteal</span> by <span class=\"highlight\">charging up</span> when shooting enemy heroes.",
     "imagePath": "items/weapon/spiritual_overflow.png",

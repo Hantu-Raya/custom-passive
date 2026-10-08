@@ -8,6 +8,7 @@ import { readPassiveFlagTemplate } from '../src/lib/source2PassiveFlags.js';
 import { uncompressSource2Resource } from '../src/lib/source2BinaryKv3.js';
 import { injectStockExternalRefs } from './inject-stock-external-refs.mjs';
 import { murmurHash2 } from './lib/murmurhash2.mjs';
+import { deriveShopFilters, parseShopFilterRecord } from './lib/shopFilters.mjs';
 
 const ABILITIES_SOURCE = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/abilities.vdata';
 const SR2_COMPILER = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/sr2compiler/New folder.exe';
@@ -160,7 +161,7 @@ function normalizeImagePath(raw) {
   return cleaned.replace(/^\/+/, '');
 }
 
-function parseCandidate(span, localization) {
+function parseCandidate(span, localization, filterContext) {
   const name = recordName(span.block);
   const slot = Object.keys(CATEGORY_BY_SLOT).find((value) => span.block.includes(`m_eItemSlotType = "${value}"`));
   const tier = Number(firstMatch(span.block, /m_iItemTier\s*=\s*"EModTier_([1-4])"/));
@@ -175,6 +176,7 @@ function parseCandidate(span, localization) {
     defaultSelected: /m_bShowInPassiveItemsArea\s*=\s*(?:"true"|true)/.test(span.block),
     legacyRemoveWarning: REMOVE_FLAG_UPGRADES.includes(name),
     activationBadge: activationBadge(span.block, name),
+    shopFilters: deriveShopFilters(filterContext.records.get(name), filterContext),
     label: localization.get(token) || titleFromId(name),
     description: localization.get(`${token}_desc`) || '',
     imagePath: normalizeImagePath(imageRaw),
@@ -526,9 +528,11 @@ async function main() {
   const localization = await loadLocalization();
   const rawContent = await readFile(ABILITIES_SOURCE, 'utf8');
   const content = stripRootInclude(rawContent);
-  const candidates = iterRecordSpans(content).filter((span) => isCandidateBlock(recordName(span.block), span.block));
+  const spans = iterRecordSpans(content);
+  const filterContext = { records: new Map(spans.map((span) => [recordName(span.block), parseShopFilterRecord(span.block)])) };
+  const candidates = spans.filter((span) => isCandidateBlock(recordName(span.block), span.block));
   if (candidates.length === 0) fail('No available shop item candidates found in abilities.vdata');
-  const items = candidates.map((span) => parseCandidate(span, localization)).sort((a, b) => a.category.localeCompare(b.category) || a.tier - b.tier || a.label.localeCompare(b.label));
+  const items = candidates.map((span) => parseCandidate(span, localization, filterContext)).sort((a, b) => a.category.localeCompare(b.category) || a.tier - b.tier || a.label.localeCompare(b.label));
   const candidateIds = new Set(items.map((item) => item.id));
   const compileContent = withStablePassiveFlags(content, candidateIds);
   const compiled = await compileTemplate(compileContent);

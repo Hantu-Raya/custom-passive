@@ -1,6 +1,7 @@
 export const DEADLOCK_ITEMS = Object.freeze([
   {
     "id": "upgrade_extra_charge",
+    "statsId": 3776945997,
     "category": "spirit",
     "tier": 1,
     "cost": 800,
@@ -14,6 +15,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_improved_spirit",
+    "statsId": 968099481,
     "category": "spirit",
     "tier": 1,
     "cost": 800,
@@ -27,6 +29,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_goose_egg",
+    "statsId": 2462046703,
     "category": "spirit",
     "tier": 1,
     "cost": 800,
@@ -40,6 +43,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_magic_burst",
+    "statsId": 1998374645,
     "category": "spirit",
     "tier": 1,
     "cost": 800,
@@ -53,6 +57,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_magic_reach",
+    "statsId": 754480263,
     "category": "spirit",
     "tier": 1,
     "cost": 800,
@@ -66,6 +71,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_mystic_regeneration",
+    "statsId": 1439347412,
     "category": "spirit",
     "tier": 1,
     "cost": 800,
@@ -79,6 +85,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_withering_whip",
+    "statsId": 2922054143,
     "category": "spirit",
     "tier": 1,
     "cost": 800,
@@ -92,6 +99,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_acolytes_glove",
+    "statsId": 465043967,
     "category": "spirit",
     "tier": 1,
     "cost": 800,
@@ -105,6 +113,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_arcane_surge",
+    "statsId": 1150006784,
     "category": "spirit",
     "tier": 2,
     "cost": 1600,
@@ -118,6 +127,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_bullet_resist_shredder",
+    "statsId": 2971868509,
     "category": "spirit",
     "tier": 2,
     "cost": 1600,
@@ -131,6 +141,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_cold_front",
+    "statsId": 1976391348,
     "category": "spirit",
     "tier": 2,
     "cost": 1600,
@@ -144,6 +155,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_magic_tempo",
+    "statsId": 380806748,
     "category": "spirit",
     "tier": 2,
     "cost": 1600,
@@ -157,6 +169,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_arcane_extension",
+    "statsId": 2951612397,
     "category": "spirit",
     "tier": 2,
     "cost": 1600,
@@ -170,6 +183,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_soaring_spirit",
+    "statsId": 7409189,
     "category": "spirit",
     "tier": 2,
     "cost": 1600,
@@ -183,6 +197,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_magic_slow",
+    "statsId": 1102081447,
     "category": "spirit",
     "tier": 2,
     "cost": 1600,
@@ -196,6 +211,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_magic_vulnerability",
+    "statsId": 2081037738,
     "category": "spirit",
     "tier": 2,
     "cost": 1600,
@@ -209,6 +225,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_quick_silver",
+    "statsId": 84321454,
     "category": "spirit",
     "tier": 2,
     "cost": 1600,
@@ -222,6 +239,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_containment",
+    "statsId": 1813726886,
     "category": "spirit",
     "tier": 2,
     "cost": 1600,
@@ -235,6 +253,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_spirit_sap",
+    "statsId": 1219329868,
     "category": "spirit",
     "tier": 2,
     "cost": 1600,
@@ -248,6 +267,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_suppressor",
+    "statsId": 1925087134,
     "category": "spirit",
     "tier": 2,
     "cost": 1600,
@@ -261,6 +281,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_rupture",
+    "statsId": 3144988365,
     "category": "spirit",
     "tier": 3,
     "cost": 3200,
@@ -274,6 +295,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_greater_withering_whip",
+    "statsId": 2061878743,
     "category": "spirit",
     "tier": 3,
     "cost": 3200,
@@ -287,6 +309,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_tech_range",
+    "statsId": 1193964439,
     "category": "spirit",
     "tier": 3,
     "cost": 3200,
@@ -300,6 +323,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_target_stun",
+    "statsId": 1254091416,
     "category": "spirit",
     "tier": 3,
     "cost": 3200,
@@ -313,6 +337,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_resonant_healing",
+    "statsId": 2947183272,
     "category": "spirit",
     "tier": 3,
     "cost": 3200,
@@ -326,6 +351,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_rapid_recharge",
+    "statsId": 787198704,
     "category": "spirit",
     "tier": 3,
     "cost": 3200,
@@ -339,6 +365,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_targeted_silence",
+    "statsId": 619484391,
     "category": "spirit",
     "tier": 3,
     "cost": 3200,
@@ -352,6 +379,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_spirit_snatch",
+    "statsId": 3190916303,
     "category": "spirit",
     "tier": 3,
     "cost": 3200,
@@ -365,6 +393,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_cooldown_reduction",
+    "statsId": 3261353684,
     "category": "spirit",
     "tier": 3,
     "cost": 3200,
@@ -378,6 +407,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_imbued_duration_extender",
+    "statsId": 2717651715,
     "category": "spirit",
     "tier": 3,
     "cost": 3200,
@@ -391,6 +421,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_magic_storm",
+    "statsId": 1292979587,
     "category": "spirit",
     "tier": 3,
     "cost": 3200,
@@ -404,6 +435,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_magic_shock",
+    "statsId": 2121044373,
     "category": "spirit",
     "tier": 3,
     "cost": 3200,
@@ -417,6 +449,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_tech_damage_pulse",
+    "statsId": 395944548,
     "category": "spirit",
     "tier": 3,
     "cost": 3200,
@@ -430,6 +463,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_arctic_blast",
+    "statsId": 3812615317,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -443,6 +477,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_boundless_spirit",
+    "statsId": 2519598785,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -456,6 +491,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_glitch",
+    "statsId": 2617435668,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -469,6 +505,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_ability_power_shard",
+    "statsId": 630839635,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -482,6 +519,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_escalating_exposure",
+    "statsId": 3005970438,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -495,6 +533,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_self_bubble",
+    "statsId": 2533252781,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -508,6 +547,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_focus_lens",
+    "statsId": 2142980412,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -521,6 +561,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_ultimate_burst",
+    "statsId": 493591231,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -534,6 +575,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_magic_carpet",
+    "statsId": 2800629741,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -547,6 +589,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_ethereal_bullets",
+    "statsId": 3919289022,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -560,6 +603,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_mystic_reverb",
+    "statsId": 3577481646,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -573,6 +617,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_ability_refresher",
+    "statsId": 677738769,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -586,6 +631,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_discord",
+    "statsId": 2417568017,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -599,6 +645,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_spirit_burn",
+    "statsId": 343572757,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -612,6 +659,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_transcendent_cooldown",
+    "statsId": 915014646,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -625,6 +673,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_aoe_root",
+    "statsId": 1152158042,
     "category": "spirit",
     "tier": 4,
     "cost": 6400,
@@ -638,6 +687,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_health",
+    "statsId": 3633614685,
     "category": "vitality",
     "tier": 1,
     "cost": 800,
@@ -651,6 +701,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_endurance",
+    "statsId": 2829638276,
     "category": "vitality",
     "tier": 1,
     "cost": 800,
@@ -664,6 +715,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_improved_stamina",
+    "statsId": 4139877411,
     "category": "vitality",
     "tier": 1,
     "cost": 800,
@@ -677,6 +729,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_grit",
+    "statsId": 1672893796,
     "category": "vitality",
     "tier": 1,
     "cost": 800,
@@ -690,6 +743,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_health_stimpak",
+    "statsId": 1710079648,
     "category": "vitality",
     "tier": 1,
     "cost": 800,
@@ -703,6 +757,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_lifestrike_gauntlets",
+    "statsId": 1437614329,
     "category": "vitality",
     "tier": 1,
     "cost": 800,
@@ -716,6 +771,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_melee_rebuttal",
+    "statsId": 4204808176,
     "category": "vitality",
     "tier": 1,
     "cost": 800,
@@ -729,6 +785,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_sprint_booster",
+    "statsId": 3399065363,
     "category": "vitality",
     "tier": 1,
     "cost": 800,
@@ -742,6 +799,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_regenerating_bullet_shield",
+    "statsId": 1235347618,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -755,6 +813,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_vampire",
+    "statsId": 499683006,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -768,6 +827,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_debuff_reducer",
+    "statsId": 1047818222,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -781,6 +841,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_magic_shield",
+    "statsId": 3970837787,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -794,6 +855,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_cardio_calibrator",
+    "statsId": 2447176615,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -807,6 +869,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_guardian_ward",
+    "statsId": 857669956,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -820,6 +883,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_healbane",
+    "statsId": 2603935618,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -833,6 +897,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_healing_booster",
+    "statsId": 2566692615,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -846,6 +911,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_vex_barrier",
+    "statsId": 1644605047,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -859,6 +925,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_restorative_locket",
+    "statsId": 2059712766,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -872,6 +939,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_return_fire",
+    "statsId": 3361075077,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -885,6 +953,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_health_stealing_magic",
+    "statsId": 876563814,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -898,6 +967,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_spirit_bubble",
+    "statsId": 112198670,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -911,6 +981,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_trophy_collector",
+    "statsId": 3074274290,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -924,6 +995,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_weapon_shielding",
+    "statsId": 805079544,
     "category": "vitality",
     "tier": 2,
     "cost": 1600,
@@ -937,6 +1009,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_improved_bullet_armor",
+    "statsId": 3140772621,
     "category": "vitality",
     "tier": 3,
     "cost": 3200,
@@ -950,6 +1023,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_counterspell",
+    "statsId": 1414025773,
     "category": "vitality",
     "tier": 3,
     "cost": 3200,
@@ -963,6 +1037,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_reduce_debuff_duration",
+    "statsId": 3731635960,
     "category": "vitality",
     "tier": 3,
     "cost": 3200,
@@ -976,6 +1051,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_chonky",
+    "statsId": 3585132399,
     "category": "vitality",
     "tier": 3,
     "cost": 3200,
@@ -989,6 +1065,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_fury_trance",
+    "statsId": 1409190604,
     "category": "vitality",
     "tier": 3,
     "cost": 3200,
@@ -1002,6 +1079,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_health_nova",
+    "statsId": 2956256701,
     "category": "vitality",
     "tier": 3,
     "cost": 3200,
@@ -1015,6 +1093,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_boxing_glove",
+    "statsId": 1252627263,
     "category": "vitality",
     "tier": 3,
     "cost": 3200,
@@ -1028,6 +1107,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_rocket_booster",
+    "statsId": 600033864,
     "category": "vitality",
     "tier": 3,
     "cost": 3200,
@@ -1041,6 +1121,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_metal_skin",
+    "statsId": 1378931225,
     "category": "vitality",
     "tier": 3,
     "cost": 3200,
@@ -1054,6 +1135,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_rescue_beam",
+    "statsId": 1804594021,
     "category": "vitality",
     "tier": 3,
     "cost": 3200,
@@ -1067,6 +1149,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_tech_purge",
+    "statsId": 2163598980,
     "category": "vitality",
     "tier": 3,
     "cost": 3200,
@@ -1080,6 +1163,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_superior_stamina",
+    "statsId": 334300056,
     "category": "vitality",
     "tier": 3,
     "cost": 3200,
@@ -1093,6 +1177,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_veil_walker",
+    "statsId": 865958998,
     "category": "vitality",
     "tier": 3,
     "cost": 3200,
@@ -1106,6 +1191,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_warp_stone",
+    "statsId": 3270001687,
     "category": "vitality",
     "tier": 3,
     "cost": 3200,
@@ -1119,6 +1205,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_cheat_death",
+    "statsId": 3361811174,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1132,6 +1219,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_colossus",
+    "statsId": 2407781327,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1145,6 +1233,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_divine_barrier",
+    "statsId": 1662311306,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1158,6 +1247,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_diviners_kevlar",
+    "statsId": 2820116164,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1171,6 +1261,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_healbuff",
+    "statsId": 1427630806,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1184,6 +1275,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_auto_cleanse",
+    "statsId": 951866250,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1197,6 +1289,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_infuser",
+    "statsId": 1797283378,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1210,6 +1303,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_inhibitor",
+    "statsId": 2037039379,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1223,6 +1317,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_juggernaut",
+    "statsId": 1250307611,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1236,6 +1331,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_damage_recycler",
+    "statsId": 865846625,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1249,6 +1345,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_phantom_strike",
+    "statsId": 1371725689,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1262,6 +1359,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_deflecting_armor",
+    "statsId": 3491236900,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1275,6 +1373,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_siphon_bullets",
+    "statsId": 1282141666,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1288,6 +1387,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_spellbreaker",
+    "statsId": 1955841979,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1301,6 +1401,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_unstoppable",
+    "statsId": 3357231760,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1314,6 +1415,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_surging_power",
+    "statsId": 1055679805,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1327,6 +1429,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_absorbing_armor",
+    "statsId": 3028234315,
     "category": "vitality",
     "tier": 4,
     "cost": 6400,
@@ -1340,6 +1443,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_close_range",
+    "statsId": 1342610602,
     "category": "weapon",
     "tier": 1,
     "cost": 800,
@@ -1353,6 +1457,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_clip_size",
+    "statsId": 1548066885,
     "category": "weapon",
     "tier": 1,
     "cost": 800,
@@ -1366,6 +1471,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_headshot_booster",
+    "statsId": 2010028405,
     "category": "weapon",
     "tier": 1,
     "cost": 800,
@@ -1379,6 +1485,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_high_velocity_mag",
+    "statsId": 3077079169,
     "category": "weapon",
     "tier": 1,
     "cost": 800,
@@ -1392,6 +1499,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_non_player_bonus",
+    "statsId": 1009965641,
     "category": "weapon",
     "tier": 1,
     "cost": 800,
@@ -1405,6 +1513,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_rapid_rounds",
+    "statsId": 668299740,
     "category": "weapon",
     "tier": 1,
     "cost": 800,
@@ -1418,6 +1527,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_medic_bullets",
+    "statsId": 3862866912,
     "category": "weapon",
     "tier": 1,
     "cost": 800,
@@ -1431,6 +1541,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_active_reload",
+    "statsId": 381961617,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1444,6 +1555,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_fleetfoot_boots",
+    "statsId": 3403085434,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1457,6 +1569,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_intensifying_clip",
+    "statsId": 2407033488,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1470,6 +1583,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_kinetic_sash",
+    "statsId": 3977876567,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1483,6 +1597,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_long_range",
+    "statsId": 3331811235,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1496,6 +1611,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_melee_charge",
+    "statsId": 26002154,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1509,6 +1625,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_crackshot",
+    "statsId": 395867183,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1522,6 +1639,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_pristine_emblem",
+    "statsId": 2064029594,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1535,6 +1653,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_rechargingbullets",
+    "statsId": 1763073141,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1548,6 +1667,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_slowing_bullets",
+    "statsId": 393974127,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1561,6 +1681,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_tech_defense_shredders",
+    "statsId": 1144549437,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1574,6 +1695,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_split_shot",
+    "statsId": 3647584222,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1587,6 +1709,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_weapon_backstabber",
+    "statsId": 98582110,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1600,6 +1723,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_blitz_bullets",
+    "statsId": 4104549924,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1613,6 +1737,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_titan_round",
+    "statsId": 2356412290,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1626,6 +1751,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_headshot_booster2",
+    "statsId": 1770441818,
     "category": "weapon",
     "tier": 2,
     "cost": 1600,
@@ -1639,6 +1765,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_thermal_detonator",
+    "statsId": 1932939246,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1652,6 +1779,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_bulletshredimbue",
+    "statsId": 3294954488,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1665,6 +1793,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_berserker",
+    "statsId": 1414319208,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1678,6 +1807,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_blood_tribute",
+    "statsId": 989206714,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1691,6 +1821,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_burst_fire",
+    "statsId": 2739107182,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1704,6 +1835,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_non_player_bonus_sacrifice",
+    "statsId": 709540378,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1717,6 +1849,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_reinforcing_casings",
+    "statsId": 2463960640,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1730,6 +1863,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_express_shot",
+    "statsId": 690458959,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1743,6 +1877,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_headhunter",
+    "statsId": 4053935515,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1756,6 +1891,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_dps_aura",
+    "statsId": 2108215830,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1769,6 +1905,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_hollow_point_rounds",
+    "statsId": 2678489038,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1782,6 +1919,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_bullet_armor_reduction_aura",
+    "statsId": 2481177645,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1795,6 +1933,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_close_quarter_combat",
+    "statsId": 2095565695,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1808,6 +1947,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_cloaking_device_active",
+    "statsId": 1798666702,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1821,6 +1961,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_sharpshooter",
+    "statsId": 2152872419,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1834,6 +1975,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_spellslinger_headshots",
+    "statsId": 4075861416,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1847,6 +1989,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_chain_lightning",
+    "statsId": 811521119,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1860,6 +2003,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_toxic_bullets",
+    "statsId": 3696726732,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1873,6 +2017,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_weighted_shots",
+    "statsId": 3791587546,
     "category": "weapon",
     "tier": 3,
     "cost": 3200,
@@ -1886,6 +2031,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_aprounds",
+    "statsId": 673001892,
     "category": "weapon",
     "tier": 4,
     "cost": 6400,
@@ -1899,6 +2045,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_capacitor",
+    "statsId": 710436191,
     "category": "weapon",
     "tier": 4,
     "cost": 6400,
@@ -1912,6 +2059,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_banshee_slugs",
+    "statsId": 3884003354,
     "category": "weapon",
     "tier": 4,
     "cost": 6400,
@@ -1925,6 +2073,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_crushing_fists",
+    "statsId": 800008313,
     "category": "weapon",
     "tier": 4,
     "cost": 6400,
@@ -1938,6 +2087,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_fervor",
+    "statsId": 339443430,
     "category": "weapon",
     "tier": 4,
     "cost": 6400,
@@ -1951,6 +2101,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_glass_cannon",
+    "statsId": 365620721,
     "category": "weapon",
     "tier": 4,
     "cost": 6400,
@@ -1964,6 +2115,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_critshot",
+    "statsId": 1396247347,
     "category": "weapon",
     "tier": 4,
     "cost": 6400,
@@ -1977,6 +2129,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_ricochet",
+    "statsId": 2480592370,
     "category": "weapon",
     "tier": 4,
     "cost": 6400,
@@ -1990,6 +2143,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_proc_silence",
+    "statsId": 1113837674,
     "category": "weapon",
     "tier": 4,
     "cost": 6400,
@@ -2003,6 +2157,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_enchanted_holsters",
+    "statsId": 2221211450,
     "category": "weapon",
     "tier": 4,
     "cost": 6400,
@@ -2016,6 +2171,7 @@ export const DEADLOCK_ITEMS = Object.freeze([
   },
   {
     "id": "upgrade_tech_overflow",
+    "statsId": 2226497419,
     "category": "weapon",
     "tier": 4,
     "cost": 6400,

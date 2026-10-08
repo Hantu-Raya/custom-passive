@@ -7,12 +7,21 @@ import { BINARY_KV3_BOOLEAN_FALSE } from '../src/lib/passiveFlagTemplate.js';
 import { readPassiveFlagTemplate } from '../src/lib/source2PassiveFlags.js';
 import { uncompressSource2Resource } from '../src/lib/source2BinaryKv3.js';
 import { injectStockExternalRefs } from './inject-stock-external-refs.mjs';
+import { murmurHash2 } from './lib/murmurhash2.mjs';
 
 const ABILITIES_SOURCE = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/abilities.vdata';
 const SR2_COMPILER = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/sr2compiler/New folder.exe';
 const PAK01 = 'G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/pak01_dir.vpk';
 const SOURCE2_VIEWER_CLI = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/.tmp/source2viewer-cli/Source2Viewer-CLI.exe';
 const VPKEDIT_CLI = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/vpk cli/vpkeditcli.exe';
+const SHOP_LAYOUT_PATHS = Object.freeze([
+  'panorama/styles/citadel_hud_hero_shop.vcss_c',
+  'panorama/styles/citadel_shop_mods_filtered.vcss_c',
+  'panorama/styles/citadel_shop_mods_recommended.vcss_c',
+  'panorama/styles/citadel_shop_mods_tier.vcss_c',
+  'panorama/styles/citadel_shop_mod_view.vcss_c',
+  'panorama/layout/citadel_hud_hero_shop.vxml_c'
+]);
 
 const MODS_LOCALIZATION_URL = 'https://raw.githubusercontent.com/SteamTracking/GameTracking-Deadlock/master/game/citadel/resource/localization/citadel_mods/citadel_mods_english.txt';
 const GC_MOD_NAMES_LOCALIZATION = 'G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/resource/localization/citadel_gc_mod_names/citadel_gc_mod_names_english.txt';
@@ -159,6 +168,7 @@ function parseCandidate(span, localization) {
   const token = name.toLowerCase();
   return {
     id: name,
+    statsId: murmurHash2(name.toLowerCase()),
     category: CATEGORY_BY_SLOT[slot],
     tier,
     cost: TIER_COSTS[tier],
@@ -280,6 +290,21 @@ function referencedShopSurfacePaths() {
     'panorama/images/shop/catalog/catalog_shop_bg_spirit_psd.png',
     'panorama/images/shop/catalog/catalog_shop_bg_vitality_psd.png',
     'panorama/images/shop/catalog/catalog_shop_bg_weapon_psd.png',
+    'panorama/images/shop/catalog/catalog_shop_tab_shape_psd.png',
+    'panorama/images/shop/catalog/catalog_shop_tab_edge_overlay_psd.png',
+    'panorama/images/shop/catalog/catalog_shop_tab_icon_all_psd.png',
+    'panorama/images/shop/catalog/catalog_shop_tab_icon_recommendations_psd.png',
+    'panorama/images/shop/catalog/catalog_shop_generic_bg2_psd.png',
+    'panorama/images/shop/catalog/catalog_shop_popular_bg_psd.png',
+    'panorama/images/shop/catalog/catalog_shop_top_recommendations_header_psd.png',
+    'panorama/images/shop/catalog/catalog_shop_filter_bg_psd.png',
+    'panorama/images/shop/catalog/catalog_shop_builds_header_bg_psd.png',
+    'panorama/images/shop/catalog/filters/shop_filtered_tree_header_full_psd.png',
+    'panorama/images/shop/catalog/pricetag_tier1_psd.png',
+    'panorama/images/shop/catalog/pricetag_tier2_psd.png',
+    'panorama/images/shop/catalog/pricetag_tier3_psd.png',
+    'panorama/images/shop/catalog/pricetag_tier4_psd.png',
+    'panorama/images/shop/catalog/price_currency_psd.png',
     'panorama/images/shop/catalog/catalog_shop_tab_icon_builds_psd.png',
     'panorama/images/shop/catalog/catalog_shop_tab_icon_spirit_psd.png',
     'panorama/images/shop/catalog/catalog_shop_tab_icon_vitality_psd.png',
@@ -371,12 +396,122 @@ async function maybeExtractAssets(items) {
   const assetPaths = referencedAssetPaths(items);
   await pruneUnreferencedAssets(assetRoot, assetPaths);
   await optimizeExtractedAssets(assetRoot, assetPaths);
+  const missingSurfaces = [...referencedShopSurfacePaths()].map(webpPath).filter((surfacePath) => !existsSync(path.join(assetRoot, surfacePath)));
+  if (missingSurfaces.length > 0) fail(`Missing required shop surface WebP(s): ${missingSurfaces.join(', ')}`);
   for (const item of items) {
     const pngPath = decompiledPngPath(item.imagePath);
     const itemWebpPath = webpPath(pngPath);
     if (existsSync(path.join(assetRoot, itemWebpPath))) item.iconUrl = `assets/deadlock/${itemWebpPath}`;
     else if (existsSync(path.join(assetRoot, pngPath))) item.iconUrl = `assets/deadlock/${pngPath}`;
   }
+}
+
+function parseShopCss(text, rules) {
+  const css = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*@(?:define|import)\b[^;]*;/gm, '');
+  for (const [, selectors, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const declarations = {};
+    for (const declaration of body.split(';')) {
+      const match = declaration.match(/^\s*([\w-]+)\s*:\s*([\s\S]+?)\s*$/);
+      if (match) declarations[match[1]] = match[2];
+    }
+    for (const selector of selectors.split(',')) {
+      const key = selector.trim().replace(/\s+/g, ' ');
+      rules.set(key, { ...rules.get(key), ...declarations });
+    }
+  }
+}
+
+function shopStyleValue(rules, selector, property) {
+  const value = rules.get(selector)?.[property];
+  if (value === undefined) fail(`Missing stock shop layout field: ${selector} { ${property} }`);
+  return value;
+}
+
+function shopPixels(value, label) {
+  if (!/^-?(?:\d+(?:\.\d+)?|\.\d+)px$/.test(value)) fail(`Unparsable stock shop layout field ${label}: ${value}`);
+  return Number(value.slice(0, -2));
+}
+
+function shopMargin(value, label) {
+  const values = value.split(/\s+/).map((part) => shopPixels(part, label));
+  if (values.length < 1 || values.length > 4) fail(`Unparsable stock shop layout margin ${label}: ${value}`);
+  const [top, right = top, bottom = top, left = right] = values;
+  return { top, right, bottom, left };
+}
+
+async function extractShopLayout() {
+  const root = path.resolve('.tmp/custom-passive-shop-layout');
+  await rm(root, { recursive: true, force: true });
+  await mkdir(root, { recursive: true });
+  const listing = await runProcess(SOURCE2_VIEWER_CLI, ['-i', PAK01, '-l']);
+  if (listing.code !== 0) fail(`Source2Viewer shop layout listing failed: ${listing.stderr || listing.stdout}`);
+  const crcs = new Map([...listing.stdout.matchAll(/^(.+?)\s+CRC:([0-9a-f]+)\s+size:\d+\s*$/gmi)].map(([, filePath, crc]) => [filePath.trim().replace(/\\/g, '/'), crc.toLowerCase()]));
+  const files = [];
+  const rules = new Map();
+  let xml = '';
+  for (const filePath of SHOP_LAYOUT_PATHS) {
+    const crc = crcs.get(filePath);
+    if (!crc) fail(`Missing stock shop layout CRC: ${filePath}`);
+    files.push({ path: filePath, crc });
+    const result = await runProcess(SOURCE2_VIEWER_CLI, ['-i', PAK01, '--vpk_filepath', filePath, '-o', root, '-d']);
+    if (result.code !== 0) fail(`Source2Viewer stock shop layout extraction failed for ${filePath}: ${result.stderr || result.stdout}`);
+    const decompiledPath = path.join(root, filePath.replace(/\.vcss_c$/, '.css').replace(/\.vxml_c$/, '.xml'));
+    await assertReadable(decompiledPath, 'Decompiled stock shop layout');
+    const text = await readFile(decompiledPath, 'utf8');
+    if (filePath.endsWith('.vcss_c')) parseShopCss(text, rules);
+    else xml = text;
+  }
+
+  const steamInfoPath = path.join(path.dirname(PAK01), 'steam.inf');
+  await assertReadable(steamInfoPath, 'Deadlock steam.inf');
+  const clientVersion = Number((await readFile(steamInfoPath, 'utf8')).match(/^\s*ClientVersion\s*=\s*(\d+)\s*$/m)?.[1]);
+  if (!Number.isSafeInteger(clientVersion) || clientVersion <= 0) fail(`Missing or unparsable ClientVersion in ${steamInfoPath}`);
+  const pixels = (selector, property) => shopPixels(shopStyleValue(rules, selector, property), `${selector} { ${property} }`);
+  const categoryTiers = {};
+  for (const [category, showing] of [['weapon', 'Weapon'], ['spirit', 'Spirit'], ['vitality', 'Vitality']]) {
+    categoryTiers[category] = {};
+    for (let tier = 1; tier <= 4; tier += 1) {
+      const selector = `.Showing${showing}Only CitadelShopModsFiltered .tierRow.EModTier_${tier}`;
+      const costSelector = `${selector} .CostLabel`;
+      categoryTiers[category][tier] = {
+        x: pixels(selector, 'x'),
+        y: pixels(selector, 'y'),
+        width: pixels(selector, 'width'),
+        costLabel: {
+          marginLeft: pixels(costSelector, 'margin-left'),
+          marginTop: pixels(costSelector, 'margin-top'),
+          // Stock T1 omits margin-bottom; Panorama's panel margin defaults to zero.
+          marginBottom: tier === 1 && rules.get(costSelector)?.['margin-bottom'] === undefined ? 0 : pixels(costSelector, 'margin-bottom')
+        }
+      };
+    }
+  }
+
+  const navOrder = [];
+  for (const [, attributes] of xml.replace(/<!--[\s\S]*?-->/g, '').matchAll(/<Panel\b([^>]*)>/g)) {
+    const classes = attributes.match(/\bclass\s*=\s*["']([^"']*)["']/)?.[1]?.split(/\s+/) || [];
+    if (!classes.includes('NavigationButton')) continue;
+    const id = attributes.match(/\bid\s*=\s*["']([^"']+)["']/)?.[1];
+    if (!id || navOrder.includes(id)) fail('Missing or duplicate stock NavigationButton panel id');
+    navOrder.push(id);
+  }
+  if (navOrder.length === 0) fail('Missing stock NavigationButton panels');
+  const passiveModsFlow = shopStyleValue(rules, '#PassiveModsContainer', 'flow-children');
+  if (!['none', 'right', 'down', 'right-wrap', 'down-wrap'].includes(passiveModsFlow)) fail(`Unparsable stock passive mod flow: ${passiveModsFlow}`);
+  const opacityValue = shopStyleValue(rules, 'CitadelShopModsFiltered .tierRow.EmptyTier', 'opacity');
+  if (!/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(opacityValue) || Number(opacityValue) > 1) fail(`Unparsable stock empty tier opacity: ${opacityValue}`);
+  const layout = {
+    provenance: { clientVersion, files },
+    mainPanel: { width: pixels('#MainPanel', 'width'), height: pixels('#MainPanel', 'height') },
+    mod: { width: pixels('CitadelShopMod', 'width'), height: pixels('CitadelShopMod', 'height'), margin: pixels('CitadelShopMod', 'margin') },
+    passiveModsFlow,
+    categoryTiers,
+    modTiersMargin: shopMargin(shopStyleValue(rules, 'CitadelShopModsFiltered #ModTiers', 'margin'), 'CitadelShopModsFiltered #ModTiers'),
+    emptyTier: { opacity: Number(opacityValue), height: pixels('CitadelShopModsFiltered .tierRow.EmptyTier', 'height') },
+    navOrder
+  };
+  console.log(`Generated stock shop layout for ClientVersion ${clientVersion}: ${JSON.stringify(layout.provenance)}`);
+  return layout;
 }
 
 async function main() {
@@ -405,10 +540,12 @@ async function main() {
     if (template[offsets[item.id]] !== BINARY_KV3_BOOLEAN_FALSE) fail(`Generated template byte for ${item.id} is ${template[offsets[item.id]]}, expected ${BINARY_KV3_BOOLEAN_FALSE}`);
   }
   await maybeExtractAssets(items);
+  const shopLayout = await extractShopLayout();
   await mkdir('test/fixtures/templates/custom_passive/scripts', { recursive: true });
   await mkdir('src/data', { recursive: true });
   await writeFile('test/fixtures/templates/custom_passive/scripts/abilities.vdata_c.template', template);
   await writeFile('src/data/deadlockItems.generated.js', generatedDataSource(items, offsets));
+  await writeFile('src/data/shopLayout.generated.js', `export const SHOP_LAYOUT = Object.freeze(${JSON.stringify(shopLayout, null, 2)});\n`);
   console.log(`Generated ${items.length} items and ${template.byteLength} template bytes.`);
 }
 

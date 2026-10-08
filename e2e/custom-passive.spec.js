@@ -431,7 +431,7 @@ test('keeps the search hint expanded on desktop', async ({ page }) => {
   expect(hintMetrics.height).toBeLessThan(hintMetrics.lineHeight * 1.25);
 });
 
-test('shows selected and search tabs as tiered item lists', async ({ page }) => {
+test('shows selected and search tabs as three-column tier boards', async ({ page }) => {
   await page.goto('/custom-passive/');
   await waitForHydration(page, PRESET_TEMPLATE_IDS.PASSIVE_AND_ACTIVE);
   await page.getByTestId('tab-search').click();
@@ -440,7 +440,8 @@ test('shows selected and search tabs as tiered item lists', async ({ page }) => 
 
   await page.getByTestId('tab-selected').click();
   await expect(page.locator('.catalog-list-board')).toHaveCount(1);
-  await expect(page.locator('.list-tier-section')).not.toHaveCount(0);
+  await expect(page.locator('.tier-board-row')).toHaveCount(4);
+  await expect(page.locator('.tier-board-cell')).toHaveCount(12);
   await page.getByTestId('tab-search').click();
   await expect(page.locator('.catalog-list-board')).toHaveCount(1);
   await expect(page.getByTestId('item-card-upgrade_close_range')).toBeVisible();

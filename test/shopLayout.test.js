@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 import { SHOP_LAYOUT } from '../src/data/shopLayout.generated.js';
 import { DEADLOCK_ITEMS } from '../src/data/deadlockItems.generated.js';
+import { CATEGORY_TIER_COLUMNS } from '../src/lib/tierBoard.js';
 import { murmurHash2 } from '../scripts/lib/murmurhash2.mjs';
 
 const API_ITEM_IDS = JSON.parse(readFileSync(new URL('./fixtures/deadlock-api-item-ids.json', import.meta.url), 'utf8'));
@@ -118,15 +119,8 @@ test('catalog stats ids match the recorded API and are unique unsigned 32-bit in
 });
 
 test('verified category columns match reference first rows and wrap every catalog item', () => {
-  // JSX cannot be imported by node:test; mirror CATEGORY_TIER_COLUMNS here
-  // and verify the table against independently captured in-game icons.
-  const columns = {
-    weapon: { 1: 5, 2: 6, 3: 7, 4: 4 },
-    spirit: { 1: 5, 2: 6, 3: 5, 4: 6 },
-    vitality: { 1: 5, 2: 6, 3: 5, 4: 6 }
-  };
   const anchors = JSON.parse(readFileSync(new URL('../e2e/fixtures/shop-reference-anchors.json', import.meta.url), 'utf8'));
-  for (const [category, tiers] of Object.entries(columns)) {
+  for (const [category, tiers] of Object.entries(CATEGORY_TIER_COLUMNS)) {
     const capture = anchors.captures[`tab_${category}`];
     for (const tier of [1, 2, 3, 4]) {
       const items = DEADLOCK_ITEMS.filter((item) => item.category === category && item.tier === tier);

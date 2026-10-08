@@ -636,51 +636,37 @@ a:focus-visible {
   white-space: nowrap;
 }
 .catalog-list-board {
-  /* Keep inherited padding independent of the child's query container. */
-  --catalog-list-pad: clamp(12px, 2.2svw, 24px);
   width: min(100%, calc((var(--app-viewport-height) - (var(--shell-pad) * 2) - var(--catalog-support-footer-height) - 8px) * var(--category-board-aspect)));
   aspect-ratio: var(--category-board-aspect);
   max-height: calc(var(--app-viewport-height) - (var(--shell-pad) * 2) - var(--catalog-support-footer-height) - 8px);
+  min-height: 0;
   justify-self: start;
   align-self: start;
-  overflow: auto;
   position: relative;
+  display: flex;
+  flex-direction: column;
   container-type: inline-size;
-  padding: var(--catalog-list-pad) var(--catalog-list-pad) var(--catalog-list-pad) max(var(--catalog-list-pad), 64px);
+  --shop-card-width: calc(100cqw * var(--shop-card-scale));
+  --shop-grid-gap: calc(var(--shop-card-margin) * var(--shop-unit));
+  padding: 0;
   border-radius: 8px;
-  background:
-    radial-gradient(circle at 78% 24%, #7a725d55, transparent 38%),
-    linear-gradient(180deg, #726b57, #5e5848);
-  box-shadow: 0 24px 90px #000c;
-  --shop-card-width: calc((100cqw + max(var(--catalog-list-pad), 64px) + var(--catalog-list-pad)) * var(--shop-card-scale));
-  --shop-grid-gap: calc(5.5 / 960 * 100cqw);
-}
-.catalog-list-board-selected {
-  max-height: none;
-  overflow: visible;
-  --shop-grid-gap: calc((100cqw + max(var(--catalog-list-pad), 64px) + var(--catalog-list-pad)) * 5 / 1150);
-}
-.catalog-list-board-selected,
-.catalog-list-board-search {
   background: var(--catalog-selected-bg) center / 100% 100% no-repeat;
-}
-.catalog-list-board-search {
-  padding-top: 0;
+  box-shadow: 0 24px 90px #000c;
 }
 .catalog-list-board > .search-box {
-  position: sticky;
+  position: relative;
   z-index: 8;
-  top: 0;
+  flex: 0 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas:
     "label"
     "hint";
-  align-items: start stretch;
+  align-items: start;
   gap: 0 20px;
   --search-control-width: 35%;
   --search-copy-width: calc(100% - var(--search-control-width) - 20px);
-  margin: 0 calc(var(--catalog-list-pad) * -1) clamp(12px, 1.6cqw, 20px) calc(max(var(--catalog-list-pad), 64px) * -1);
+  margin: 0;
   padding: 8px 30px 8px 18px;
   border-radius: 0;
   border-bottom: 0;
@@ -752,23 +738,88 @@ a:focus-visible {
   line-height: 1;
   opacity: 0.3;
 }
-.list-tiers {
-  display: grid;
-  gap: clamp(18px, 2.8cqw, 34px);
+.tier-board-scroller {
+  /* Reserve room for the scaled card, hover frame and glow at every edge. */
+  --tier-board-edge: calc(var(--shop-card-width) * 0.85);
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-inline: var(--tier-board-edge);
+  scrollbar-width: thin;
+  scroll-padding-block: calc(8.5cqw + var(--tier-board-edge)) var(--tier-board-edge);
 }
-.list-tier-section h2 {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
+.tier-board-scroller:focus-visible {
+  outline: 2px solid var(--enhanced-cyan);
+  outline-offset: -2px;
 }
-.list-item-grid {
+.tier-board-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #82765f;
+}
+.tier-board-header img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.tier-board-rows {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--shop-card-width), var(--shop-card-width)));
-  gap: var(--shop-grid-gap);
+  gap: var(--tier-board-edge);
+  padding-block: var(--tier-board-edge);
+  /* Reference: first price rule sits 45px below the header on a 950px board. */
+  padding-top: calc(100cqw * 45 / 950 - 12px);
+}
+.tier-board-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--shop-grid-gap);
   align-items: start;
+}
+.tier-board-price {
+  position: absolute;
+  inset: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #211e17;
+  font-family: var(--font-display);
+  font-size: clamp(16px, 2.2cqw, 24px);
+  font-weight: 900;
+  line-height: 24px;
+}
+.tier-board-price::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid #28231988;
+}
+.tier-board-cell {
+  display: grid;
+  grid-template-columns: repeat(var(--tier-board-columns), var(--shop-card-width));
+  gap: var(--shop-grid-gap);
+  align-content: start;
+  min-width: 0;
+  /* Price rule is centered in its 24px line; cards start 18 reference px below it. */
+  padding-top: calc(100cqw * 18 / 950 + 12px);
+}
+.tier-board-row.is-empty-tier {
+  height: var(--empty-tier-height);
+  opacity: var(--empty-tier-opacity);
+}
+.tier-board-row.is-empty-tier .tier-board-cell {
+  height: var(--empty-tier-height);
+  padding: 0;
+}
+.tier-board-empty {
+  margin: 0;
+  color: #211e17;
+  font-weight: 800;
+  text-align: center;
 }
 .shop-tab-search {
   margin-top: clamp(14px, 2.2vh, 24px);
@@ -848,8 +899,7 @@ button.shop-tab-search.is-active {
 .shop-shell.is-item-hovered .catalog-list-board::after {
   opacity: 1;
 }
-.tiers,
-.list-tiers {
+.tiers {
   position: relative;
   z-index: 2;
 }
@@ -1416,11 +1466,26 @@ button.shop-tab-search.is-active {
     display: none;
   }
   .catalog-board,
-  .catalog-list-board,
   .category-boards .catalog-board,
   .category-boards > .search-box {
     width: 100%;
     max-height: none;
+  }
+  .catalog-list-board {
+    width: 100%;
+    --shop-card-width: max(40px, calc(100cqw * var(--shop-card-scale)));
+    --shop-grid-gap: max(3px, calc(var(--shop-card-margin) * var(--shop-unit)));
+  }
+  .tier-board-row:not(.is-empty-tier) {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 18px;
+  }
+  .tier-board-row:not(.is-empty-tier) .tier-board-cell::before {
+    content: attr(data-category);
+    grid-column: 1 / -1;
+    color: #211e17;
+    font-weight: 900;
+    text-transform: capitalize;
   }
   .shop-tabs { position: relative; left: auto; top: auto; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 0; margin-bottom: 8px; }
   .shop-tab { width: auto; min-height: 54px; border-left: 0; border-bottom: 4px solid transparent; border-radius: 12px 12px 0 0; }

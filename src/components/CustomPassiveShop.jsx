@@ -5,6 +5,7 @@ import { downloadBytes } from '../lib/download.js';
 import { buildCompressedCustomPassivePackage, loadTemplateBytes, sha256Hex } from '../lib/packageBuilder.js';
 import { assertCompletePassiveFlagOffsets, readPassiveFlagTemplate } from '../lib/source2PassiveFlags.js';
 import { PRESET_TEMPLATE_IDS, PRESET_TEMPLATES, REQUIRED_GAMEBANANA_TEMPLATE, getPresetTemplate } from '../lib/presetTemplates.js';
+import { CATEGORY_TIER_COLUMNS, TIER_BOARD_COLUMNS, groupTierBoard } from '../lib/tierBoard.js';
 
 const STORAGE_KEY = 'custom-passive:selected-items:v2';
 const TEMPLATE_VERIFICATION_STORAGE_KEY = 'custom-passive:template-verification:v1';
@@ -47,7 +48,7 @@ const TAB_ICONS = Object.freeze({
 const SHOP_BG_TABS = new Set(['weapon', 'vitality', 'spirit']);
 const SHOP_BACKGROUNDS = Object.freeze({
   generic: `${STATIC_ASSET_BASE}catalog_shop_generic_bg_psd.webp`,
-  selected: `${STATIC_ASSET_BASE}catalog_shop_builds_bg_psd.webp`,
+  selected: `${SHOP_ASSET_BASE}catalog_shop_generic_bg2_psd.webp`,
   weapon: `${SHOP_ASSET_BASE}catalog_shop_bg_weapon_psd.webp`,
   vitality: `${SHOP_ASSET_BASE}catalog_shop_bg_vitality_psd.webp`,
   spirit: `${SHOP_ASSET_BASE}catalog_shop_bg_spirit_psd.webp`
@@ -71,11 +72,6 @@ const SHOP_ITEM_IDS_BY_CATEGORY = Object.freeze(Object.fromEntries(
   ])
 ));
 const CATEGORY_LABELS = Object.freeze({ selected: 'Selected', weapon: 'Weapon', vitality: 'Vitality', spirit: 'Spirit', search: 'Search all' });
-export const CATEGORY_TIER_COLUMNS = Object.freeze({
-  weapon: Object.freeze({ 1: 5, 2: 6, 3: 7, 4: 4 }),
-  spirit: Object.freeze({ 1: 5, 2: 6, 3: 5, 4: 6 }),
-  vitality: Object.freeze({ 1: 5, 2: 6, 3: 5, 4: 6 })
-});
 // Stock citadel_hud_hero_shop.css (#ShopModsContainer/.ShopNavigationTab)
 // and citadel_shop_mods_filtered.css (.ModList/.CostLabel). Category art
 // already contains the blank sticker shapes; only the teal prices are drawn.
@@ -349,15 +345,6 @@ function searchableText(item) {
 
 function stripMarkup(text) {
   return text.replace(/<[^>]*>/g, ' ').replace(/\{[^}]+}/g, '').replace(/\s+/g, ' ').trim();
-}
-
-function sortListItems(items) {
-  const categoryRank = new Map(SHOP_CATEGORIES.map((category, index) => [category, index]));
-  return [...items].sort((a, b) => (
-    a.tier - b.tier
-    || (categoryRank.get(a.category) ?? 99) - (categoryRank.get(b.category) ?? 99)
-    || a.label.localeCompare(b.label)
-  ));
 }
 
 function sortShopItems(items) {
@@ -898,18 +885,48 @@ function TierSection({ category, tier, slots, selectedIds, predictedHoverItemId,
   );
 }
 
-function ListTierSection({ tier, slots, selectedIds, predictedHoverItemId, relatedHoverIds, onToggle }) {
-  const visibleSlots = slots.filter(Boolean);
-  if (visibleSlots.length === 0) return null;
+function TierBoard({ activeTab, items, query, onQueryChange, selectedIds, predictedHoverItemId, relatedHoverIds, onToggle }) {
+  const rows = useMemo(() => groupTierBoard(items), [items]);
   return (
-    <section class="list-tier-section" aria-labelledby={`list-tier-${tier}`}>
-      <h2 id={`list-tier-${tier}`}>Tier {tier}</h2>
-      <div class="list-item-grid">
-        {visibleSlots.map((item, index) => (
-          <ItemCard key={item.id} item={item} index={index} selected={selectedIds.has(item.id)} predictedHover={predictedHoverItemId === item.id} relatedHover={relatedHoverIds.has(item.id)} onToggle={onToggle} />
-        ))}
+    <div
+      class={`catalog-list-board catalog-list-board-${activeTab}`}
+      style={{
+        ...CATALOG_BOARD_SCALE,
+        '--shop-unit': CATEGORY_BOARD_STYLE['--shop-unit'],
+        '--shop-card-margin': SHOP_LAYOUT.mod.margin,
+        '--catalog-selected-bg': `url("${SHOP_BACKGROUNDS.selected}")`,
+        '--tier-board-columns': TIER_BOARD_COLUMNS,
+        '--empty-tier-height': `${SHOP_LAYOUT.emptyTier.height}px`,
+        '--empty-tier-opacity': SHOP_LAYOUT.emptyTier.opacity
+      }}
+    >
+      {activeTab === 'search' && <SearchBox query={query} onQueryChange={onQueryChange} />}
+      <div class="tier-board-scroller" tabIndex={0} role="region" aria-label={`${CATEGORY_LABELS[activeTab]} items by tier and category`}>
+        <div class="tier-board-header">
+          <img src={`${SHOP_ASSET_BASE}filters/shop_filtered_tree_header_full_psd.webp`} alt="Weapon, Spirit, Vitality" />
+        </div>
+        <div class="tier-board-rows">
+          {items.length === 0 && <p class="tier-board-empty">No matching items</p>}
+          {rows.map(({ tier, cost, cells }) => (
+            <section
+              key={tier}
+              class={`tier-board-row ${cells.every((cell) => cell.items.length === 0) ? 'is-empty-tier' : ''}`}
+              data-tier={tier}
+              aria-labelledby={`tier-board-price-${tier}`}
+            >
+              <h2 class="tier-board-price" id={`tier-board-price-${tier}`}>{cost}</h2>
+              {cells.map(({ category, items: cellItems }) => (
+                <div key={category} class="tier-board-cell" data-category={category} role="group" aria-label={`${CATEGORY_LABELS[category]} ${cost}`}>
+                  {cellItems.map((item, index) => (
+                    <ItemCard key={item.id} item={item} index={index} selected={selectedIds.has(item.id)} predictedHover={predictedHoverItemId === item.id} relatedHover={relatedHoverIds.has(item.id)} onToggle={onToggle} />
+                  ))}
+                </div>
+              ))}
+            </section>
+          ))}
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -1028,14 +1045,10 @@ export default function CustomPassiveShop() {
 
   const itemsByTier = useMemo(() => {
     const groups = createTierMap();
-    if (SHOP_BG_TABS.has(activeTab)) {
-      const visibleIds = new Set(visibleItems.map((item) => item.id));
-      for (const item of sortShopItems(DEADLOCK_ITEMS.filter((candidate) => candidate.category === activeTab))) {
-        groups.get(item.tier).push(visibleIds.has(item.id) ? item : null);
-      }
-      return groups;
+    const visibleIds = new Set(visibleItems.map((item) => item.id));
+    for (const item of sortShopItems(DEADLOCK_ITEMS.filter((candidate) => candidate.category === activeTab))) {
+      groups.get(item.tier).push(visibleIds.has(item.id) ? item : null);
     }
-    for (const item of sortListItems(visibleItems)) groups.get(item.tier).push(item);
     return groups;
   }, [activeTab, visibleItems]);
 
@@ -1293,14 +1306,7 @@ export default function CustomPassiveShop() {
               </div>
             </div>
           ) : (
-            <div key={`list-${activeTab}`} class={`catalog-list-board catalog-list-board-${activeTab}`} style={{ ...CATALOG_BOARD_SCALE, '--catalog-selected-bg': `url("${SHOP_BACKGROUNDS.selected}")` }}>
-              {activeTab === 'search' && <SearchBox query={query} onQueryChange={updateQuery} />}
-              <div class="list-tiers">
-                {[1, 2, 3, 4].map((tier) => (
-                  <ListTierSection key={tier} tier={tier} slots={itemsByTier.get(tier)} selectedIds={selectedIds} predictedHoverItemId={predictedHoverItemId} relatedHoverIds={relatedHoverIds} onToggle={toggleItem} />
-                ))}
-              </div>
-            </div>
+            <TierBoard key={`list-${activeTab}`} activeTab={activeTab} items={visibleItems} query={query} onQueryChange={updateQuery} selectedIds={selectedIds} predictedHoverItemId={predictedHoverItemId} relatedHoverIds={relatedHoverIds} onToggle={toggleItem} />
           )}
         </div>
         <CatalogSupportFooter />

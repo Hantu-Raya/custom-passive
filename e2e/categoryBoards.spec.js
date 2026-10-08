@@ -1,15 +1,9 @@
 import { expect, test } from '@playwright/test';
 import { DEADLOCK_ITEMS, TIER_COSTS } from '../src/data/deadlockItems.generated.js';
 import { PRESET_TEMPLATE_IDS, REQUIRED_GAMEBANANA_TEMPLATE, getPresetTemplate } from '../src/lib/presetTemplates.js';
+import { CATEGORY_TIER_COLUMNS } from '../src/lib/tierBoard.js';
 import { expectRectNear, loadReferenceAnchors, rectOf } from './helpers/shopGeometry.js';
 
-// Mirrors CATEGORY_TIER_COLUMNS in CustomPassiveShop.jsx; the independent
-// in-game first-row counts are also checked in test/shopLayout.test.js.
-const CATEGORY_TIER_COLUMNS = {
-  weapon: { 1: 5, 2: 6, 3: 7, 4: 4 },
-  spirit: { 1: 5, 2: 6, 3: 5, 4: 6 },
-  vitality: { 1: 5, 2: 6, 3: 5, 4: 6 }
-};
 const ANCHORS = loadReferenceAnchors();
 const REQUIRED_TEMPLATE_UPLOAD = process.env.CUSTOM_PASSIVE_TEMPLATE_ARCHIVE
   || `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/${REQUIRED_GAMEBANANA_TEMPLATE.fileName}`;

@@ -29,8 +29,9 @@ src/pages/index.astro (imports src/styles/global.css)
             -> source2ResourceCompression.js -> vpkWriter.js -> archiveWriter.js -> download.js
 ```
 
-- `CustomPassiveShop.jsx` owns UI state: selected item IDs, active tab/search, preset mode, template gate, status strings, predictive hover, and build/download actions.
+- `CustomPassiveShop.jsx` owns UI state: selected item IDs, active tab/search/filters, preset mode, template gate, status strings, predictive hover, and build/download actions.
 - `deadlockItems.generated.js` provides `DEADLOCK_ITEMS` (catalog, search, tabs, icons, costs, activation badges), `PASSIVE_FLAG_TYPE_OFFSETS` (item ID → Binary KV3 passive-flag offset), and `TIER_COSTS`.
+- `shopFilters.generated.js` provides deeply frozen `SHOP_FILTER_TREE` and `SHOP_FILTER_UI`, extracted from stock Panorama layouts/styles and English localization with oracle-verified memberships. `shopFilterSelection.js` shares the order-preserving group expansion, OR filtering and search predicate between UI and tests.
 - `presetTemplates.js` adapts generated GameBanana metadata into `REQUIRED_GAMEBANANA_TEMPLATE` (including `downloadPageUrl`, `https://gamebanana.com/mods/download/601444#FileInfo_<fileId>`), `PRESET_TEMPLATE_IDS`, `PRESET_TEMPLATES` and `getPresetTemplate()`.
 - `packageBuilder.js` loads templates and verifies their SHA-256, then assembles the package payload.
 - `source2BinaryKv3.js` parses and rebuilds Source 2 resources; `source2PassiveFlags.js` scans passive-flag offsets; `passiveFlagTemplate.js` patches and reads flag bytes.
@@ -58,7 +59,7 @@ src/pages/index.astro (imports src/styles/global.css)
 - Browser-reachable files must not import native compiler or tool scripts. Load heavy modules lazily (`vpkWriter.js`, `archiveWriter.js`, `7z-wasm`); zstd/xxhash init is promise-cached.
 - Surface user-facing failures through status text and clear `Error` messages at binary, fetch, archive, template and validation boundaries.
 - Popular is the only runtime feature that contacts `api.deadlock-api.com`: lazily load heroes and normal-mode item stats while the tab is open, with an explicit hourly-rounded 30-day window. Validate responses, session-cache successful raw rows for 10 minutes, share pending keys, abort after 8 seconds and ignore stale hero results. No guessed fallback or automatic 429 retry. Build/download remain browser-only and independent of the API.
-- Stable E2E selectors: `template-gate`, `template-gate-preset`, `template-gate-file`, `template-gate-link`, `gamebanana-template-link`, `preset-template-select`, `selected-count`, `build-download`, `tab-selected`, `tab-popular`, `tab-all`, `tab-weapon`, `tab-spirit`, `tab-vitality`, `popular-hero-select`, `search-input`, `clear-search`, `item-card-${item.id}`.
+- Stable E2E selectors: `template-gate`, `template-gate-preset`, `template-gate-file`, `template-gate-link`, `gamebanana-template-link`, `preset-template-select`, `selected-count`, `build-download`, `tab-selected`, `tab-popular`, `tab-all`, `tab-weapon`, `tab-spirit`, `tab-vitality`, `popular-hero-select`, `search-input`, `clear-search`, `filter-category-<slug>` (physical, spirit, defense, mobility, disruption, misc), `filter-option-<slugified-filter-id>`, `active-filters`, `active-filter-<slugified-filter-id>`, `clear-filters`, `item-card-${item.id}`. Filter-id slugs are lowercase with non-alphanumeric runs replaced by `-` (for example, `Physical/Ammo` → `physical-ammo`).
 - Behavior-coupled CSS classes: `is-predicted-hover`, `is-item-hovered`, `is-hover-related`, `item-hover-frame`, `catalog-board`, `catalog-list-board`.
 - GameBanana compatibility is decided by generated MD5/SHA-256 metadata, never filenames.
 

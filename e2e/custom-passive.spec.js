@@ -412,27 +412,21 @@ test('embeds search only inside the All Items tab', async ({ page }) => {
   await expect(page.getByTestId('item-card-upgrade_toxic_bullets')).toBeVisible();
 });
 
-test('keeps the search hint expanded on desktop', async ({ page }) => {
+test('places search at the right end of the six-category filter bar without a shortcut hint', async ({ page }) => {
   await page.setViewportSize({ width: 1569, height: 912 });
   await page.goto('/custom-passive/');
   await waitForHydration(page);
   await page.getByTestId('tab-all').click();
-
-  const hintMetrics = await page.locator('.search-hint').evaluate((hint) => {
-    const box = hint.getBoundingClientRect();
-    const style = getComputedStyle(hint);
-    return {
-      clientWidth: hint.clientWidth,
-      height: box.height,
-      lineHeight: parseFloat(style.lineHeight),
-      scrollWidth: hint.scrollWidth,
-      whiteSpace: style.whiteSpace,
-    };
-  });
-
-  expect(hintMetrics.whiteSpace).toBe('nowrap');
-  expect(Math.ceil(hintMetrics.scrollWidth)).toBeLessThanOrEqual(Math.ceil(hintMetrics.clientWidth));
-  expect(hintMetrics.height).toBeLessThan(hintMetrics.lineHeight * 1.25);
+  await expect(page.locator('.search-hint')).toHaveCount(0);
+  await expect(page.locator('.shop-filter-bar .filter-category-button')).toHaveCount(6);
+  await expect(page.getByTestId('search-input')).toHaveAttribute('placeholder', 'Search items');
+  const bar = await page.locator('.shop-filter-bar').boundingBox();
+  const search = await page.getByTestId('search-input').boundingBox();
+  const lastCategory = await page.getByTestId('filter-category-misc').boundingBox();
+  expect(search.x).toBeGreaterThanOrEqual(lastCategory.x + lastCategory.width);
+  expect(search.x + search.width).toBeLessThanOrEqual(bar.x + bar.width);
+  expect(search.y).toBeGreaterThanOrEqual(bar.y);
+  expect(search.y + search.height).toBeLessThanOrEqual(bar.y + bar.height);
 });
 
 test('shows Selected and All Items as three-column tier boards', async ({ page }) => {

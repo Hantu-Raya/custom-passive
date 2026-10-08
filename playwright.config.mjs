@@ -12,7 +12,7 @@ export default defineConfig({
   projects: [
     {
       name: 'e2e',
-      testMatch: /(custom-passive|categoryBoards|tierBoard|shopRail)\.spec\.js$/
+      testMatch: /(custom-passive|categoryBoards|tierBoard|shopRail|shopFilters)\.spec\.js$/
     },
     {
       name: 'visual',

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { DEADLOCK_ITEMS, TIER_COSTS } from '../data/deadlockItems.generated.js';
 import { SHOP_LAYOUT } from '../data/shopLayout.generated.js';
+import { SHOP_FILTER_TREE, SHOP_FILTER_UI } from '../data/shopFilters.generated.js';
+import { filterItems, filterSlug, flattenFilters } from '../lib/shopFilterSelection.js';
 import { downloadBytes } from '../lib/download.js';
 import { buildCompressedCustomPassivePackage, loadTemplateBytes, sha256Hex } from '../lib/packageBuilder.js';
 import { assertCompletePassiveFlagOffsets, readPassiveFlagTemplate } from '../lib/source2PassiveFlags.js';
@@ -344,9 +346,6 @@ function itemNameClass(label) {
   return [compact ? 'item-card-name-compact' : '', dense ? 'item-card-name-dense' : '', longWord ? 'item-card-name-long-word' : '', singleWord ? 'item-card-name-single-word' : ''].filter(Boolean).join(' ');
 }
 
-function searchableText(item) {
-  return `${item.id} ${item.label} ${item.description} ${item.category} tier ${item.tier}`.toLowerCase();
-}
 
 function stripMarkup(text) {
   return text.replace(/<[^>]*>/g, ' ').replace(/\{[^}]+}/g, '').replace(/\s+/g, ' ').trim();
@@ -581,20 +580,158 @@ function ShopTabs({ activeTab, onTabChange }) {
 
 function SearchBox({ query, onQueryChange }) {
   return (
-    <div class="catalog-search search-box" role="search">
-      <label htmlFor="shop-search">Search items</label>
-      <p class="search-hint">Search by item name or stat, such as Ammo, Lifesteal or Spirit Power</p>
-      <div class="search-row">
-        <input
-          id="shop-search"
-          data-testid="search-input"
-          type="search"
-          value={query}
-          placeholder="Headshot, spirit, tier 2..."
-          onInput={(event) => onQueryChange(event.currentTarget.value)}
-        />
-        {query && <button type="button" data-testid="clear-search" aria-label="Clear search" onClick={() => onQueryChange('')}>Clear</button>}
+    <div class="filter-search" role="search">
+      <input id="shop-search" data-testid="search-input" type="search" aria-label="Search items" value={query} placeholder="Search items" onInput={(event) => onQueryChange(event.currentTarget.value)} />
+      {query && <button type="button" data-testid="clear-search" aria-label="Clear search" onClick={() => onQueryChange('')}>×</button>}
+    </div>
+  );
+}
+
+function FilterOptions({ nodes, activeFilterIds, onSelect, depth = 0 }) {
+  return nodes.map((node) => (
+    <div key={node.id} class="filter-option-group">
+      <button
+        type="button" role="menuitemcheckbox" aria-checked={activeFilterIds.includes(node.id)}
+        class={`filter-option ${node.children ? 'filter-option-heading' : ''}`}
+        style={{ '--filter-depth': depth }} data-testid={`filter-option-${filterSlug(node.id)}`}
+        onClick={() => onSelect(node.id, false)}
+        onContextMenu={(event) => { event.preventDefault(); onSelect(node.id, true); }}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') { event.preventDefault(); onSelect(node.id, event.ctrlKey); }
+        }}
+      >
+        <span class="filter-checkbox" aria-hidden="true">{activeFilterIds.includes(node.id) ? '✓' : ''}</span>
+        <img class="filter-option-icon" src={`${import.meta.env.BASE_URL}${node.iconUrl}`} alt="" />
+        <span>{node.label}</span>
+      </button>
+      {node.children && <FilterOptions nodes={node.children} activeFilterIds={activeFilterIds} onSelect={onSelect} depth={depth + 1} />}
+    </div>
+  ));
+}
+
+function ShopFilterBar({ query, onQueryChange, activeFilterIds, onSelect }) {
+  const [openCategory, setOpenCategory] = useState(null);
+  const barRef = useRef(null);
+  const pointerTypeRef = useRef(null);
+  const menuInputRef = useRef('keyboard');
+  const suppressFocusRef = useRef(false);
+
+  useEffect(() => {
+    const closeOutside = (event) => {
+      const menu = barRef.current?.querySelector('.filter-menu');
+      const button = menu?.closest('.filter-category').querySelector('.filter-category-button');
+      if (menu && !menu.contains(event.target) && !button.contains(event.target)) setOpenCategory(null);
+    };
+    document.addEventListener('pointerdown', closeOutside);
+    return () => document.removeEventListener('pointerdown', closeOutside);
+  }, []);
+
+  function menuKeyDown(event, category) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      suppressFocusRef.current = true;
+      barRef.current.querySelector(`[data-testid="filter-category-${filterSlug(category.id)}"]`).focus();
+      suppressFocusRef.current = false;
+      setOpenCategory(null);
+      return;
+    }
+    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    setOpenCategory(category.id);
+    // Opening with a category arrow needs the newly rendered menu before focusing.
+    requestAnimationFrame(() => {
+      const options = [...(barRef.current?.querySelectorAll(`#filter-menu-${filterSlug(category.id)} [role="menuitemcheckbox"]`) || [])];
+      if (!options.length) return;
+      const index = options.indexOf(document.activeElement);
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? options.length - 1
+        : event.key === 'ArrowDown' ? (index + 1) % options.length : (index < 0 ? options.length - 1 : (index - 1 + options.length) % options.length);
+      options[next].focus();
+    });
+  }
+
+  return (
+    <div class="shop-filter-bar" ref={barRef} style={{ '--filter-nav-backer': `url("${SHOP_ASSET_BASE}filters/filter_nav_backer_psd.webp")`, '--filter-dot-pattern': `url("${SHOP_ASSET_BASE}filters/filter_backer_dot_pattern_psd.webp")` }}
+      onPointerDown={(event) => { menuInputRef.current = event.pointerType === 'mouse' ? 'mouse' : 'touch'; }}
+      onKeyDown={() => { menuInputRef.current = 'keyboard'; }}
+      onFocusIn={(event) => { if (!event.target.closest('.filter-category')) setOpenCategory(null); }}
+      onFocusOut={(event) => {
+        if (event.currentTarget.contains(event.relatedTarget)) return;
+        const ownerMenuId = event.target.closest('.filter-menu')?.id
+          || event.target.closest('.filter-category-button')?.getAttribute('aria-controls');
+        // Removing a focused old menu must not dismiss a newly hovered category.
+        setOpenCategory((current) => current && ownerMenuId && ownerMenuId !== `filter-menu-${filterSlug(current)}` ? current : null);
+      }}>
+      <div class="filter-categories">
+        {SHOP_FILTER_TREE.map((category) => (
+          <div key={category.id} class={`filter-category ${openCategory === category.id ? 'is-open' : ''}`} style={{ '--filter-color': category.color }}
+            onPointerEnter={(event) => {
+              if (event.pointerType === 'mouse') {
+                menuInputRef.current = 'mouse';
+                setOpenCategory(category.id);
+              }
+            }}
+            onPointerLeave={(event) => {
+              if (event.pointerType === 'mouse' && menuInputRef.current === 'mouse') setOpenCategory((current) => current === category.id ? null : current);
+            }}
+            onKeyDown={(event) => menuKeyDown(event, category)}>
+            <button type="button" class="filter-category-button" data-testid={`filter-category-${filterSlug(category.id)}`}
+              aria-label={category.label} aria-haspopup="menu" aria-expanded={openCategory === category.id} aria-controls={`filter-menu-${filterSlug(category.id)}`}
+              onPointerDown={(event) => { pointerTypeRef.current = event.pointerType; }}
+              onFocus={() => {
+                if (!suppressFocusRef.current && pointerTypeRef.current !== 'touch') {
+                  menuInputRef.current = pointerTypeRef.current === 'mouse' ? 'mouse' : 'keyboard';
+                  setOpenCategory(category.id);
+                }
+              }}
+              onClick={() => {
+                const isTouch = pointerTypeRef.current === 'touch';
+                setOpenCategory((current) => isTouch && current === category.id ? null : category.id);
+                pointerTypeRef.current = null;
+              }}>
+              <img src={`${import.meta.env.BASE_URL}${category.iconUrl}`} alt="" />
+              <span>{category.label}</span>
+            </button>
+            {openCategory === category.id && (
+              <div class="filter-menu" id={`filter-menu-${filterSlug(category.id)}`} role="menu" aria-label={`${category.label} filters`}>
+                <FilterOptions nodes={category.children} activeFilterIds={activeFilterIds} onSelect={onSelect} />
+                <div class="filter-help">{SHOP_FILTER_UI.helpLines.map((line) => <p key={line}>{line}</p>)}</div>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
+      <div><SearchBox query={query} onQueryChange={onQueryChange} /></div>
+    </div>
+  );
+}
+
+function ActiveFilters({ activeFilterIds, onRemove, onClear }) {
+  if (!activeFilterIds.length) return null;
+  const options = new Map(flattenFilters().map((node) => [node.id, node]));
+  return (
+    <div class="active-filters" data-testid="active-filters" style={{ '--filter-dot-pattern': `url("${SHOP_ASSET_BASE}filters/filter_backer_dot_pattern_psd.webp")` }}>
+      <div class="active-filter-content">
+        <span class="active-filters-label">{SHOP_FILTER_UI.activeLabel}</span>
+        <div class="active-filter-chips">
+          {activeFilterIds.map((id, index) => {
+            const node = options.get(id);
+            const category = SHOP_FILTER_TREE.find((entry) => id === entry.id || id.startsWith(`${entry.id}/`));
+            return (
+              <span key={id} class="active-filter-entry">
+                {index > 0 && <span class="active-filter-or">{SHOP_FILTER_UI.orLabel}</span>}
+                <button type="button" class="active-filter-chip" data-testid={`active-filter-${filterSlug(id)}`} style={{ '--filter-color': category.color }}
+                  aria-label={`Remove ${category.label} > ${node.label}`} onClick={() => onRemove(id)}>
+                  <span class="filter-checkbox" aria-hidden="true">✓</span>
+                  <img class="filter-option-icon" src={`${import.meta.env.BASE_URL}${node.iconUrl}`} alt="" />
+                  <span>{category.label} › {node.label}</span><span class="active-filter-remove" aria-hidden="true">×</span>
+                </button>
+              </span>
+            );
+          })}
+        </div>
+      </div>
+      <button type="button" class="clear-filters" data-testid="clear-filters" onClick={onClear}>{SHOP_FILTER_UI.clearLabel}</button>
     </div>
   );
 }
@@ -912,7 +1049,7 @@ function tierRowIntrinsicHeight(cells) {
   return `calc(${height} * var(--shop-unit) + 100cqw * 18 / 950 + 12px)`;
 }
 
-function TierBoard({ activeTab, items, query, onQueryChange, popular, selectedIds, predictedHoverItemId, relatedHoverIds, onToggle }) {
+function TierBoard({ activeTab, items, query, onQueryChange, filters, popular, selectedIds, predictedHoverItemId, relatedHoverIds, onToggle }) {
   const rows = useMemo(() => groupTierBoard(items), [items]);
   return (
     <div
@@ -928,7 +1065,7 @@ function TierBoard({ activeTab, items, query, onQueryChange, popular, selectedId
         '--empty-tier-opacity': SHOP_LAYOUT.emptyTier.opacity
       }}
     >
-      {activeTab === 'all' && <SearchBox query={query} onQueryChange={onQueryChange} />}
+      {activeTab === 'all' && <ShopFilterBar query={query} onQueryChange={onQueryChange} activeFilterIds={filters.activeIds} onSelect={filters.onSelect} />}
       {activeTab === 'popular' && <PopularHeader {...popular} />}
       <div class="tier-board-scroller" tabIndex={0} role="region" aria-label={`${CATEGORY_LABELS[activeTab]} items by tier and category`}>
         <div class="tier-board-header">
@@ -956,6 +1093,7 @@ function TierBoard({ activeTab, items, query, onQueryChange, popular, selectedId
           ))}
         </div>
       </div>
+      {activeTab === 'all' && <ActiveFilters activeFilterIds={filters.activeIds} onRemove={filters.onRemove} onClear={filters.onClear} />}
     </div>
   );
 }
@@ -1008,6 +1146,7 @@ export default function CustomPassiveShop() {
   const [selectionStorageReady, setSelectionStorageReady] = useState(false);
   const [activeTab, setActiveTab] = useState('selected');
   const [query, setQuery] = useState('');
+  const [activeFilterIds, setActiveFilterIds] = useState([]);
   const [popularHeroId, setPopularHeroId] = useState(null);
   const [popularHeroes, setPopularHeroes] = useState([]);
   const [popularHeroError, setPopularHeroError] = useState('');
@@ -1097,17 +1236,16 @@ export default function CustomPassiveShop() {
 
   const currentPopularState = popularState.heroId === popularHeroId ? popularState : { status: 'loading', data: null, error: '' };
   const popularItems = useMemo(() => currentPopularState.data ? getPopularItems(currentPopularState.data.rows, DEADLOCK_ITEMS.filter((item) => supportedItemIds.has(item.id))) : [], [currentPopularState.data, supportedItemIds]);
-  const normalizedQuery = query.trim().toLowerCase();
   const visibleItems = useMemo(() => {
     if (activeTab === 'popular') return popularItems;
-    return DEADLOCK_ITEMS.filter((item) => {
+    const tabItems = DEADLOCK_ITEMS.filter((item) => {
       if (!supportedItemIds.has(item.id)) return false;
       if (activeTab === 'selected' && !selectedIds.has(item.id)) return false;
       if ((activeTab === 'weapon' || activeTab === 'vitality' || activeTab === 'spirit') && item.category !== activeTab) return false;
-      if (normalizedQuery && !searchableText(item).includes(normalizedQuery)) return false;
       return true;
     });
-  }, [activeTab, normalizedQuery, selectedIds, supportedItemIds, popularItems]);
+    return filterItems(tabItems, activeTab === 'all' ? activeFilterIds : [], query);
+  }, [activeTab, query, activeFilterIds, selectedIds, supportedItemIds, popularItems]);
 
   const itemsByTier = useMemo(() => {
     const groups = createTierMap();
@@ -1172,6 +1310,11 @@ export default function CustomPassiveShop() {
 
   function updateQuery(value) {
     setQuery(value);
+  }
+
+  function selectFilter(id, additive) {
+    clearPredictedHover();
+    setActiveFilterIds((current) => additive ? [...new Set([...current, id])] : [id]);
   }
 
   function changePopularHero(heroId) {
@@ -1302,7 +1445,10 @@ export default function CustomPassiveShop() {
     }
     setActiveTab(tabId);
     clearPredictedHover();
-    if (tabId !== 'all') setQuery('');
+    if (tabId !== 'all') {
+      setQuery('');
+      setActiveFilterIds([]);
+    }
   }
 
   async function buildAndDownload(selectedItemIds) {
@@ -1384,7 +1530,7 @@ export default function CustomPassiveShop() {
               </div>
             </div>
           ) : (
-            <TierBoard key={`list-${activeTab}`} activeTab={activeTab} items={visibleItems} query={query} onQueryChange={updateQuery} popular={{ heroId: popularHeroId, heroes: popularHeroes, onHeroChange: changePopularHero, data: currentPopularState.data, error: currentPopularState.error || popularHeroError, emptyMessage: currentPopularState.status === 'loading' ? 'Loading popularity data…' : currentPopularState.status === 'error' ? 'Popularity data unavailable' : 'No popularity data for this hero yet' }} selectedIds={selectedIds} predictedHoverItemId={predictedHoverItemId} relatedHoverIds={relatedHoverIds} onToggle={toggleItem} />
+            <TierBoard key={`list-${activeTab}`} activeTab={activeTab} items={visibleItems} query={query} onQueryChange={updateQuery} filters={{ activeIds: activeFilterIds, onSelect: selectFilter, onRemove: (id) => setActiveFilterIds((current) => current.filter((value) => value !== id)), onClear: () => setActiveFilterIds([]) }} popular={{ heroId: popularHeroId, heroes: popularHeroes, onHeroChange: changePopularHero, data: currentPopularState.data, error: currentPopularState.error || popularHeroError, emptyMessage: currentPopularState.status === 'loading' ? 'Loading popularity data…' : currentPopularState.status === 'error' ? 'Popularity data unavailable' : 'No popularity data for this hero yet' }} selectedIds={selectedIds} predictedHoverItemId={predictedHoverItemId} relatedHoverIds={relatedHoverIds} onToggle={toggleItem} />
           )}
         </div>
         <CatalogSupportFooter />

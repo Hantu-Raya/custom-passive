@@ -9,6 +9,7 @@ import { uncompressSource2Resource } from '../src/lib/source2BinaryKv3.js';
 import { injectStockExternalRefs } from './inject-stock-external-refs.mjs';
 import { murmurHash2 } from './lib/murmurhash2.mjs';
 import { deriveShopFilters, parseShopFilterRecord } from './lib/shopFilters.mjs';
+import { frozenSource, parseShopFilterTree } from './lib/shopFilterTree.mjs';
 
 const ABILITIES_SOURCE = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/abilities.vdata';
 const SR2_COMPILER = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/sr2compiler/New folder.exe';
@@ -23,12 +24,16 @@ const SHOP_LAYOUT_PATHS = Object.freeze([
   'panorama/styles/citadel_shop_mods_recommended.vcss_c',
   'panorama/styles/citadel_shop_mods_tier.vcss_c',
   'panorama/styles/citadel_shop_mod_view.vcss_c',
-  'panorama/layout/citadel_hud_hero_shop.vxml_c'
+  'panorama/layout/citadel_hud_hero_shop.vxml_c',
+  'panorama/layout/citadel_ui_shop_filters.vxml_c',
+  'panorama/styles/citadel_ui_shop_filters.vcss_c',
+  'panorama/styles/ability_property_icons.vcss_c'
 ]);
 
 const MODS_LOCALIZATION_URL = 'https://raw.githubusercontent.com/SteamTracking/GameTracking-Deadlock/master/game/citadel/resource/localization/citadel_mods/citadel_mods_english.txt';
 const GC_MOD_NAMES_LOCALIZATION = 'G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/resource/localization/citadel_gc_mod_names/citadel_gc_mod_names_english.txt';
 const GC_MOD_NAMES_LOCALIZATION_URL = 'https://raw.githubusercontent.com/SteamTracking/GameTracking-Deadlock/master/game/citadel/resource/localization/citadel_gc_mod_names/citadel_gc_mod_names_english.txt';
+const SHOP_LOCALIZATION = path.join(path.dirname(PAK01), 'resource/localization/citadel_main/citadel_main_english.txt');
 const INCLUDE_PATTERN = /^\s*_include\s*=\s*\r?\n\s*\[\s*\r?\n(?:\s*resource_name:"[^"]+",?\s*\r?\n)+\s*\]\s*\r?\n/ms;
 const PASSIVE_FLAG_LINE_PATTERN = /\n\s*m_bShowInPassiveItemsArea\s*=\s*(?:"(?:true|false)"|true|false)/g;
 const TIER_COSTS = Object.freeze({ 1: 800, 2: 1600, 3: 3200, 4: 6400 });
@@ -202,6 +207,7 @@ async function readLocalizationSource(localPath, url) {
 
 async function loadLocalization() {
   const map = new Map();
+  parseLocalizationText(await readFile(SHOP_LOCALIZATION, 'utf8'), map);
   try {
     parseLocalizationText(await readLocalizationSource(null, MODS_LOCALIZATION_URL), map);
   } catch (error) {
@@ -287,7 +293,7 @@ function webpPath(pngPath) {
   return pngPath.replace(/\.png$/i, '.webp');
 }
 
-function referencedShopSurfacePaths() {
+function referencedShopSurfacePaths(filterAssets = new Set()) {
   const paths = new Set([
     'panorama/images/shop/card_backer_png.png',
     'panorama/images/shop/catalog/backer_star_test_png.png',
@@ -317,6 +323,9 @@ function referencedShopSurfacePaths() {
     'panorama/images/shop/catalog/catalog_tooltip_header_vitality_psd.png',
     'panorama/images/shop/catalog/catalog_tooltip_header_weapon_psd.png'
   ]);
+  for (const filterAsset of filterAssets) paths.add(filterAsset);
+  for (const name of ['physical', 'magic', 'defense', 'mobility', 'disruption', 'misc']) paths.add(`panorama/images/shop/catalog/filters/sigil_${name}_psd.png`);
+  for (const name of ['filter_nav_backer_psd', 'filter_backer_dot_pattern_psd']) paths.add(`panorama/images/shop/catalog/filters/${name}.png`);
   for (const category of ['spirit', 'vitality', 'weapon']) {
     for (let tier = 1; tier <= 4; tier += 1) paths.add(`panorama/images/shop/catalog/cards/card_backer_${category}_t${tier}_psd.png`);
   }
@@ -328,8 +337,8 @@ function referencedShopSurfacePaths() {
   return paths;
 }
 
-function referencedAssetPaths(items) {
-  const paths = referencedShopSurfacePaths();
+function referencedAssetPaths(items, filterAssets) {
+  const paths = referencedShopSurfacePaths(filterAssets);
   for (const item of items) paths.add(decompiledPngPath(item.imagePath));
   return paths;
 }
@@ -369,6 +378,7 @@ async function convertPngToWebp(pngPath, outputPath) {
 async function optimizeExtractedAssets(assetRoot, pngPaths) {
   let converted = 0;
   for (const pngPath of pngPaths) {
+    if (!pngPath.endsWith('.png')) continue;
     const inputPath = path.join(assetRoot, pngPath);
     if (!existsSync(inputPath)) continue;
     const outputPath = path.join(assetRoot, webpPath(pngPath));
@@ -380,27 +390,34 @@ async function optimizeExtractedAssets(assetRoot, pngPaths) {
   console.log(`Optimized ${converted} Deadlock PNG assets to WebP.`);
 }
 
-async function maybeExtractAssets(items) {
+async function maybeExtractAssets(items, filterAssets) {
   const assetRoot = path.resolve('public/assets/deadlock');
   await rm(assetRoot, { recursive: true, force: true });
   await mkdir(assetRoot, { recursive: true });
   const extractJobs = [
     { label: 'item icons', filter: 'panorama/images/items/' },
-    { label: 'shop surfaces', filter: 'panorama/images/shop/' }
+    { label: 'shop surfaces', filter: 'panorama/images/shop/', extension: 'vtex_c' },
+    { label: 'filter property icons', filter: 'panorama/images/icons/properties/', extension: 'vsvg_c' }
   ];
   for (const job of extractJobs) {
     try {
-      const args = ['-i', PAK01, '-o', assetRoot, '-d', '-f', job.filter, '-e', 'vtex_c'];
+      const args = ['-i', PAK01, '-o', assetRoot, '-d', '-f', job.filter, '-e', job.extension || 'vtex_c'];
       const result = await runProcess(SOURCE2_VIEWER_CLI, args, { timeoutMs: 120000 });
       if (result.code !== 0) console.warn(`[warn] Source2Viewer ${job.label} extraction failed with exit code ${result.code}; CSS/glyph fallbacks will be used.`);
     } catch (error) {
       console.warn(`[warn] Source2Viewer ${job.label} extraction failed; CSS/glyph fallbacks will be used: ${error?.message || error}`);
     }
   }
-  const assetPaths = referencedAssetPaths(items);
+  for (const asset of filterAssets) {
+    if (existsSync(path.join(assetRoot, asset))) continue;
+    const member = asset.replace(/\.png$/, '.vtex_c').replace(/\.svg$/, '.vsvg_c');
+    const result = await runProcess(SOURCE2_VIEWER_CLI, ['-i', PAK01, '--vpk_filepath', member, '-o', assetRoot, '-d'], { timeoutMs: 120000 });
+    if (result.code !== 0) fail(`Source2Viewer required filter asset extraction failed: ${member}`);
+  }
+  const assetPaths = referencedAssetPaths(items, filterAssets);
   await pruneUnreferencedAssets(assetRoot, assetPaths);
   await optimizeExtractedAssets(assetRoot, assetPaths);
-  const missingSurfaces = [...referencedShopSurfacePaths()].map(webpPath).filter((surfacePath) => !existsSync(path.join(assetRoot, surfacePath)));
+  const missingSurfaces = [...referencedShopSurfacePaths(filterAssets)].map(webpPath).filter((surfacePath) => !existsSync(path.join(assetRoot, surfacePath)));
   if (missingSurfaces.length > 0) fail(`Missing required shop surface WebP(s): ${missingSurfaces.join(', ')}`);
   const fontRoot = path.join(assetRoot, 'panorama/fonts');
   await mkdir(fontRoot, { recursive: true });
@@ -446,7 +463,7 @@ function shopMargin(value, label) {
   return { top, right, bottom, left };
 }
 
-async function extractShopLayout() {
+async function extractShopLayout(localization, items) {
   const root = path.resolve('.tmp/custom-passive-shop-layout');
   await rm(root, { recursive: true, force: true });
   await mkdir(root, { recursive: true });
@@ -456,6 +473,7 @@ async function extractShopLayout() {
   const files = [];
   const rules = new Map();
   let xml = '';
+  let filterXml = '';
   for (const filePath of SHOP_LAYOUT_PATHS) {
     const crc = crcs.get(filePath);
     if (!crc) fail(`Missing stock shop layout CRC: ${filePath}`);
@@ -465,7 +483,10 @@ async function extractShopLayout() {
     const decompiledPath = path.join(root, filePath.replace(/\.vcss_c$/, '.css').replace(/\.vxml_c$/, '.xml'));
     await assertReadable(decompiledPath, 'Decompiled stock shop layout');
     const text = await readFile(decompiledPath, 'utf8');
-    if (filePath.endsWith('.vcss_c')) parseShopCss(text, rules);
+    if (filePath.endsWith('.vcss_c')) {
+      parseShopCss(text, rules);
+      for (const [, name, color] of text.matchAll(/@define\s+(\w+)Color:\s*(#[\da-f]+);/gi)) rules.set(`@filter-color-${name}`, { color });
+    } else if (filePath.endsWith('citadel_ui_shop_filters.vxml_c')) filterXml = text;
     else xml = text;
   }
 
@@ -511,7 +532,7 @@ async function extractShopLayout() {
   const opacityValue = shopStyleValue(rules, 'CitadelShopModsFiltered .tierRow.EmptyTier', 'opacity');
   if (!/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(opacityValue) || Number(opacityValue) > 1) fail(`Unparsable stock empty tier opacity: ${opacityValue}`);
   const layout = {
-    provenance: { clientVersion, files },
+    provenance: { clientVersion, files: files.filter((file) => !/shop_filters|ability_property_icons/.test(file.path)) },
     mainPanel: { width: pixels('#MainPanel', 'width'), height: pixels('#MainPanel', 'height') },
     mod: { width: pixels('CitadelShopMod', 'width'), height: pixels('CitadelShopMod', 'height'), margin: pixels('CitadelShopMod', 'margin') },
     passiveModsFlow,
@@ -521,7 +542,10 @@ async function extractShopLayout() {
     navOrder
   };
   console.log(`Generated stock shop layout for ClientVersion ${clientVersion}: ${JSON.stringify(layout.provenance)}`);
-  return layout;
+  const oracle = JSON.parse(await readFile('test/fixtures/shop-filter-oracle.json', 'utf8'));
+  const filters = parseShopFilterTree(filterXml, rules, localization, items, oracle);
+  filters.ui.provenance = { clientVersion, files: files.filter((file) => /shop_filters|ability_property_icons/.test(file.path)), localization: 'resource/localization/citadel_main/citadel_main_english.txt' };
+  return { layout, filters };
 }
 
 async function main() {
@@ -552,13 +576,14 @@ async function main() {
   for (const item of items) {
     if (template[offsets[item.id]] !== BINARY_KV3_BOOLEAN_FALSE) fail(`Generated template byte for ${item.id} is ${template[offsets[item.id]]}, expected ${BINARY_KV3_BOOLEAN_FALSE}`);
   }
-  await maybeExtractAssets(items);
-  const shopLayout = await extractShopLayout();
+  const { layout: shopLayout, filters } = await extractShopLayout(localization, items);
+  await maybeExtractAssets(items, filters.assetPaths);
   await mkdir('test/fixtures/templates/custom_passive/scripts', { recursive: true });
   await mkdir('src/data', { recursive: true });
   await writeFile('test/fixtures/templates/custom_passive/scripts/abilities.vdata_c.template', template);
   await writeFile('src/data/deadlockItems.generated.js', generatedDataSource(items, offsets));
   await writeFile('src/data/shopLayout.generated.js', `export const SHOP_LAYOUT = Object.freeze(${JSON.stringify(shopLayout, null, 2)});\n`);
+  await writeFile('src/data/shopFilters.generated.js', `export const SHOP_FILTER_TREE = ${frozenSource(filters.tree)};\n\nexport const SHOP_FILTER_UI = ${frozenSource(filters.ui)};\n`);
   console.log(`Generated ${items.length} items and ${template.byteLength} template bytes.`);
 }
 

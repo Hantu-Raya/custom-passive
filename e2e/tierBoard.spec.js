@@ -71,6 +71,57 @@ async function expectFirstTierSpacing(page) {
   expect(Math.abs(spacing.ruleToCard - 18), 'reference-scaled first-price-to-card spacing').toBeLessThanOrEqual(1);
 }
 
+async function expectReferenceColumns(page) {
+  const geometry = await page.locator('.catalog-list-board').evaluate((board) => {
+    const bounds = board.getBoundingClientRect();
+    const header = board.querySelector('.tier-board-header').getBoundingClientRect();
+    const columns = ['weapon', 'spirit', 'vitality'].map((category) => {
+      const icon = board.querySelector(`.tier-board-cell[data-category="${category}"] .item-icon`);
+      const cell = icon.closest('.tier-board-cell').getBoundingClientRect();
+      return { icon: (icon.getBoundingClientRect().left - bounds.left) / bounds.width, cellLeft: cell.left, cellWidth: cell.width };
+    });
+    return { left: (header.left - bounds.left) / bounds.width, right: (bounds.right - header.right) / bounds.width, headerLeft: header.left, headerWidth: header.width, columns };
+  });
+  const referenceFirstIcons = [(555 - 532) / 925, (854 - 532) / 925, (1153 - 532) / 925];
+  for (const [index, column] of geometry.columns.entries()) {
+    expect(Math.abs(column.icon - referenceFirstIcons[index]), `${index}: first icon reference-normalized x`).toBeLessThanOrEqual(0.01);
+    expect(Math.abs(column.cellLeft - geometry.headerLeft - index * geometry.headerWidth / 3), `${index}: header and cell left alignment`).toBeLessThanOrEqual(1);
+    expect(Math.abs(column.cellWidth - geometry.headerWidth / 3), `${index}: header and cell width alignment`).toBeLessThanOrEqual(1);
+  }
+  expect(Math.abs(geometry.left - 16 / 925), 'stock header left inset').toBeLessThanOrEqual(0.01);
+  expect(Math.abs(geometry.right - 11 / 925), 'stock header right inset').toBeLessThanOrEqual(0.01);
+}
+
+async function expectPriceLabelsVisible(page) {
+  const scroller = page.locator('.tier-board-scroller');
+  const initialScrollTop = await scroller.evaluate((element) => element.scrollTop);
+  const prices = page.locator('.tier-board-row .tier-board-price');
+  for (let index = 0; index < await prices.count(); index += 1) {
+    const price = prices.nth(index);
+    await price.evaluate((element) => element.scrollIntoView({ block: 'center' }));
+    await expect(price).toBeVisible();
+    const geometry = await price.evaluate((element) => {
+      const board = element.closest('.catalog-list-board').getBoundingClientRect();
+      const scroller = element.closest('.tier-board-scroller');
+      const frame = scroller.getBoundingClientRect();
+      const header = scroller.querySelector('.tier-board-header').getBoundingClientRect();
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const text = range.getBoundingClientRect();
+      const hit = document.elementFromPoint(text.left + 1, (text.top + text.bottom) / 2);
+      return { labelLeft: element.getBoundingClientRect().left, boardLeft: board.left, boardWidth: board.width, frameRight: frame.right, frameBottom: frame.bottom, headerBottom: header.bottom, textLeft: text.left, textRight: text.right, textTop: text.top, textBottom: text.bottom, unobscured: hit === element || element.contains(hit) };
+    });
+    expect(geometry.labelLeft, `${index}: price label inset`).toBeGreaterThanOrEqual(geometry.boardLeft + 8);
+    expect(Math.abs((geometry.labelLeft - geometry.boardLeft) / geometry.boardWidth - 13 / 925), `${index}: stock price inset`).toBeLessThanOrEqual(0.005);
+    expect(geometry.textLeft).toBeGreaterThanOrEqual(geometry.boardLeft + 8);
+    expect(geometry.textRight).toBeLessThanOrEqual(geometry.frameRight);
+    expect(geometry.textTop).toBeGreaterThanOrEqual(geometry.headerBottom - 1);
+    expect(geometry.textBottom).toBeLessThanOrEqual(geometry.frameBottom + 1);
+    expect(geometry.unobscured, `${index}: price text not hidden under the rail`).toBe(true);
+  }
+  await scroller.evaluate((element, scrollTop) => { element.scrollTop = scrollTop; }, initialScrollTop);
+}
+
 test('Popular uses Recommended header and tier spacing, without Filtered label padding', async ({ page }) => {
   await page.route('https://api.deadlock-api.com/**', async (route) => {
     const fixture = route.request().url().includes('/assets/heroes') ? 'heroes.json' : 'item-stats-silver.json';
@@ -81,6 +132,20 @@ test('Popular uses Recommended header and tier spacing, without Filtered label p
   await page.getByTestId('popular-hero-select').selectOption('80');
   await expect(page.getByTestId('item-card-upgrade_close_range')).toBeVisible();
   await expectFirstTierSpacing(page);
+  await expectReferenceColumns(page);
+  await expectPriceLabelsVisible(page);
+});
+
+test('All Items and Selected columns align with the full-width reference header', async ({ page }) => {
+  await openShop(page);
+  await page.getByTestId('tab-all').click();
+  await expect(page.locator('.catalog-list-board .item-card')).toHaveCount(156);
+  await page.mouse.move(0, 0);
+  await expectReferenceColumns(page);
+  await expectPriceLabelsVisible(page);
+  await selectAllItems(page);
+  await expectReferenceColumns(page);
+  await expectPriceLabelsVisible(page);
 });
 
 test('Selected renders every item in twelve four-across cells with tallest-cell row heights', async ({ page }) => {

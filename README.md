@@ -19,7 +19,7 @@ Hosted app: <https://hantu-raya.github.io/custom-passive/>
 
 ## Supported inputs
 
-Required template and preset sources are generated from the latest compatible GameBanana batch. Use the template filename shown in the app, not a previously documented filename.
+Required template and preset sources are generated from the latest compatible GameBanana batch. The app's GameBanana links open the download page at the required template file. Use the template filename shown in the app, not a previously documented filename.
 
 Filenames are only hints. SHA-256 metadata in `src/data/gamebananaSources.generated.js` decides compatibility.
 

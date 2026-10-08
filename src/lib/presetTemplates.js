@@ -18,6 +18,7 @@ const ALL_ITEM_IDS = Object.freeze(DEADLOCK_ITEMS.map((item) => item.id).sort())
 export const REQUIRED_GAMEBANANA_TEMPLATE = Object.freeze({
   fileName: REQUIRED_GAMEBANANA_TEMPLATE_SOURCE.fileName,
   modUrl: GAMEBANANA_MOD_SOURCE.url,
+  downloadPageUrl: `https://gamebanana.com/mods/download/${GAMEBANANA_MOD_SOURCE.id}#FileInfo_${REQUIRED_GAMEBANANA_TEMPLATE_SOURCE.fileId}`,
   sha256: REQUIRED_GAMEBANANA_TEMPLATE_SOURCE.sha256,
   md5: REQUIRED_GAMEBANANA_TEMPLATE_SOURCE.md5,
   archiveMember: REQUIRED_GAMEBANANA_TEMPLATE_SOURCE.archiveMember

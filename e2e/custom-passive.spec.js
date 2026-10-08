@@ -195,7 +195,7 @@ test('loads verified GameBanana presets before building', async ({ page }) => {
   await waitForHydration(page);
   const passiveOnly = getPresetTemplate(PRESET_TEMPLATE_IDS.PASSIVE_ONLY);
   const passiveAndActive = getPresetTemplate(PRESET_TEMPLATE_IDS.PASSIVE_AND_ACTIVE);
-  await expect(page.getByTestId('gamebanana-template-link')).toHaveAttribute('href', REQUIRED_GAMEBANANA_TEMPLATE.modUrl);
+  await expect(page.getByTestId('gamebanana-template-link')).toHaveAttribute('href', REQUIRED_GAMEBANANA_TEMPLATE.downloadPageUrl);
   await expect(page.getByTestId('donation-link')).toHaveAttribute('href', 'https://ko-fi.com/hantuaraya');
   await expect(page.getByTestId('donation-link')).toHaveText('Donate');
   await expect(page.getByTestId('supporter-leaderboard-link')).toHaveAttribute('href', 'https://ko-fi.com/hantuaraya/leaderboard');
@@ -239,6 +239,7 @@ test('reuses template verification for 12 hours then asks again', async ({ page 
   await seedTemplateVerification(expiredPage, Date.now() - 1);
   await expiredPage.goto('/custom-passive/');
   await expect(expiredPage.getByTestId('template-gate')).toBeVisible();
+  await expect(expiredPage.getByTestId('template-gate-link')).toHaveAttribute('href', REQUIRED_GAMEBANANA_TEMPLATE.downloadPageUrl);
   await expect(expiredPage.getByTestId('build-download')).toBeDisabled();
 });
 

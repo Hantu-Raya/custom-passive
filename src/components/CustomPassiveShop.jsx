@@ -751,7 +751,7 @@ function BuildDownloadPanel({
         <a
           class="gamebanana-template-link"
           data-testid="gamebanana-template-link"
-          href={REQUIRED_GAMEBANANA_TEMPLATE.modUrl}
+          href={REQUIRED_GAMEBANANA_TEMPLATE.downloadPageUrl}
           target="_blank"
           rel="noreferrer"
         >
@@ -820,7 +820,7 @@ function TemplateGate({
         <a
           class="gamebanana-template-link"
           data-testid="template-gate-link"
-          href={REQUIRED_GAMEBANANA_TEMPLATE.modUrl}
+          href={REQUIRED_GAMEBANANA_TEMPLATE.downloadPageUrl}
           target="_blank"
           rel="noreferrer"
         >

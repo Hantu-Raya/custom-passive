@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { DEADLOCK_ITEMS } from '../src/data/deadlockItems.generated.js';
-import { GAMEBANANA_MOD_SOURCE, GAMEBANANA_PRESET_SOURCES } from '../src/data/gamebananaSources.generated.js';
+import { GAMEBANANA_MOD_SOURCE, GAMEBANANA_PRESET_SOURCES, REQUIRED_GAMEBANANA_TEMPLATE_SOURCE } from '../src/data/gamebananaSources.generated.js';
 import { PRESET_TEMPLATE_IDS, PRESET_TEMPLATES, REQUIRED_GAMEBANANA_TEMPLATE, getPresetTemplate } from '../src/lib/presetTemplates.js';
 
 const ALL_ITEM_IDS = DEADLOCK_ITEMS.map((item) => item.id).sort();
@@ -32,6 +32,7 @@ test('passive and active preset preselects yes-behavior archive selection withou
   assert.match(REQUIRED_GAMEBANANA_TEMPLATE.sha256, /^[a-f0-9]{64}$/);
   assert.equal(REQUIRED_GAMEBANANA_TEMPLATE.archiveMember, 'pak02_dir.vpk');
   assert.equal(REQUIRED_GAMEBANANA_TEMPLATE.modUrl, 'https://gamebanana.com/mods/601444');
+  assert.equal(REQUIRED_GAMEBANANA_TEMPLATE.downloadPageUrl, `https://gamebanana.com/mods/download/601444#FileInfo_${REQUIRED_GAMEBANANA_TEMPLATE_SOURCE.fileId}`);
   assert.equal(preset.sourceArchive.archiveMember, 'pak03_dir.vpk');
   assert.deepEqual(preset.supportedItemIds, ALL_ITEM_IDS);
   assert.equal(preset.presetItemIds.length, 74);

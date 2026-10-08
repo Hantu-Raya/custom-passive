@@ -7,7 +7,7 @@ import { PRESET_TEMPLATE_IDS, PRESET_TEMPLATES, REQUIRED_GAMEBANANA_TEMPLATE, ge
 const ALL_ITEM_IDS = DEADLOCK_ITEMS.map((item) => item.id).sort();
 
 function dateTagFromFile(fileName) {
-  return fileName.match(/(\d{2}_\d{2})\.7z$/)?.[1] || null;
+  return fileName.match(/(\d{2}_\d{2})(?:_[0-9a-f]{5})?\.7z$/i)?.[1] || null;
 }
 
 function assertCurrentSource(preset, source) {

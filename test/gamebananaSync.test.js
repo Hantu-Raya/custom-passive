@@ -74,6 +74,17 @@ test('classifies GameBanana archive names used by the mod', () => {
     role: 'required-template',
     dateTag: '06_19'
   });
+  assert.deepEqual(classifyGameBananaFile('templete_10_08_511fe.7z'), {
+    key: 'requiredTemplate',
+    role: 'required-template',
+    dateTag: '10_08'
+  });
+  assert.deepEqual(classifyGameBananaFile('filter_for_passive_items_10_08_0a1b2.7z'), {
+    key: 'passiveOnly',
+    role: 'passive-only',
+    dateTag: '10_08'
+  });
+  assert.equal(classifyGameBananaFile('templete_10_08_extra.7z'), null);
   assert.equal(classifyGameBananaFile('standalone_passive_items_06_19.7z'), null);
 });
 

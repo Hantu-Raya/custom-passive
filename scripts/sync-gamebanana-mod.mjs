@@ -93,19 +93,21 @@ export function normalizeGameBananaFiles(apiPayload) {
   return Object.freeze(Object.values(files).map(normalizeFile));
 }
 
+// GameBanana appends a 5-hex suffix (e.g. templete_10_08_511fe.7z) when a re-upload reuses a file name.
+const GB_SUFFIX = String.raw`(?:_[0-9a-f]{5})?\.7z$`;
+const FILE_PATTERNS = Object.freeze([
+  [new RegExp(String.raw`^filter_for_passive_items_(\d{2}_\d{2})${GB_SUFFIX}`, 'i'), 'passiveOnly', 'passive-only'],
+  [new RegExp(String.raw`^filter_for_passive_and_active_items_yes_?behaviou?r_(\d{2}_\d{2})${GB_SUFFIX}`, 'i'), 'passiveAndActive', 'passive-and-active'],
+  [new RegExp(String.raw`^filter_for_passive_and_active_items_(\d{2}_\d{2})${GB_SUFFIX}`, 'i'), 'passiveAndActiveNoBehavior', 'passive-and-active-no-behavior'],
+  [new RegExp(String.raw`^(?:template|templete)_(\d{2}_\d{2})${GB_SUFFIX}`, 'i'), 'requiredTemplate', 'required-template']
+]);
+
 export function classifyGameBananaFile(fileName) {
   const name = String(fileName || '');
-  let match = /^filter_for_passive_items_(\d{2}_\d{2})\.7z$/i.exec(name);
-  if (match) return Object.freeze({ key: 'passiveOnly', role: 'passive-only', dateTag: match[1] });
-
-  match = /^filter_for_passive_and_active_items_yes_?behaviou?r_(\d{2}_\d{2})\.7z$/i.exec(name);
-  if (match) return Object.freeze({ key: 'passiveAndActive', role: 'passive-and-active', dateTag: match[1] });
-
-  match = /^filter_for_passive_and_active_items_(\d{2}_\d{2})\.7z$/i.exec(name);
-  if (match) return Object.freeze({ key: 'passiveAndActiveNoBehavior', role: 'passive-and-active-no-behavior', dateTag: match[1] });
-
-  match = /^(?:template|templete)_(\d{2}_\d{2})\.7z$/i.exec(name);
-  if (match) return Object.freeze({ key: 'requiredTemplate', role: 'required-template', dateTag: match[1] });
+  for (const [pattern, key, role] of FILE_PATTERNS) {
+    const match = pattern.exec(name);
+    if (match) return Object.freeze({ key, role, dateTag: match[1] });
+  }
 
   return null;
 }

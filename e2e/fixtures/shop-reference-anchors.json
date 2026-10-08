@@ -1,0 +1,4495 @@
+{
+  "captures": {
+    "all_items_00": {
+      "board": {
+        "h": 800,
+        "w": 950,
+        "x": 500,
+        "y": 17
+      },
+      "cards": [
+        {
+          "h": 60,
+          "id": "upgrade_close_range",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 211
+        },
+        {
+          "h": 60,
+          "id": "upgrade_clip_size",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 211
+        },
+        {
+          "h": 60,
+          "id": "upgrade_headshot_booster",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 211
+        },
+        {
+          "h": 60,
+          "id": "upgrade_high_velocity_mag",
+          "score": 1.0,
+          "w": 60,
+          "x": 757,
+          "y": 211
+        },
+        {
+          "h": 60,
+          "id": "upgrade_extra_charge",
+          "score": 1.0,
+          "w": 60,
+          "x": 854,
+          "y": 211
+        },
+        {
+          "h": 60,
+          "id": "upgrade_improved_spirit",
+          "score": 1.0,
+          "w": 60,
+          "x": 921,
+          "y": 211
+        },
+        {
+          "h": 60,
+          "id": "upgrade_goose_egg",
+          "score": 1.0,
+          "w": 60,
+          "x": 988,
+          "y": 211
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_burst",
+          "score": 1.0,
+          "w": 60,
+          "x": 1055,
+          "y": 211
+        },
+        {
+          "h": 60,
+          "id": "upgrade_health",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 211
+        },
+        {
+          "h": 60,
+          "id": "upgrade_endurance",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 211
+        },
+        {
+          "h": 60,
+          "id": "upgrade_improved_stamina",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 211
+        },
+        {
+          "h": 60,
+          "id": "upgrade_grit",
+          "score": 1.0,
+          "w": 60,
+          "x": 1354,
+          "y": 211
+        },
+        {
+          "h": 60,
+          "id": "upgrade_non_player_bonus",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 310
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rapid_rounds",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 310
+        },
+        {
+          "h": 60,
+          "id": "upgrade_medic_bullets",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 310
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_reach",
+          "score": 1.0,
+          "w": 60,
+          "x": 854,
+          "y": 310
+        },
+        {
+          "h": 60,
+          "id": "upgrade_mystic_regeneration",
+          "score": 0.999999,
+          "w": 60,
+          "x": 921,
+          "y": 310
+        },
+        {
+          "h": 60,
+          "id": "upgrade_withering_whip",
+          "score": 1.0,
+          "w": 60,
+          "x": 988,
+          "y": 310
+        },
+        {
+          "h": 60,
+          "id": "upgrade_acolytes_glove",
+          "score": 1.0,
+          "w": 60,
+          "x": 1055,
+          "y": 310
+        },
+        {
+          "h": 60,
+          "id": "upgrade_health_stimpak",
+          "score": 0.999999,
+          "w": 60,
+          "x": 1153,
+          "y": 310
+        },
+        {
+          "h": 60,
+          "id": "upgrade_lifestrike_gauntlets",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 310
+        },
+        {
+          "h": 60,
+          "id": "upgrade_melee_rebuttal",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 310
+        },
+        {
+          "h": 60,
+          "id": "upgrade_sprint_booster",
+          "score": 1.0,
+          "w": 60,
+          "x": 1354,
+          "y": 310
+        },
+        {
+          "h": 60,
+          "id": "upgrade_active_reload",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_fleetfoot_boots",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_intensifying_clip",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_kinetic_sash",
+          "score": 1.0,
+          "w": 60,
+          "x": 757,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_arcane_surge",
+          "score": 1.0,
+          "w": 60,
+          "x": 854,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_bullet_resist_shredder",
+          "score": 1.0,
+          "w": 60,
+          "x": 921,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_cold_front",
+          "score": 0.999999,
+          "w": 60,
+          "x": 988,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_tempo",
+          "score": 1.0,
+          "w": 60,
+          "x": 1055,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_regenerating_bullet_shield",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_vampire",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_debuff_reducer",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_shield",
+          "score": 1.0,
+          "w": 60,
+          "x": 1354,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_guardian_ward",
+          "score": 0.935776,
+          "w": 60,
+          "x": 1220,
+          "y": 577
+        },
+        {
+          "h": 60,
+          "id": "upgrade_healbane",
+          "score": 0.996046,
+          "w": 60,
+          "x": 1287,
+          "y": 577
+        },
+        {
+          "h": 60,
+          "id": "upgrade_long_range",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_melee_charge",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_crackshot",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_pristine_emblem",
+          "score": 1.0,
+          "w": 60,
+          "x": 757,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_arcane_extension",
+          "score": 1.0,
+          "w": 60,
+          "x": 854,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_soaring_spirit",
+          "score": 1.0,
+          "w": 60,
+          "x": 921,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_slow",
+          "score": 1.0,
+          "w": 60,
+          "x": 988,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_vulnerability",
+          "score": 1.0,
+          "w": 60,
+          "x": 1055,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_cardio_calibrator",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_healing_booster",
+          "score": 1.0,
+          "w": 60,
+          "x": 1354,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rechargingbullets",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 677
+        },
+        {
+          "h": 60,
+          "id": "upgrade_slowing_bullets",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 677
+        },
+        {
+          "h": 60,
+          "id": "upgrade_tech_defense_shredders",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 677
+        },
+        {
+          "h": 60,
+          "id": "upgrade_split_shot",
+          "score": 0.945161,
+          "w": 60,
+          "x": 757,
+          "y": 677
+        },
+        {
+          "h": 60,
+          "id": "upgrade_quick_silver",
+          "score": 1.0,
+          "w": 60,
+          "x": 854,
+          "y": 677
+        },
+        {
+          "h": 60,
+          "id": "upgrade_containment",
+          "score": 0.933054,
+          "w": 60,
+          "x": 921,
+          "y": 677
+        },
+        {
+          "h": 60,
+          "id": "upgrade_suppressor",
+          "score": 1.0,
+          "w": 60,
+          "x": 1055,
+          "y": 677
+        },
+        {
+          "h": 60,
+          "id": "upgrade_vex_barrier",
+          "score": 0.999998,
+          "w": 60,
+          "x": 1153,
+          "y": 677
+        },
+        {
+          "h": 60,
+          "id": "upgrade_restorative_locket",
+          "score": 0.956629,
+          "w": 60,
+          "x": 1220,
+          "y": 677
+        },
+        {
+          "h": 60,
+          "id": "upgrade_return_fire",
+          "score": 0.9522,
+          "w": 60,
+          "x": 1287,
+          "y": 677
+        },
+        {
+          "h": 60,
+          "id": "upgrade_health_stealing_magic",
+          "score": 1.0,
+          "w": 60,
+          "x": 1354,
+          "y": 677
+        },
+        {
+          "h": 60,
+          "id": "upgrade_titan_round",
+          "score": 0.907074,
+          "w": 60,
+          "x": 690,
+          "y": 776
+        }
+      ],
+      "sha256": "c2bd01b1d036097de958e81054554e2859003d925438c9fab72717b97cfa8cf6",
+      "size": 919751,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 155
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "all_items_01": {
+      "board": {
+        "h": 800,
+        "w": 950,
+        "x": 500,
+        "y": 17
+      },
+      "cards": [
+        {
+          "h": 60,
+          "id": "upgrade_guardian_ward",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 234
+        },
+        {
+          "h": 60,
+          "id": "upgrade_healbane",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 234
+        },
+        {
+          "h": 60,
+          "id": "upgrade_long_range",
+          "score": 0.999992,
+          "w": 60,
+          "x": 555,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_melee_charge",
+          "score": 0.999997,
+          "w": 60,
+          "x": 622,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_crackshot",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_pristine_emblem",
+          "score": 1.0,
+          "w": 60,
+          "x": 757,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_arcane_extension",
+          "score": 0.999997,
+          "w": 60,
+          "x": 854,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_soaring_spirit",
+          "score": 0.999997,
+          "w": 60,
+          "x": 921,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_slow",
+          "score": 0.999996,
+          "w": 60,
+          "x": 988,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_vulnerability",
+          "score": 0.999997,
+          "w": 60,
+          "x": 1055,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_cardio_calibrator",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_healing_booster",
+          "score": 0.999999,
+          "w": 60,
+          "x": 1354,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rechargingbullets",
+          "score": 0.999995,
+          "w": 60,
+          "x": 555,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_slowing_bullets",
+          "score": 0.999994,
+          "w": 60,
+          "x": 622,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_tech_defense_shredders",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_split_shot",
+          "score": 1.0,
+          "w": 60,
+          "x": 757,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_quick_silver",
+          "score": 0.999996,
+          "w": 60,
+          "x": 854,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_containment",
+          "score": 1.0,
+          "w": 60,
+          "x": 921,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spirit_sap",
+          "score": 1.0,
+          "w": 60,
+          "x": 988,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_suppressor",
+          "score": 0.999996,
+          "w": 60,
+          "x": 1055,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_vex_barrier",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_restorative_locket",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_return_fire",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_health_stealing_magic",
+          "score": 1.0,
+          "w": 60,
+          "x": 1354,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_weapon_backstabber",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_blitz_bullets",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_titan_round",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_headshot_booster2",
+          "score": 0.999999,
+          "w": 60,
+          "x": 757,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spirit_bubble",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_trophy_collector",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_weapon_shielding",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_thermal_detonator",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 602
+        },
+        {
+          "h": 60,
+          "id": "upgrade_bulletshredimbue",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 602
+        },
+        {
+          "h": 60,
+          "id": "upgrade_berserker",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 602
+        },
+        {
+          "h": 60,
+          "id": "upgrade_blood_tribute",
+          "score": 1.0,
+          "w": 60,
+          "x": 757,
+          "y": 602
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rupture",
+          "score": 1.0,
+          "w": 60,
+          "x": 854,
+          "y": 602
+        },
+        {
+          "h": 60,
+          "id": "upgrade_greater_withering_whip",
+          "score": 1.0,
+          "w": 60,
+          "x": 921,
+          "y": 602
+        },
+        {
+          "h": 60,
+          "id": "upgrade_tech_range",
+          "score": 1.0,
+          "w": 60,
+          "x": 988,
+          "y": 602
+        },
+        {
+          "h": 60,
+          "id": "upgrade_target_stun",
+          "score": 1.0,
+          "w": 60,
+          "x": 1055,
+          "y": 602
+        },
+        {
+          "h": 60,
+          "id": "upgrade_improved_bullet_armor",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 602
+        },
+        {
+          "h": 60,
+          "id": "upgrade_counterspell",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 602
+        },
+        {
+          "h": 60,
+          "id": "upgrade_reduce_debuff_duration",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 602
+        },
+        {
+          "h": 60,
+          "id": "upgrade_chonky",
+          "score": 1.0,
+          "w": 60,
+          "x": 1354,
+          "y": 602
+        },
+        {
+          "h": 60,
+          "id": "upgrade_burst_fire",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 701
+        },
+        {
+          "h": 60,
+          "id": "upgrade_non_player_bonus_sacrifice",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 701
+        },
+        {
+          "h": 60,
+          "id": "upgrade_reinforcing_casings",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 701
+        },
+        {
+          "h": 60,
+          "id": "upgrade_express_shot",
+          "score": 1.0,
+          "w": 60,
+          "x": 757,
+          "y": 701
+        },
+        {
+          "h": 60,
+          "id": "upgrade_resonant_healing",
+          "score": 1.0,
+          "w": 60,
+          "x": 854,
+          "y": 701
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rapid_recharge",
+          "score": 1.0,
+          "w": 60,
+          "x": 921,
+          "y": 701
+        },
+        {
+          "h": 60,
+          "id": "upgrade_targeted_silence",
+          "score": 1.0,
+          "w": 60,
+          "x": 988,
+          "y": 701
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spirit_snatch",
+          "score": 1.0,
+          "w": 60,
+          "x": 1055,
+          "y": 701
+        },
+        {
+          "h": 60,
+          "id": "upgrade_fury_trance",
+          "score": 0.982134,
+          "w": 60,
+          "x": 1153,
+          "y": 701
+        },
+        {
+          "h": 60,
+          "id": "upgrade_health_nova",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 701
+        },
+        {
+          "h": 60,
+          "id": "upgrade_boxing_glove",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 701
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rocket_booster",
+          "score": 1.0,
+          "w": 60,
+          "x": 1354,
+          "y": 701
+        }
+      ],
+      "sha256": "c70085c00e5d428ad1566988bdf8926bccf68ccce5536e22c5fa89f8cf03caf4",
+      "size": 976980,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 155
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "all_items_02": {
+      "board": {
+        "h": 800,
+        "w": 950,
+        "x": 500,
+        "y": 17
+      },
+      "cards": [
+        {
+          "h": 60,
+          "id": "upgrade_burst_fire",
+          "score": 0.999992,
+          "w": 60,
+          "x": 555,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_non_player_bonus_sacrifice",
+          "score": 0.915298,
+          "w": 60,
+          "x": 622,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_reinforcing_casings",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_express_shot",
+          "score": 1.0,
+          "w": 60,
+          "x": 757,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_resonant_healing",
+          "score": 0.999998,
+          "w": 60,
+          "x": 854,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rapid_recharge",
+          "score": 0.999996,
+          "w": 60,
+          "x": 921,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_targeted_silence",
+          "score": 0.915927,
+          "w": 60,
+          "x": 988,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spirit_snatch",
+          "score": 0.999993,
+          "w": 60,
+          "x": 1055,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_fury_trance",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_health_nova",
+          "score": 0.933487,
+          "w": 60,
+          "x": 1220,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_boxing_glove",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rocket_booster",
+          "score": 0.974898,
+          "w": 60,
+          "x": 1354,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_headhunter",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_dps_aura",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_hollow_point_rounds",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_bullet_armor_reduction_aura",
+          "score": 1.0,
+          "w": 60,
+          "x": 757,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_cooldown_reduction",
+          "score": 0.999999,
+          "w": 60,
+          "x": 854,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_imbued_duration_extender",
+          "score": 1.0,
+          "w": 60,
+          "x": 921,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_storm",
+          "score": 0.999999,
+          "w": 60,
+          "x": 988,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_shock",
+          "score": 1.0,
+          "w": 60,
+          "x": 1055,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_metal_skin",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rescue_beam",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_tech_purge",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_superior_stamina",
+          "score": 1.0,
+          "w": 60,
+          "x": 1354,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_close_quarter_combat",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 432
+        },
+        {
+          "h": 60,
+          "id": "upgrade_cloaking_device_active",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 432
+        },
+        {
+          "h": 60,
+          "id": "upgrade_sharpshooter",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 432
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spellslinger_headshots",
+          "score": 1.0,
+          "w": 60,
+          "x": 757,
+          "y": 432
+        },
+        {
+          "h": 60,
+          "id": "upgrade_tech_damage_pulse",
+          "score": 1.0,
+          "w": 60,
+          "x": 854,
+          "y": 432
+        },
+        {
+          "h": 60,
+          "id": "upgrade_veil_walker",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 432
+        },
+        {
+          "h": 60,
+          "id": "upgrade_warp_stone",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 432
+        },
+        {
+          "h": 60,
+          "id": "upgrade_chain_lightning",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 532
+        },
+        {
+          "h": 60,
+          "id": "upgrade_toxic_bullets",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 532
+        },
+        {
+          "h": 60,
+          "id": "upgrade_weighted_shots",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 532
+        },
+        {
+          "h": 60,
+          "id": "upgrade_aprounds",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 700
+        },
+        {
+          "h": 60,
+          "id": "upgrade_capacitor",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 700
+        },
+        {
+          "h": 60,
+          "id": "upgrade_banshee_slugs",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 700
+        },
+        {
+          "h": 60,
+          "id": "upgrade_crushing_fists",
+          "score": 1.0,
+          "w": 60,
+          "x": 757,
+          "y": 700
+        },
+        {
+          "h": 60,
+          "id": "upgrade_arctic_blast",
+          "score": 1.0,
+          "w": 60,
+          "x": 854,
+          "y": 700
+        },
+        {
+          "h": 60,
+          "id": "upgrade_boundless_spirit",
+          "score": 1.0,
+          "w": 60,
+          "x": 921,
+          "y": 700
+        },
+        {
+          "h": 60,
+          "id": "upgrade_glitch",
+          "score": 1.0,
+          "w": 60,
+          "x": 988,
+          "y": 700
+        },
+        {
+          "h": 60,
+          "id": "upgrade_ability_power_shard",
+          "score": 1.0,
+          "w": 60,
+          "x": 1055,
+          "y": 700
+        },
+        {
+          "h": 60,
+          "id": "upgrade_cheat_death",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 700
+        },
+        {
+          "h": 60,
+          "id": "upgrade_colossus",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 700
+        },
+        {
+          "h": 60,
+          "id": "upgrade_divine_barrier",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 700
+        },
+        {
+          "h": 60,
+          "id": "upgrade_diviners_kevlar",
+          "score": 1.0,
+          "w": 60,
+          "x": 1354,
+          "y": 700
+        }
+      ],
+      "sha256": "467337c7f43d28db1029c572a6325027226893801ef7a8db70408e848ab463c4",
+      "size": 960162,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 155
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "all_items_03": {
+      "board": {
+        "h": 800,
+        "w": 950,
+        "x": 500,
+        "y": 17
+      },
+      "cards": [
+        {
+          "h": 60,
+          "id": "upgrade_fervor",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_glass_cannon",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_critshot",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_ricochet",
+          "score": 1.0,
+          "w": 60,
+          "x": 757,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_escalating_exposure",
+          "score": 1.0,
+          "w": 60,
+          "x": 854,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_self_bubble",
+          "score": 1.0,
+          "w": 60,
+          "x": 921,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_focus_lens",
+          "score": 1.0,
+          "w": 60,
+          "x": 988,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_ultimate_burst",
+          "score": 1.0,
+          "w": 60,
+          "x": 1055,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_healbuff",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_auto_cleanse",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_infuser",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_inhibitor",
+          "score": 1.0,
+          "w": 60,
+          "x": 1354,
+          "y": 235
+        },
+        {
+          "h": 60,
+          "id": "upgrade_proc_silence",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_enchanted_holsters",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_tech_overflow",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_carpet",
+          "score": 1.0,
+          "w": 60,
+          "x": 854,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_ethereal_bullets",
+          "score": 1.0,
+          "w": 60,
+          "x": 921,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_mystic_reverb",
+          "score": 1.0,
+          "w": 60,
+          "x": 988,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_ability_refresher",
+          "score": 1.0,
+          "w": 60,
+          "x": 1055,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_juggernaut",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_damage_recycler",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_phantom_strike",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_deflecting_armor",
+          "score": 1.0,
+          "w": 60,
+          "x": 1354,
+          "y": 334
+        },
+        {
+          "h": 60,
+          "id": "upgrade_discord",
+          "score": 1.0,
+          "w": 60,
+          "x": 854,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spirit_burn",
+          "score": 1.0,
+          "w": 60,
+          "x": 921,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_transcendent_cooldown",
+          "score": 1.0,
+          "w": 60,
+          "x": 988,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_aoe_root",
+          "score": 1.0,
+          "w": 60,
+          "x": 1055,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_siphon_bullets",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spellbreaker",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_unstoppable",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_surging_power",
+          "score": 1.0,
+          "w": 60,
+          "x": 1354,
+          "y": 433
+        },
+        {
+          "h": 60,
+          "id": "upgrade_absorbing_armor",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 532
+        }
+      ],
+      "sha256": "e3e0224aa89fd690d0b4dcc2f9211c64edcd3c4552dc00a5545c2a82c13d845d",
+      "size": 875503,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 155
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "flt_Physical_Ammo_00": {
+      "board": {
+        "h": 800,
+        "w": 950,
+        "x": 500,
+        "y": 17
+      },
+      "cards": [
+        {
+          "h": 60,
+          "id": "upgrade_clip_size",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 211
+        },
+        {
+          "h": 60,
+          "id": "upgrade_active_reload",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 380
+        },
+        {
+          "h": 60,
+          "id": "upgrade_intensifying_clip",
+          "score": 1.0,
+          "w": 60,
+          "x": 623,
+          "y": 380
+        },
+        {
+          "h": 60,
+          "id": "upgrade_kinetic_sash",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 380
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rechargingbullets",
+          "score": 0.999995,
+          "w": 60,
+          "x": 756,
+          "y": 380
+        },
+        {
+          "h": 60,
+          "id": "upgrade_quick_silver",
+          "score": 0.999994,
+          "w": 60,
+          "x": 854,
+          "y": 380
+        },
+        {
+          "h": 60,
+          "id": "upgrade_titan_round",
+          "score": 1.0,
+          "w": 60,
+          "x": 556,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_reinforcing_casings",
+          "score": 1.0,
+          "w": 60,
+          "x": 556,
+          "y": 648
+        }
+      ],
+      "sha256": "73a95a3725d8401656b2002ba4ad4b3547e5d1d212fb938ea196372e16f028ce",
+      "size": 633490,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 155
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "menu_Defense": {
+      "board": {
+        "h": 800,
+        "w": 950,
+        "x": 500,
+        "y": 17
+      },
+      "cards": [],
+      "menu": {
+        "h": 454,
+        "w": 333,
+        "x": 782,
+        "y": 80
+      },
+      "sha256": "72bf0bce218177877397a468d1fda1d31610978ad8fa5dc711df87390696fda7",
+      "size": 953170,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 155
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "menu_Disruption": {
+      "board": {
+        "h": 800,
+        "w": 950,
+        "x": 500,
+        "y": 17
+      },
+      "cards": [],
+      "menu": {
+        "h": 457,
+        "w": 352,
+        "x": 1005,
+        "y": 80
+      },
+      "sha256": "393f3a346658be57c3d72ec5d336501ad362be356097fcf935717d0b81ae5998",
+      "size": 976818,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 155
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "menu_Misc": {
+      "board": {
+        "h": 800,
+        "w": 950,
+        "x": 500,
+        "y": 17
+      },
+      "cards": [],
+      "menu": {
+        "h": 58,
+        "w": 248,
+        "x": 1152,
+        "y": 80
+      },
+      "sha256": "f149a80796ae1fc0a043b8217b5df88281cfd3a06e96f27f1448207cb1b63e72",
+      "size": 917593,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 155
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "menu_Mobility": {
+      "board": {
+        "h": 800,
+        "w": 950,
+        "x": 500,
+        "y": 17
+      },
+      "cards": [],
+      "menu": {
+        "h": 243,
+        "w": 333,
+        "x": 898,
+        "y": 80
+      },
+      "sha256": "1f8792acf49726c64872b44c96a22aa011d93856c33d561c791705c925688a49",
+      "size": 945044,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 155
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "menu_Physical": {
+      "board": {
+        "h": 800,
+        "w": 950,
+        "x": 500,
+        "y": 17
+      },
+      "cards": [],
+      "menu": {
+        "h": 283,
+        "w": 338,
+        "x": 557,
+        "y": 80
+      },
+      "sha256": "84e2848687fcb07d18e9a6a673f1cf02d31a571be3e933c846a3180e11b20a49",
+      "size": 948443,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 155
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "menu_Spirit": {
+      "board": {
+        "h": 800,
+        "w": 950,
+        "x": 500,
+        "y": 17
+      },
+      "cards": [],
+      "menu": {
+        "h": 276,
+        "w": 343,
+        "x": 680,
+        "y": 80
+      },
+      "sha256": "e1a33c99ef44939942fb98d6d1e6aaef32c8853968a45cc6627d888ea2a74bfe",
+      "size": 963804,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 155
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "popular_abrams_00": {
+      "board": {
+        "h": 808,
+        "w": 950,
+        "x": 500,
+        "y": 9
+      },
+      "cards": [
+        {
+          "h": 60,
+          "id": "upgrade_close_range",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 191
+        },
+        {
+          "h": 60,
+          "id": "upgrade_non_player_bonus",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 191
+        },
+        {
+          "h": 60,
+          "id": "upgrade_medic_bullets",
+          "score": 1.0,
+          "w": 60,
+          "x": 690,
+          "y": 191
+        },
+        {
+          "h": 60,
+          "id": "upgrade_acolytes_glove",
+          "score": 1.0,
+          "w": 60,
+          "x": 854,
+          "y": 191
+        },
+        {
+          "h": 60,
+          "id": "upgrade_health",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 191
+        },
+        {
+          "h": 60,
+          "id": "upgrade_endurance",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 191
+        },
+        {
+          "h": 60,
+          "id": "upgrade_lifestrike_gauntlets",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 191
+        },
+        {
+          "h": 60,
+          "id": "upgrade_melee_charge",
+          "score": 0.999997,
+          "w": 60,
+          "x": 555,
+          "y": 335
+        },
+        {
+          "h": 60,
+          "id": "upgrade_weapon_backstabber",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 335
+        },
+        {
+          "h": 60,
+          "id": "upgrade_bullet_resist_shredder",
+          "score": 0.999999,
+          "w": 60,
+          "x": 854,
+          "y": 335
+        },
+        {
+          "h": 60,
+          "id": "upgrade_arcane_extension",
+          "score": 0.999997,
+          "w": 60,
+          "x": 921,
+          "y": 335
+        },
+        {
+          "h": 60,
+          "id": "upgrade_regenerating_bullet_shield",
+          "score": 0.999999,
+          "w": 60,
+          "x": 1153,
+          "y": 335
+        },
+        {
+          "h": 60,
+          "id": "upgrade_debuff_reducer",
+          "score": 0.999999,
+          "w": 60,
+          "x": 1220,
+          "y": 335
+        },
+        {
+          "h": 60,
+          "id": "upgrade_healing_booster",
+          "score": 0.999998,
+          "w": 60,
+          "x": 1287,
+          "y": 335
+        },
+        {
+          "h": 60,
+          "id": "upgrade_close_quarter_combat",
+          "score": 0.999714,
+          "w": 60,
+          "x": 689,
+          "y": 478
+        },
+        {
+          "h": 60,
+          "id": "upgrade_tech_damage_pulse",
+          "score": 0.999705,
+          "w": 60,
+          "x": 1055,
+          "y": 478
+        },
+        {
+          "h": 60,
+          "id": "upgrade_warp_stone",
+          "score": 0.996108,
+          "w": 60,
+          "x": 1287,
+          "y": 478
+        },
+        {
+          "h": 60,
+          "id": "upgrade_berserker",
+          "score": 1.0,
+          "w": 60,
+          "x": 556,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_bullet_armor_reduction_aura",
+          "score": 1.0,
+          "w": 60,
+          "x": 623,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spirit_snatch",
+          "score": 0.999988,
+          "w": 60,
+          "x": 854,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_cooldown_reduction",
+          "score": 0.999988,
+          "w": 60,
+          "x": 921,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_imbued_duration_extender",
+          "score": 1.0,
+          "w": 60,
+          "x": 988,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_boxing_glove",
+          "score": 0.999998,
+          "w": 60,
+          "x": 1153,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_tech_purge",
+          "score": 0.999994,
+          "w": 60,
+          "x": 1220,
+          "y": 479
+        },
+        {
+          "h": 60,
+          "id": "upgrade_crushing_fists",
+          "score": 0.999906,
+          "w": 60,
+          "x": 556,
+          "y": 622
+        },
+        {
+          "h": 60,
+          "id": "upgrade_colossus",
+          "score": 0.999054,
+          "w": 60,
+          "x": 1153,
+          "y": 622
+        },
+        {
+          "h": 60,
+          "id": "upgrade_juggernaut",
+          "score": 0.999998,
+          "w": 60,
+          "x": 1220,
+          "y": 623
+        },
+        {
+          "h": 60,
+          "id": "upgrade_phantom_strike",
+          "score": 0.983025,
+          "w": 60,
+          "x": 1287,
+          "y": 623
+        },
+        {
+          "h": 60,
+          "id": "upgrade_deflecting_armor",
+          "score": 0.999995,
+          "w": 60,
+          "x": 1354,
+          "y": 623
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spellbreaker",
+          "score": 0.999998,
+          "w": 60,
+          "x": 1153,
+          "y": 722
+        },
+        {
+          "h": 60,
+          "id": "upgrade_absorbing_armor",
+          "score": 0.999989,
+          "w": 60,
+          "x": 1220,
+          "y": 722
+        }
+      ],
+      "sha256": "203e65d9add44edcfcd9820a77a198d3695e6d863241b8556eaa781fa51d57ef",
+      "size": 825587,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 260
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "popular_silver_00": {
+      "board": {
+        "h": 808,
+        "w": 950,
+        "x": 500,
+        "y": 9
+      },
+      "cards": [
+        {
+          "h": 60,
+          "id": "upgrade_close_range",
+          "score": 1.0,
+          "w": 60,
+          "x": 555,
+          "y": 191
+        },
+        {
+          "h": 60,
+          "id": "upgrade_medic_bullets",
+          "score": 1.0,
+          "w": 60,
+          "x": 623,
+          "y": 191
+        },
+        {
+          "h": 60,
+          "id": "upgrade_health",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 191
+        },
+        {
+          "h": 60,
+          "id": "upgrade_endurance",
+          "score": 1.0,
+          "w": 60,
+          "x": 1220,
+          "y": 191
+        },
+        {
+          "h": 60,
+          "id": "upgrade_improved_stamina",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 191
+        },
+        {
+          "h": 60,
+          "id": "upgrade_grit",
+          "score": 0.999958,
+          "w": 60,
+          "x": 1354,
+          "y": 191
+        },
+        {
+          "h": 60,
+          "id": "upgrade_lifestrike_gauntlets",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 290
+        },
+        {
+          "h": 60,
+          "id": "upgrade_slowing_bullets",
+          "score": 0.999997,
+          "w": 60,
+          "x": 555,
+          "y": 434
+        },
+        {
+          "h": 60,
+          "id": "upgrade_weapon_backstabber",
+          "score": 1.0,
+          "w": 60,
+          "x": 622,
+          "y": 434
+        },
+        {
+          "h": 60,
+          "id": "upgrade_bullet_resist_shredder",
+          "score": 0.999999,
+          "w": 60,
+          "x": 854,
+          "y": 434
+        },
+        {
+          "h": 60,
+          "id": "upgrade_arcane_extension",
+          "score": 0.999999,
+          "w": 60,
+          "x": 921,
+          "y": 434
+        },
+        {
+          "h": 60,
+          "id": "upgrade_containment",
+          "score": 0.997726,
+          "w": 60,
+          "x": 988,
+          "y": 434
+        },
+        {
+          "h": 60,
+          "id": "upgrade_debuff_reducer",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 434
+        },
+        {
+          "h": 60,
+          "id": "upgrade_cardio_calibrator",
+          "score": 0.999999,
+          "w": 60,
+          "x": 1220,
+          "y": 434
+        },
+        {
+          "h": 60,
+          "id": "upgrade_healing_booster",
+          "score": 1.0,
+          "w": 60,
+          "x": 1287,
+          "y": 434
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spirit_bubble",
+          "score": 0.999998,
+          "w": 60,
+          "x": 1354,
+          "y": 434
+        },
+        {
+          "h": 60,
+          "id": "upgrade_close_quarter_combat",
+          "score": 0.994884,
+          "w": 60,
+          "x": 689,
+          "y": 577
+        },
+        {
+          "h": 60,
+          "id": "upgrade_warp_stone",
+          "score": 0.958017,
+          "w": 60,
+          "x": 1354,
+          "y": 577
+        },
+        {
+          "h": 60,
+          "id": "upgrade_berserker",
+          "score": 0.999999,
+          "w": 60,
+          "x": 556,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_bullet_armor_reduction_aura",
+          "score": 1.0,
+          "w": 60,
+          "x": 623,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_weighted_shots",
+          "score": 1.0,
+          "w": 60,
+          "x": 757,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_imbued_duration_extender",
+          "score": 1.0,
+          "w": 60,
+          "x": 854,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_shock",
+          "score": 0.999995,
+          "w": 60,
+          "x": 921,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_boxing_glove",
+          "score": 1.0,
+          "w": 60,
+          "x": 1153,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_tech_purge",
+          "score": 0.999997,
+          "w": 60,
+          "x": 1220,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_superior_stamina",
+          "score": 0.999998,
+          "w": 60,
+          "x": 1287,
+          "y": 578
+        },
+        {
+          "h": 60,
+          "id": "upgrade_diviners_kevlar",
+          "score": 0.999267,
+          "w": 60,
+          "x": 1153,
+          "y": 721
+        },
+        {
+          "h": 60,
+          "id": "upgrade_fervor",
+          "score": 0.999972,
+          "w": 60,
+          "x": 555,
+          "y": 722
+        },
+        {
+          "h": 60,
+          "id": "upgrade_proc_silence",
+          "score": 0.999974,
+          "w": 60,
+          "x": 622,
+          "y": 722
+        },
+        {
+          "h": 60,
+          "id": "upgrade_healbuff",
+          "score": 0.999994,
+          "w": 60,
+          "x": 1220,
+          "y": 722
+        },
+        {
+          "h": 60,
+          "id": "upgrade_deflecting_armor",
+          "score": 0.999994,
+          "w": 60,
+          "x": 1287,
+          "y": 722
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spellbreaker",
+          "score": 0.999998,
+          "w": 60,
+          "x": 1354,
+          "y": 722
+        }
+      ],
+      "sha256": "561c6d378e0a1bdb6d83aa65c9acfb1961d5d9f1a9ae290be72cdbf56d5c16ce",
+      "size": 836151,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 260
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "tab_builds": {
+      "board": {
+        "h": 808,
+        "w": 950,
+        "x": 500,
+        "y": 9
+      },
+      "cards": [],
+      "sha256": "5a2947820f445bc28d63f95475bfcb5b82757e5ead72af9989208cb7e6084833",
+      "size": 684360,
+      "tabs": [
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 191
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 260
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "tab_popular": {
+      "board": {
+        "h": 808,
+        "w": 950,
+        "x": 500,
+        "y": 9
+      },
+      "cards": [],
+      "sha256": "80ba357a127e3d8102dd2a1c5f5d546120b13d636dbe2b0e7506e7ddb0cdb6aa",
+      "size": 677843,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 167,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 260
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 329
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ]
+    },
+    "tab_spirit": {
+      "board": {
+        "h": 808,
+        "w": 950,
+        "x": 500,
+        "y": 9
+      },
+      "cards": [
+        {
+          "h": 60,
+          "id": "upgrade_arcane_surge",
+          "score": 0.993303,
+          "w": 60,
+          "x": 997,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_bullet_resist_shredder",
+          "score": 0.986753,
+          "w": 60,
+          "x": 1064,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_cold_front",
+          "score": 0.98937,
+          "w": 60,
+          "x": 1131,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_tempo",
+          "score": 0.979127,
+          "w": 60,
+          "x": 1198,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_arcane_extension",
+          "score": 0.97287,
+          "w": 60,
+          "x": 1265,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_soaring_spirit",
+          "score": 0.990975,
+          "w": 60,
+          "x": 1332,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_extra_charge",
+          "score": 0.996809,
+          "w": 60,
+          "x": 592,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_improved_spirit",
+          "score": 0.990418,
+          "w": 60,
+          "x": 659,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_goose_egg",
+          "score": 0.993098,
+          "w": 60,
+          "x": 726,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_burst",
+          "score": 0.987195,
+          "w": 60,
+          "x": 793,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_reach",
+          "score": 0.969566,
+          "w": 60,
+          "x": 860,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_slow",
+          "score": 0.989685,
+          "w": 60,
+          "x": 997,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_vulnerability",
+          "score": 0.993025,
+          "w": 60,
+          "x": 1064,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_quick_silver",
+          "score": 0.962611,
+          "w": 60,
+          "x": 1131,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_containment",
+          "score": 0.985412,
+          "w": 60,
+          "x": 1198,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spirit_sap",
+          "score": 0.967294,
+          "w": 60,
+          "x": 1265,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_suppressor",
+          "score": 0.970605,
+          "w": 60,
+          "x": 1332,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_mystic_regeneration",
+          "score": 0.988951,
+          "w": 60,
+          "x": 592,
+          "y": 270
+        },
+        {
+          "h": 60,
+          "id": "upgrade_withering_whip",
+          "score": 0.993759,
+          "w": 60,
+          "x": 659,
+          "y": 270
+        },
+        {
+          "h": 60,
+          "id": "upgrade_acolytes_glove",
+          "score": 0.988781,
+          "w": 60,
+          "x": 726,
+          "y": 270
+        },
+        {
+          "h": 60,
+          "id": "upgrade_arctic_blast",
+          "score": 0.967766,
+          "w": 60,
+          "x": 997,
+          "y": 472
+        },
+        {
+          "h": 60,
+          "id": "upgrade_boundless_spirit",
+          "score": 0.981053,
+          "w": 60,
+          "x": 1064,
+          "y": 472
+        },
+        {
+          "h": 60,
+          "id": "upgrade_glitch",
+          "score": 0.959143,
+          "w": 60,
+          "x": 1131,
+          "y": 472
+        },
+        {
+          "h": 60,
+          "id": "upgrade_ability_power_shard",
+          "score": 0.92639,
+          "w": 60,
+          "x": 1198,
+          "y": 472
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rupture",
+          "score": 0.979191,
+          "w": 60,
+          "x": 592,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_greater_withering_whip",
+          "score": 0.978323,
+          "w": 60,
+          "x": 659,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_tech_range",
+          "score": 0.986789,
+          "w": 60,
+          "x": 726,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_target_stun",
+          "score": 0.987391,
+          "w": 60,
+          "x": 793,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_resonant_healing",
+          "score": 0.993066,
+          "w": 60,
+          "x": 860,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_escalating_exposure",
+          "score": 0.992128,
+          "w": 60,
+          "x": 1265,
+          "y": 473
+        },
+        {
+          "fallback": true,
+          "h": 60,
+          "id": "upgrade_self_bubble",
+          "score": 0.983632,
+          "w": 60,
+          "x": 1332,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rapid_recharge",
+          "score": 0.99202,
+          "w": 60,
+          "x": 592,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_targeted_silence",
+          "score": 0.976238,
+          "w": 60,
+          "x": 659,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spirit_snatch",
+          "score": 0.986054,
+          "w": 60,
+          "x": 726,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_cooldown_reduction",
+          "score": 0.990512,
+          "w": 60,
+          "x": 793,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_imbued_duration_extender",
+          "score": 0.981704,
+          "w": 60,
+          "x": 860,
+          "y": 572
+        },
+        {
+          "fallback": true,
+          "h": 60,
+          "id": "upgrade_focus_lens",
+          "score": 0.991065,
+          "w": 60,
+          "x": 997,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_ultimate_burst",
+          "score": 0.99125,
+          "w": 60,
+          "x": 1064,
+          "y": 572
+        },
+        {
+          "fallback": true,
+          "h": 60,
+          "id": "upgrade_magic_carpet",
+          "score": 0.993886,
+          "w": 60,
+          "x": 1131,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_ethereal_bullets",
+          "score": 0.975669,
+          "w": 60,
+          "x": 1198,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_mystic_reverb",
+          "score": 0.971487,
+          "w": 60,
+          "x": 1265,
+          "y": 572
+        },
+        {
+          "fallback": true,
+          "h": 60,
+          "id": "upgrade_ability_refresher",
+          "score": 0.991523,
+          "w": 60,
+          "x": 1332,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_tech_damage_pulse",
+          "score": 0.973764,
+          "w": 60,
+          "x": 726,
+          "y": 670
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_storm",
+          "score": 0.968371,
+          "w": 60,
+          "x": 592,
+          "y": 671
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_shock",
+          "score": 0.988624,
+          "w": 60,
+          "x": 659,
+          "y": 671
+        },
+        {
+          "fallback": true,
+          "h": 60,
+          "id": "upgrade_discord",
+          "score": 0.980916,
+          "w": 60,
+          "x": 997,
+          "y": 671
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spirit_burn",
+          "score": 0.995683,
+          "w": 60,
+          "x": 1064,
+          "y": 671
+        },
+        {
+          "h": 60,
+          "id": "upgrade_transcendent_cooldown",
+          "score": 0.988703,
+          "w": 60,
+          "x": 1131,
+          "y": 671
+        },
+        {
+          "fallback": true,
+          "h": 60,
+          "id": "upgrade_aoe_root",
+          "score": 0.976372,
+          "w": 60,
+          "x": 1198,
+          "y": 671
+        }
+      ],
+      "sha256": "2d20ad590c656d8579f6b37549005ccf81577dbe55c52fd38e128cf2529d8a74",
+      "size": 1068029,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 155
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 224
+        },
+        {
+          "h": 167,
+          "w": 50,
+          "x": 483,
+          "y": 293
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ],
+      "tiers": {
+        "1": {
+          "firstCard": {
+            "h": 60,
+            "id": "upgrade_extra_charge",
+            "score": 0.996809,
+            "w": 60,
+            "x": 592,
+            "y": 171
+          },
+          "rect": {
+            "h": 159,
+            "w": 328,
+            "x": 592,
+            "y": 171
+          }
+        },
+        "2": {
+          "firstCard": {
+            "h": 60,
+            "id": "upgrade_arcane_surge",
+            "score": 0.993303,
+            "w": 60,
+            "x": 997,
+            "y": 81
+          },
+          "rect": {
+            "h": 159,
+            "w": 395,
+            "x": 997,
+            "y": 81
+          }
+        },
+        "3": {
+          "firstCard": {
+            "h": 60,
+            "id": "upgrade_rupture",
+            "score": 0.979191,
+            "w": 60,
+            "x": 592,
+            "y": 473
+          },
+          "rect": {
+            "h": 258,
+            "w": 328,
+            "x": 592,
+            "y": 473
+          }
+        },
+        "4": {
+          "firstCard": {
+            "h": 60,
+            "id": "upgrade_arctic_blast",
+            "score": 0.967766,
+            "w": 60,
+            "x": 997,
+            "y": 472
+          },
+          "rect": {
+            "h": 259,
+            "w": 395,
+            "x": 997,
+            "y": 472
+          }
+        }
+      }
+    },
+    "tab_vitality": {
+      "board": {
+        "h": 808,
+        "w": 950,
+        "x": 500,
+        "y": 9
+      },
+      "cards": [
+        {
+          "h": 60,
+          "id": "upgrade_guardian_ward",
+          "score": 0.962771,
+          "w": 60,
+          "x": 1333,
+          "y": 80
+        },
+        {
+          "h": 60,
+          "id": "upgrade_regenerating_bullet_shield",
+          "score": 0.992134,
+          "w": 60,
+          "x": 998,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_vampire",
+          "score": 0.991567,
+          "w": 60,
+          "x": 1065,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_debuff_reducer",
+          "score": 0.996743,
+          "w": 60,
+          "x": 1132,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_magic_shield",
+          "score": 0.993493,
+          "w": 60,
+          "x": 1199,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_cardio_calibrator",
+          "score": 0.993042,
+          "w": 60,
+          "x": 1266,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_health",
+          "score": 0.997174,
+          "w": 60,
+          "x": 593,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_endurance",
+          "score": 0.996301,
+          "w": 60,
+          "x": 660,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_improved_stamina",
+          "score": 0.993319,
+          "w": 60,
+          "x": 727,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_grit",
+          "score": 0.986832,
+          "w": 60,
+          "x": 794,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_health_stimpak",
+          "score": 0.989376,
+          "w": 60,
+          "x": 861,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_healbane",
+          "score": 0.992802,
+          "w": 60,
+          "x": 998,
+          "y": 179
+        },
+        {
+          "h": 60,
+          "id": "upgrade_healing_booster",
+          "score": 0.996785,
+          "w": 60,
+          "x": 1065,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_vex_barrier",
+          "score": 0.992866,
+          "w": 60,
+          "x": 1132,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_restorative_locket",
+          "score": 0.978057,
+          "w": 60,
+          "x": 1199,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_return_fire",
+          "score": 0.98578,
+          "w": 60,
+          "x": 1266,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_health_stealing_magic",
+          "score": 0.993264,
+          "w": 60,
+          "x": 1333,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_lifestrike_gauntlets",
+          "score": 0.997336,
+          "w": 60,
+          "x": 593,
+          "y": 270
+        },
+        {
+          "h": 60,
+          "id": "upgrade_melee_rebuttal",
+          "score": 0.992187,
+          "w": 60,
+          "x": 660,
+          "y": 270
+        },
+        {
+          "h": 60,
+          "id": "upgrade_sprint_booster",
+          "score": 0.99635,
+          "w": 60,
+          "x": 727,
+          "y": 270
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spirit_bubble",
+          "score": 0.994734,
+          "w": 60,
+          "x": 998,
+          "y": 279
+        },
+        {
+          "h": 60,
+          "id": "upgrade_trophy_collector",
+          "score": 0.990926,
+          "w": 60,
+          "x": 1065,
+          "y": 279
+        },
+        {
+          "h": 60,
+          "id": "upgrade_weapon_shielding",
+          "score": 0.99369,
+          "w": 60,
+          "x": 1132,
+          "y": 279
+        },
+        {
+          "h": 60,
+          "id": "upgrade_cheat_death",
+          "score": 0.989305,
+          "w": 60,
+          "x": 998,
+          "y": 472
+        },
+        {
+          "h": 60,
+          "id": "upgrade_colossus",
+          "score": 0.900551,
+          "w": 60,
+          "x": 1065,
+          "y": 472
+        },
+        {
+          "h": 60,
+          "id": "upgrade_divine_barrier",
+          "score": 0.957496,
+          "w": 60,
+          "x": 1132,
+          "y": 472
+        },
+        {
+          "h": 60,
+          "id": "upgrade_diviners_kevlar",
+          "score": 0.975218,
+          "w": 60,
+          "x": 1199,
+          "y": 472
+        },
+        {
+          "h": 60,
+          "id": "upgrade_improved_bullet_armor",
+          "score": 0.992482,
+          "w": 60,
+          "x": 593,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_counterspell",
+          "score": 0.986629,
+          "w": 60,
+          "x": 660,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_reduce_debuff_duration",
+          "score": 0.981605,
+          "w": 60,
+          "x": 727,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_chonky",
+          "score": 0.992795,
+          "w": 60,
+          "x": 794,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_fury_trance",
+          "score": 0.984153,
+          "w": 60,
+          "x": 861,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_healbuff",
+          "score": 0.992377,
+          "w": 60,
+          "x": 1266,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_auto_cleanse",
+          "score": 0.983362,
+          "w": 60,
+          "x": 1333,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_health_nova",
+          "score": 0.988085,
+          "w": 60,
+          "x": 593,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_boxing_glove",
+          "score": 0.995118,
+          "w": 60,
+          "x": 660,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rocket_booster",
+          "score": 0.988633,
+          "w": 60,
+          "x": 727,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_metal_skin",
+          "score": 0.970798,
+          "w": 60,
+          "x": 794,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rescue_beam",
+          "score": 0.933902,
+          "w": 60,
+          "x": 861,
+          "y": 572
+        },
+        {
+          "fallback": true,
+          "h": 60,
+          "id": "upgrade_infuser",
+          "score": 0.967957,
+          "w": 60,
+          "x": 998,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_inhibitor",
+          "score": 0.991471,
+          "w": 60,
+          "x": 1065,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_juggernaut",
+          "score": 0.995231,
+          "w": 60,
+          "x": 1132,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_damage_recycler",
+          "score": 0.984295,
+          "w": 60,
+          "x": 1199,
+          "y": 572
+        },
+        {
+          "fallback": true,
+          "h": 60,
+          "id": "upgrade_phantom_strike",
+          "score": 0.989385,
+          "w": 60,
+          "x": 1266,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_deflecting_armor",
+          "score": 0.996529,
+          "w": 60,
+          "x": 1333,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_veil_walker",
+          "score": 0.987195,
+          "w": 60,
+          "x": 727,
+          "y": 670
+        },
+        {
+          "h": 60,
+          "id": "upgrade_warp_stone",
+          "score": 0.946837,
+          "w": 60,
+          "x": 794,
+          "y": 670
+        },
+        {
+          "h": 60,
+          "id": "upgrade_tech_purge",
+          "score": 0.983772,
+          "w": 60,
+          "x": 593,
+          "y": 671
+        },
+        {
+          "h": 60,
+          "id": "upgrade_superior_stamina",
+          "score": 0.99187,
+          "w": 60,
+          "x": 660,
+          "y": 671
+        },
+        {
+          "h": 60,
+          "id": "upgrade_siphon_bullets",
+          "score": 0.991854,
+          "w": 60,
+          "x": 998,
+          "y": 671
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spellbreaker",
+          "score": 0.991261,
+          "w": 60,
+          "x": 1065,
+          "y": 671
+        },
+        {
+          "h": 60,
+          "id": "upgrade_unstoppable",
+          "score": 0.896988,
+          "w": 60,
+          "x": 1132,
+          "y": 671
+        },
+        {
+          "h": 60,
+          "id": "upgrade_surging_power",
+          "score": 0.882548,
+          "w": 60,
+          "x": 1199,
+          "y": 671
+        },
+        {
+          "h": 60,
+          "id": "upgrade_absorbing_armor",
+          "score": 0.976285,
+          "w": 60,
+          "x": 1266,
+          "y": 671
+        }
+      ],
+      "sha256": "f82fcf08ddbee97cef8b20eba3ac6e3cd20dc19e2001280fb1b234d2edf13fa7",
+      "size": 975496,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 155
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 224
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 293
+        },
+        {
+          "h": 167,
+          "w": 50,
+          "x": 483,
+          "y": 362
+        }
+      ],
+      "tiers": {
+        "1": {
+          "firstCard": {
+            "h": 60,
+            "id": "upgrade_health",
+            "score": 0.997174,
+            "w": 60,
+            "x": 593,
+            "y": 171
+          },
+          "rect": {
+            "h": 159,
+            "w": 328,
+            "x": 593,
+            "y": 171
+          }
+        },
+        "2": {
+          "firstCard": {
+            "h": 60,
+            "id": "upgrade_guardian_ward",
+            "score": 0.962771,
+            "w": 60,
+            "x": 1333,
+            "y": 80
+          },
+          "rect": {
+            "h": 259,
+            "w": 395,
+            "x": 998,
+            "y": 80
+          }
+        },
+        "3": {
+          "firstCard": {
+            "h": 60,
+            "id": "upgrade_improved_bullet_armor",
+            "score": 0.992482,
+            "w": 60,
+            "x": 593,
+            "y": 473
+          },
+          "rect": {
+            "h": 258,
+            "w": 328,
+            "x": 593,
+            "y": 473
+          }
+        },
+        "4": {
+          "firstCard": {
+            "h": 60,
+            "id": "upgrade_cheat_death",
+            "score": 0.989305,
+            "w": 60,
+            "x": 998,
+            "y": 472
+          },
+          "rect": {
+            "h": 259,
+            "w": 395,
+            "x": 998,
+            "y": 472
+          }
+        }
+      }
+    },
+    "tab_weapon": {
+      "board": {
+        "h": 808,
+        "w": 950,
+        "x": 500,
+        "y": 9
+      },
+      "cards": [
+        {
+          "h": 60,
+          "id": "upgrade_active_reload",
+          "score": 1.0,
+          "w": 60,
+          "x": 997,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_fleetfoot_boots",
+          "score": 0.99762,
+          "w": 60,
+          "x": 1064,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_intensifying_clip",
+          "score": 1.0,
+          "w": 60,
+          "x": 1132,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_kinetic_sash",
+          "score": 1.0,
+          "w": 60,
+          "x": 1199,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_long_range",
+          "score": 0.999994,
+          "w": 60,
+          "x": 1265,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_melee_charge",
+          "score": 0.999998,
+          "w": 60,
+          "x": 1332,
+          "y": 81
+        },
+        {
+          "h": 60,
+          "id": "upgrade_close_range",
+          "score": 1.0,
+          "w": 60,
+          "x": 592,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_clip_size",
+          "score": 1.0,
+          "w": 60,
+          "x": 659,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_headshot_booster",
+          "score": 1.0,
+          "w": 60,
+          "x": 727,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_high_velocity_mag",
+          "score": 1.0,
+          "w": 60,
+          "x": 794,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_non_player_bonus",
+          "score": 0.999999,
+          "w": 60,
+          "x": 860,
+          "y": 171
+        },
+        {
+          "h": 60,
+          "id": "upgrade_crackshot",
+          "score": 1.0,
+          "w": 60,
+          "x": 998,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_pristine_emblem",
+          "score": 1.0,
+          "w": 60,
+          "x": 1065,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rechargingbullets",
+          "score": 0.999998,
+          "w": 60,
+          "x": 1131,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_slowing_bullets",
+          "score": 1.0,
+          "w": 60,
+          "x": 1198,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_tech_defense_shredders",
+          "score": 1.0,
+          "w": 60,
+          "x": 1266,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_split_shot",
+          "score": 0.982004,
+          "w": 60,
+          "x": 1333,
+          "y": 180
+        },
+        {
+          "h": 60,
+          "id": "upgrade_rapid_rounds",
+          "score": 0.999999,
+          "w": 60,
+          "x": 592,
+          "y": 270
+        },
+        {
+          "h": 60,
+          "id": "upgrade_medic_bullets",
+          "score": 1.0,
+          "w": 60,
+          "x": 660,
+          "y": 270
+        },
+        {
+          "h": 60,
+          "id": "upgrade_weapon_backstabber",
+          "score": 1.0,
+          "w": 60,
+          "x": 997,
+          "y": 279
+        },
+        {
+          "h": 60,
+          "id": "upgrade_blitz_bullets",
+          "score": 1.0,
+          "w": 60,
+          "x": 1064,
+          "y": 279
+        },
+        {
+          "h": 60,
+          "id": "upgrade_titan_round",
+          "score": 1.0,
+          "w": 60,
+          "x": 1132,
+          "y": 279
+        },
+        {
+          "h": 60,
+          "id": "upgrade_headshot_booster2",
+          "score": 1.0,
+          "w": 60,
+          "x": 1199,
+          "y": 279
+        },
+        {
+          "h": 60,
+          "id": "upgrade_aprounds",
+          "score": 0.977557,
+          "w": 60,
+          "x": 1134,
+          "y": 472
+        },
+        {
+          "h": 60,
+          "id": "upgrade_capacitor",
+          "score": 0.935683,
+          "w": 60,
+          "x": 1201,
+          "y": 472
+        },
+        {
+          "h": 60,
+          "id": "upgrade_banshee_slugs",
+          "score": 0.992561,
+          "w": 60,
+          "x": 1269,
+          "y": 472
+        },
+        {
+          "h": 60,
+          "id": "upgrade_crushing_fists",
+          "score": 0.982224,
+          "w": 60,
+          "x": 1336,
+          "y": 472
+        },
+        {
+          "h": 60,
+          "id": "upgrade_thermal_detonator",
+          "score": 0.992498,
+          "w": 60,
+          "x": 592,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_bulletshredimbue",
+          "score": 1.0,
+          "w": 60,
+          "x": 659,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_berserker",
+          "score": 1.0,
+          "w": 60,
+          "x": 727,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_blood_tribute",
+          "score": 0.994357,
+          "w": 60,
+          "x": 794,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_burst_fire",
+          "score": 1.0,
+          "w": 60,
+          "x": 860,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_non_player_bonus_sacrifice",
+          "score": 0.986292,
+          "w": 60,
+          "x": 927,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_reinforcing_casings",
+          "score": 1.0,
+          "w": 60,
+          "x": 995,
+          "y": 473
+        },
+        {
+          "h": 60,
+          "id": "upgrade_close_quarter_combat",
+          "score": 0.992718,
+          "w": 60,
+          "x": 927,
+          "y": 571
+        },
+        {
+          "h": 60,
+          "id": "upgrade_cloaking_device_active",
+          "score": 0.96267,
+          "w": 60,
+          "x": 994,
+          "y": 571
+        },
+        {
+          "h": 60,
+          "id": "upgrade_express_shot",
+          "score": 1.0,
+          "w": 60,
+          "x": 593,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_headhunter",
+          "score": 0.999996,
+          "w": 60,
+          "x": 659,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_dps_aura",
+          "score": 0.924039,
+          "w": 60,
+          "x": 726,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_hollow_point_rounds",
+          "score": 1.0,
+          "w": 60,
+          "x": 794,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_bullet_armor_reduction_aura",
+          "score": 1.0,
+          "w": 60,
+          "x": 861,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_fervor",
+          "score": 0.999897,
+          "w": 60,
+          "x": 1134,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_glass_cannon",
+          "score": 0.99995,
+          "w": 60,
+          "x": 1201,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_critshot",
+          "score": 1.0,
+          "w": 60,
+          "x": 1269,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_ricochet",
+          "score": 1.0,
+          "w": 60,
+          "x": 1336,
+          "y": 572
+        },
+        {
+          "h": 60,
+          "id": "upgrade_sharpshooter",
+          "score": 0.991136,
+          "w": 60,
+          "x": 593,
+          "y": 670
+        },
+        {
+          "h": 60,
+          "id": "upgrade_spellslinger_headshots",
+          "score": 0.991837,
+          "w": 60,
+          "x": 660,
+          "y": 670
+        },
+        {
+          "h": 60,
+          "id": "upgrade_chain_lightning",
+          "score": 0.999996,
+          "w": 60,
+          "x": 726,
+          "y": 671
+        },
+        {
+          "h": 60,
+          "id": "upgrade_toxic_bullets",
+          "score": 0.999999,
+          "w": 60,
+          "x": 793,
+          "y": 671
+        },
+        {
+          "h": 60,
+          "id": "upgrade_weighted_shots",
+          "score": 1.0,
+          "w": 60,
+          "x": 861,
+          "y": 671
+        },
+        {
+          "h": 60,
+          "id": "upgrade_proc_silence",
+          "score": 0.999928,
+          "w": 60,
+          "x": 1134,
+          "y": 671
+        },
+        {
+          "h": 60,
+          "id": "upgrade_enchanted_holsters",
+          "score": 0.999938,
+          "w": 60,
+          "x": 1201,
+          "y": 671
+        },
+        {
+          "h": 60,
+          "id": "upgrade_tech_overflow",
+          "score": 1.0,
+          "w": 60,
+          "x": 1269,
+          "y": 671
+        }
+      ],
+      "sha256": "66956e1a2faecc324be979a6dccdcb37fd45e82e7a1bbd786a1a0afde30b6e41",
+      "size": 1048862,
+      "tabs": [
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 17
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 86
+        },
+        {
+          "h": 62,
+          "w": 58,
+          "x": 475,
+          "y": 155
+        },
+        {
+          "h": 167,
+          "w": 50,
+          "x": 483,
+          "y": 224
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 398
+        },
+        {
+          "h": 62,
+          "w": 50,
+          "x": 483,
+          "y": 467
+        }
+      ],
+      "tiers": {
+        "1": {
+          "firstCard": {
+            "h": 60,
+            "id": "upgrade_close_range",
+            "score": 1.0,
+            "w": 60,
+            "x": 592,
+            "y": 171
+          },
+          "rect": {
+            "h": 159,
+            "w": 328,
+            "x": 592,
+            "y": 171
+          }
+        },
+        "2": {
+          "firstCard": {
+            "h": 60,
+            "id": "upgrade_active_reload",
+            "score": 1.0,
+            "w": 60,
+            "x": 997,
+            "y": 81
+          },
+          "rect": {
+            "h": 258,
+            "w": 396,
+            "x": 997,
+            "y": 81
+          }
+        },
+        "3": {
+          "firstCard": {
+            "h": 60,
+            "id": "upgrade_thermal_detonator",
+            "score": 0.992498,
+            "w": 60,
+            "x": 592,
+            "y": 473
+          },
+          "rect": {
+            "h": 258,
+            "w": 463,
+            "x": 592,
+            "y": 473
+          }
+        },
+        "4": {
+          "firstCard": {
+            "h": 60,
+            "id": "upgrade_aprounds",
+            "score": 0.977557,
+            "w": 60,
+            "x": 1134,
+            "y": 472
+          },
+          "rect": {
+            "h": 259,
+            "w": 262,
+            "x": 1134,
+            "y": 472
+          }
+        }
+      }
+    }
+  },
+  "clientVersion": 6763,
+  "frame": {
+    "h": 900,
+    "w": 1600
+  }
+}

@@ -1,6 +1,8 @@
 ---
 import CustomPassiveShop from '../components/CustomPassiveShop.jsx';
 import '../styles/global.css';
+
+const shopFontBase = `${import.meta.env.BASE_URL}assets/deadlock/panorama/fonts/`;
 ---
 
 <html lang="en">
@@ -9,6 +11,30 @@ import '../styles/global.css';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <title>Deadlock Custom Passive Builder</title>
+    <link rel="preload" href={`${shopFontBase}valvepulp-bold.ttf`} as="font" type="font/ttf" crossorigin="anonymous" />
+    <style is:inline set:html={`
+      @font-face {
+        font-family: VALVEPulp;
+        src: url("${shopFontBase}valvepulp-bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: VALVEOracle;
+        src: url("${shopFontBase}valveoracle-semibold.ttf") format("truetype");
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: VALVEOracle;
+        src: url("${shopFontBase}valveoracle-medium.ttf") format("truetype");
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+      }
+    `} />
   </head>
   <body>
     <CustomPassiveShop client:load />

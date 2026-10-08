@@ -45,6 +45,7 @@ export const SHOP_LAYOUT = Object.freeze({
         "y": 120,
         "width": 500,
         "costLabel": {
+          "fontSize": 24,
           "marginLeft": -20,
           "marginTop": 0,
           "marginBottom": 0
@@ -55,6 +56,7 @@ export const SHOP_LAYOUT = Object.freeze({
         "y": 10,
         "width": 540,
         "costLabel": {
+          "fontSize": 26,
           "marginLeft": -20,
           "marginTop": -20,
           "marginBottom": 20
@@ -65,6 +67,7 @@ export const SHOP_LAYOUT = Object.freeze({
         "y": 480,
         "width": 600,
         "costLabel": {
+          "fontSize": 28,
           "marginLeft": -18,
           "marginTop": -21,
           "marginBottom": 20
@@ -75,6 +78,7 @@ export const SHOP_LAYOUT = Object.freeze({
         "y": 480,
         "width": 400,
         "costLabel": {
+          "fontSize": 28,
           "marginLeft": 0,
           "marginTop": -28,
           "marginBottom": 26
@@ -87,6 +91,7 @@ export const SHOP_LAYOUT = Object.freeze({
         "y": 120,
         "width": 500,
         "costLabel": {
+          "fontSize": 24,
           "marginLeft": -20,
           "marginTop": 0,
           "marginBottom": 0
@@ -97,6 +102,7 @@ export const SHOP_LAYOUT = Object.freeze({
         "y": 10,
         "width": 540,
         "costLabel": {
+          "fontSize": 26,
           "marginLeft": -20,
           "marginTop": -20,
           "marginBottom": 20
@@ -107,6 +113,7 @@ export const SHOP_LAYOUT = Object.freeze({
         "y": 480,
         "width": 500,
         "costLabel": {
+          "fontSize": 28,
           "marginLeft": -18,
           "marginTop": -21,
           "marginBottom": 20
@@ -117,6 +124,7 @@ export const SHOP_LAYOUT = Object.freeze({
         "y": 480,
         "width": 560,
         "costLabel": {
+          "fontSize": 28,
           "marginLeft": -15,
           "marginTop": -31,
           "marginBottom": 30
@@ -129,6 +137,7 @@ export const SHOP_LAYOUT = Object.freeze({
         "y": 120,
         "width": 500,
         "costLabel": {
+          "fontSize": 24,
           "marginLeft": -20,
           "marginTop": 0,
           "marginBottom": 0
@@ -139,6 +148,7 @@ export const SHOP_LAYOUT = Object.freeze({
         "y": 10,
         "width": 540,
         "costLabel": {
+          "fontSize": 26,
           "marginLeft": -20,
           "marginTop": -20,
           "marginBottom": 20
@@ -149,6 +159,7 @@ export const SHOP_LAYOUT = Object.freeze({
         "y": 480,
         "width": 500,
         "costLabel": {
+          "fontSize": 28,
           "marginLeft": -18,
           "marginTop": -21,
           "marginBottom": 20
@@ -159,6 +170,7 @@ export const SHOP_LAYOUT = Object.freeze({
         "y": 480,
         "width": 550,
         "costLabel": {
+          "fontSize": 28,
           "marginLeft": -15,
           "marginTop": -31,
           "marginBottom": 30

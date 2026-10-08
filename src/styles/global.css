@@ -13,6 +13,8 @@
   --font-display: Bahnschrift, "Arial Narrow", "Segoe UI Condensed", "Segoe UI", sans-serif;
   --font-body: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: "Cascadia Mono", Consolas, "SFMono-Regular", monospace;
+  --font-block: VALVEPulp, sans-serif;
+  --font-oracle: VALVEOracle, Reaver, serif;
   --app-viewport-height: 100vh;
   --off-white: var(--deadlock-ink);
   --off-black: var(--deadlock-panel);
@@ -787,11 +789,14 @@ a:focus-visible {
   align-items: center;
   gap: 8px;
   margin: 0;
-  color: #211e17;
-  font-family: var(--font-display);
-  font-size: clamp(16px, 2.2cqw, 24px);
-  font-weight: 900;
+  color: var(--off-black);
+  font-family: var(--font-oracle);
+  font-size: calc(24 * var(--shop-unit));
+  font-weight: 600;
   line-height: 24px;
+  text-shadow: 0 0 calc(5 * var(--shop-unit)) #a49376,
+    calc(1 * var(--shop-unit)) 0 #a49376, calc(-1 * var(--shop-unit)) 0 #a49376,
+    0 calc(1 * var(--shop-unit)) #a49376, 0 calc(-1 * var(--shop-unit)) #a49376;
 }
 .tier-board-price::after {
   content: "";
@@ -817,8 +822,9 @@ a:focus-visible {
 }
 .tier-board-empty {
   margin: 0;
-  color: #211e17;
-  font-weight: 800;
+  color: var(--off-black);
+  font-family: var(--font-oracle);
+  font-weight: 700;
   text-align: center;
 }
 .shop-tab-search {
@@ -992,11 +998,21 @@ button.shop-tab-search.is-active {
 }
 .tier-price-label {
   width: var(--tier-label-width);
-  text-align: center;
-  font-family: var(--font-display);
+  /* Stock's 16px label inset centers the glyphs in each differently sized backer. */
+  margin-left: var(--tier-label-margin-left);
+  text-align: left;
+  font-family: var(--font-block);
   font-size: var(--tier-price-font-size);
-  font-weight: 900;
+  font-weight: 700;
+  color: #99ffd6;
+  text-shadow: none;
   line-height: 1;
+}
+.tier-price-text {
+  display: inline-block;
+  /* Panorama's glyph advance is narrower than the browser's at the same cap height. */
+  transform: scaleX(0.91);
+  transform-origin: center;
 }
 .tier-heading {
   position: absolute;
@@ -1392,31 +1408,46 @@ button.shop-tab-search.is-active {
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
-  padding: min(5px, 6.25cqw) min(3px, 3.75cqw);
+  width: calc(100cqw * 59 / var(--shop-card-stock-width));
+  align-self: center;
+  padding: 0 min(2px, calc(100cqw * 2 / var(--shop-card-stock-width)));
+  max-width: min(82px, calc(100cqw * 82 / var(--shop-card-stock-width)));
+  max-height: min(40px, calc(100cqw * 40 / var(--shop-card-stock-width)));
   overflow: hidden;
-  font-family: "Arial Narrow", Arial, Helvetica, sans-serif;
-  font-size: min(15px, 18.75cqw);
-  font-stretch: condensed;
-  font-weight: 700;
-  line-height: 1.02;
+  font-family: var(--font-oracle);
+  font-size: min(12px, calc(100cqw * 12 / var(--shop-card-stock-width)));
+  font-weight: 500;
+  line-height: 1.04;
   text-align: center;
   text-shadow: none;
-  color: #16100a;
+  color: var(--off-black);
   overflow-wrap: anywhere;
   word-break: normal;
 }
+.item-name-text {
+  width: 100%;
+  /* Calibrated to the in-game Oracle advance without synthesizing a heavier face. */
+  transform: scaleX(1.07);
+  transform-origin: center;
+}
 .item-card-name-compact .item-name {
-  padding-block: min(2px, 2.5cqw);
-  font-size: min(12.5px, 15.625cqw);
-  line-height: 1;
+  font-size: min(10px, calc(100cqw * 10 / var(--shop-card-stock-width)));
 }
 .item-card-name-dense .item-name {
-  padding-block: min(1px, 1.25cqw);
-  font-size: min(10.5px, 13.125cqw);
-  line-height: 0.98;
+  font-size: min(9.25px, calc(100cqw * 9.25 / var(--shop-card-stock-width)));
+}
+.item-card-name-long-word .item-name {
+  font-size: min(9.5px, calc(100cqw * 9.5 / var(--shop-card-stock-width)));
+}
+.item-card-name-single-word .item-name {
+  width: 100%;
+  font-size: min(13px, calc(100cqw * 13 / var(--shop-card-stock-width)));
+}
+.item-card-name-single-word.item-card-name-long-word .item-name {
+  font-size: min(11px, calc(100cqw * 11 / var(--shop-card-stock-width)));
 }
 .item-card-tier-3.item-card-weapon .item-name {
-  color: #090706;
+  color: #000;
   text-shadow: 0 0 12px #aa8470;
 }
 .item-card-tier-4.item-card-weapon .item-name { color: #e4c5a1; }

@@ -679,15 +679,16 @@ test('renders item icons and text at Source 2 shop-card proportions', async ({ p
   await page.getByTestId('tab-vitality').click();
   const longWordMetrics = await readCardTextMetrics(page.getByTestId('item-card-upgrade_juggernaut'));
 
-  expect(metrics.nameFamily).toMatch(/Arial/);
+  expect(metrics.nameFamily).toMatch(/^VALVEOracle/);
   expect(Math.abs(metrics.iconHeight - metrics.cardWidth)).toBeLessThan(1);
   expect(Math.abs(metrics.imageWidth - metrics.cardWidth * 0.95)).toBeLessThan(1);
   expect(Math.abs(metrics.imageHeight - metrics.cardWidth * 0.95)).toBeLessThan(1);
-  expect(Math.abs(metrics.nameSize - metrics.cardWidth * 0.1875)).toBeLessThan(0.6);
-  expect(metrics.nameWeight).toBe('700');
+  expect(Math.abs(metrics.nameSize - metrics.cardWidth * 12 / 76)).toBeLessThan(0.6);
+  expect(metrics.nameWeight).toBe('500');
   expect(Math.abs(activeMetrics.badgeSize - activeMetrics.cardWidth * 0.10625)).toBeLessThan(0.6);
   expect(longNameMetrics.nameSize).toBeLessThan(metrics.nameSize);
-  expect(longWordMetrics.nameSize).toBeLessThan(metrics.nameSize);
+  // In game a single-word name (Juggernaut) renders larger than a two-word name, but still fits the card.
+  expect(longWordMetrics.nameSize).toBeGreaterThan(metrics.nameSize);
   expect(longWordMetrics.nameRight).toBeLessThanOrEqual(longWordMetrics.cardRight + 0.5);
   expect(longWordMetrics.nameBottom).toBeLessThanOrEqual(longWordMetrics.cardBottom + 0.5);
   expect(longNameMetrics.nameBottom).toBeLessThanOrEqual(longNameMetrics.cardBottom + 0.5);

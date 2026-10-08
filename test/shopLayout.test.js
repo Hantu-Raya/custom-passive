@@ -76,12 +76,12 @@ test('stock layout preserves panel size, flow, margins, and navigation order', (
   assert.deepEqual(SHOP_LAYOUT.emptyTier, { opacity: 0.2, height: 40 });
   assert.deepEqual(SHOP_LAYOUT.navOrder, ['FavoritesNav', 'RecommendedNav', 'FilteredNav', 'WeaponNav', 'TechNav', 'ArmorNav']);
   for (const category of ['weapon', 'spirit', 'vitality']) {
-    assert.deepEqual(SHOP_LAYOUT.categoryTiers[category][1].costLabel, { marginLeft: -20, marginTop: 0, marginBottom: 0 });
-    assert.deepEqual(SHOP_LAYOUT.categoryTiers[category][2].costLabel, { marginLeft: -20, marginTop: -20, marginBottom: 20 });
-    assert.deepEqual(SHOP_LAYOUT.categoryTiers[category][3].costLabel, { marginLeft: -18, marginTop: -21, marginBottom: 20 });
+    assert.deepEqual(SHOP_LAYOUT.categoryTiers[category][1].costLabel, { fontSize: 24, marginLeft: -20, marginTop: 0, marginBottom: 0 });
+    assert.deepEqual(SHOP_LAYOUT.categoryTiers[category][2].costLabel, { fontSize: 26, marginLeft: -20, marginTop: -20, marginBottom: 20 });
+    assert.deepEqual(SHOP_LAYOUT.categoryTiers[category][3].costLabel, { fontSize: 28, marginLeft: -18, marginTop: -21, marginBottom: 20 });
     assert.deepEqual(SHOP_LAYOUT.categoryTiers[category][4].costLabel, category === 'weapon'
-      ? { marginLeft: 0, marginTop: -28, marginBottom: 26 }
-      : { marginLeft: -15, marginTop: -31, marginBottom: 30 });
+      ? { fontSize: 28, marginLeft: 0, marginTop: -28, marginBottom: 26 }
+      : { fontSize: 28, marginLeft: -15, marginTop: -31, marginBottom: 30 });
   }
   assert.ok(Number.isSafeInteger(SHOP_LAYOUT.provenance.clientVersion));
   assert.ok(SHOP_LAYOUT.provenance.clientVersion > 0);
@@ -94,6 +94,25 @@ test('stock layout preserves panel size, flow, margins, and navigation order', (
     'panorama/layout/citadel_hud_hero_shop.vxml_c'
   ]);
   for (const file of SHOP_LAYOUT.provenance.files) assert.match(file.crc, /^[0-9a-f]+$/, file.path);
+});
+
+test('stock price font sizes and game font URLs preserve the deployment base path', () => {
+  for (const category of ['weapon', 'spirit', 'vitality']) {
+    assert.deepEqual(Object.values(SHOP_LAYOUT.categoryTiers[category]).map(({ costLabel }) => costLabel.fontSize), [24, 26, 28, 28]);
+  }
+  const page = readFileSync(new URL('../src/pages/index.astro', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
+  assert.match(page, /const shopFontBase = `\$\{import\.meta\.env\.BASE_URL\}assets\/deadlock\/panorama\/fonts\/`;/);
+  const names = ['valvepulp-bold.ttf', 'valveoracle-semibold.ttf', 'valveoracle-medium.ttf'];
+  const references = [...page.matchAll(/url\("([^"]+\.ttf)"\)|href=\{`([^`]+\.ttf)`\}/g)].map((match) => match[1] || match[2]);
+  assert.equal(references.length, 4, 'three font faces and the block font preload');
+  for (const reference of references) assert.ok(reference.startsWith('${shopFontBase}'), reference);
+  for (const name of names) {
+    assert.ok(references.includes(`\${shopFontBase}${name}`), name);
+    assert.equal(existsSync(new URL(`../public/assets/deadlock/panorama/fonts/${name}`, import.meta.url)), true, name);
+  }
+  assert.match(page, /rel="preload" href=\{`\$\{shopFontBase\}valvepulp-bold\.ttf`\} as="font"/);
+  assert.doesNotMatch(css, /url\([^)]*\.ttf/, 'font sources must use the Astro BASE_URL-prefixed URLs');
 });
 
 test('every required shop surface has an optimized WebP asset', () => {

@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { zstdDecompressSync } from 'node:zlib';
 import { BINARY_KV3_BOOLEAN_FALSE } from '../src/lib/passiveFlagTemplate.js';
@@ -15,6 +15,8 @@ const SR2_COMPILER = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/sr2co
 const PAK01 = 'G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/pak01_dir.vpk';
 const SOURCE2_VIEWER_CLI = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/.tmp/source2viewer-cli/Source2Viewer-CLI.exe';
 const VPKEDIT_CLI = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/vpk cli/vpkeditcli.exe';
+const SHOP_FONT_ROOT = path.join(path.dirname(PAK01), 'panorama/fonts');
+const SHOP_FONT_NAMES = Object.freeze(['valvepulp-bold.ttf', 'valveoracle-semibold.ttf', 'valveoracle-medium.ttf']);
 const SHOP_LAYOUT_PATHS = Object.freeze([
   'panorama/styles/citadel_hud_hero_shop.vcss_c',
   'panorama/styles/citadel_shop_mods_filtered.vcss_c',
@@ -400,6 +402,9 @@ async function maybeExtractAssets(items) {
   await optimizeExtractedAssets(assetRoot, assetPaths);
   const missingSurfaces = [...referencedShopSurfacePaths()].map(webpPath).filter((surfacePath) => !existsSync(path.join(assetRoot, surfacePath)));
   if (missingSurfaces.length > 0) fail(`Missing required shop surface WebP(s): ${missingSurfaces.join(', ')}`);
+  const fontRoot = path.join(assetRoot, 'panorama/fonts');
+  await mkdir(fontRoot, { recursive: true });
+  for (const name of SHOP_FONT_NAMES) await copyFile(path.join(SHOP_FONT_ROOT, name), path.join(fontRoot, name));
   for (const item of items) {
     const pngPath = decompiledPngPath(item.imagePath);
     const itemWebpPath = webpPath(pngPath);
@@ -480,6 +485,9 @@ async function extractShopLayout() {
         y: pixels(selector, 'y'),
         width: pixels(selector, 'width'),
         costLabel: {
+          fontSize: tier === 1 && rules.get(`${costSelector} Label`)?.['font-size'] === undefined
+            ? pixels('CitadelShopModsFiltered .tierRow .CostLabel Label', 'font-size')
+            : pixels(`${costSelector} Label`, 'font-size'),
           marginLeft: pixels(costSelector, 'margin-left'),
           marginTop: pixels(costSelector, 'margin-top'),
           // Stock T1 omits margin-bottom; Panorama's panel margin defaults to zero.
@@ -522,7 +530,8 @@ async function main() {
     assertReadable(SR2_COMPILER, 'SR2_COMPILER'),
     assertReadable(PAK01, 'PAK01'),
     assertReadable(SOURCE2_VIEWER_CLI, 'SOURCE2_VIEWER_CLI'),
-    assertReadable(VPKEDIT_CLI, 'VPKEDIT_CLI')
+    assertReadable(VPKEDIT_CLI, 'VPKEDIT_CLI'),
+    ...SHOP_FONT_NAMES.map((name) => assertReadable(path.join(SHOP_FONT_ROOT, name), `Required shop font ${name}`))
   ]);
 
   const localization = await loadLocalization();

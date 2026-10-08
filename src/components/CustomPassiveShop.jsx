@@ -87,12 +87,13 @@ const CATEGORY_BOARD_STOCK = Object.freeze({
   labelMarginTop: 4,
   labelMarginBottom: -20,
   labelWidth: 80,
-  labelFontSizes: Object.freeze({ 1: 24, 2: 26, 3: 28, 4: 28 })
+  labelMarginLeft: 16
 });
 const CATEGORY_BOARD_WIDTH = SHOP_LAYOUT.mainPanel.width - CATEGORY_BOARD_STOCK.navWidth - CATEGORY_BOARD_STOCK.containerMarginRight;
 const stockBoardLength = (value) => `calc(${value} * var(--shop-unit))`;
 const CATALOG_BOARD_SCALE = Object.freeze({
   '--category-board-aspect': CATEGORY_BOARD_WIDTH / SHOP_LAYOUT.mainPanel.height,
+  '--shop-card-stock-width': SHOP_LAYOUT.mod.width,
   '--shop-card-scale': SHOP_LAYOUT.mod.width / CATEGORY_BOARD_WIDTH,
   '--shop-card-aspect': `${SHOP_LAYOUT.mod.width} / ${SHOP_LAYOUT.mod.height}`
 });
@@ -103,7 +104,8 @@ const CATEGORY_BOARD_STYLE = Object.freeze({
   '--shop-card-height': stockBoardLength(SHOP_LAYOUT.mod.height),
   // Use the stock 3px margin once between cells, with the verified wrap counts.
   '--shop-grid-gap': stockBoardLength(SHOP_LAYOUT.mod.margin),
-  '--tier-label-width': stockBoardLength(CATEGORY_BOARD_STOCK.labelWidth)
+  '--tier-label-width': stockBoardLength(CATEGORY_BOARD_STOCK.labelWidth),
+  '--tier-label-margin-left': stockBoardLength(CATEGORY_BOARD_STOCK.labelMarginLeft)
 });
 const VALID_ITEM_IDS = new Set(DEADLOCK_ITEMS.map((item) => item.id));
 const DUAL_BADGE_ITEM_IDS = new Set(['upgrade_ability_power_shard']);
@@ -334,9 +336,11 @@ function itemInitials(label) {
 function itemNameClass(label) {
   const words = label.split(/[\s-]+/).filter(Boolean);
   const maxWordLength = words.reduce((max, word) => Math.max(max, word.length), 0);
-  const compact = words.length >= 3 || label.length >= 15 || maxWordLength >= 9;
-  const dense = words.length >= 4 || label.length >= 22 || maxWordLength >= 12;
-  return [compact ? 'item-card-name-compact' : '', dense ? 'item-card-name-dense' : ''].filter(Boolean).join(' ');
+  const compact = words.length >= 3;
+  const dense = words.length >= 4 || label.length >= 22;
+  const longWord = maxWordLength >= 11;
+  const singleWord = words.length === 1;
+  return [compact ? 'item-card-name-compact' : '', dense ? 'item-card-name-dense' : '', longWord ? 'item-card-name-long-word' : '', singleWord ? 'item-card-name-single-word' : ''].filter(Boolean).join(' ');
 }
 
 function searchableText(item) {
@@ -358,7 +362,7 @@ function createTierMap() {
 function categoryTierStyle(category, tier) {
   const region = SHOP_LAYOUT.categoryTiers[category][tier];
   const { costLabel } = region;
-  const fontSize = CATEGORY_BOARD_STOCK.labelFontSizes[tier];
+  const fontSize = costLabel.fontSize;
   const labelHeight = fontSize + CATEGORY_BOARD_STOCK.labelPaddingTop
     + CATEGORY_BOARD_STOCK.labelMarginTop + CATEGORY_BOARD_STOCK.labelMarginBottom;
   return {
@@ -371,7 +375,7 @@ function categoryTierStyle(category, tier) {
       + CATEGORY_BOARD_STOCK.listMarginY + CATEGORY_BOARD_STOCK.listPaddingY
       + CATEGORY_BOARD_STOCK.tierPaddingY + SHOP_LAYOUT.mod.margin),
     '--tier-price-left': stockBoardLength(costLabel.marginLeft),
-    '--tier-price-top': stockBoardLength(costLabel.marginTop + CATEGORY_BOARD_STOCK.labelPaddingTop),
+    '--tier-price-top': stockBoardLength(costLabel.marginTop + CATEGORY_BOARD_STOCK.labelPaddingTop + CATEGORY_BOARD_STOCK.labelMarginTop),
     '--tier-price-font-size': stockBoardLength(fontSize)
   };
 }
@@ -870,7 +874,7 @@ function TierSection({ category, tier, slots, selectedIds, predictedHoverItemId,
         <span>{visibleCount} item{visibleCount === 1 ? '' : 's'}</span>
       </div>
       <div class="tier-price">
-        <span class="tier-price-label">{TIER_COSTS[tier]}</span>
+        <span class="tier-price-label"><span class="tier-price-text">{TIER_COSTS[tier]}</span></span>
       </div>
       {visibleCount > 0 ? (
         <div class="item-grid">
@@ -969,7 +973,7 @@ function ItemCard({ item, index, selected, predictedHover, relatedHover, onToggl
         <span class="item-icon" aria-hidden="true">
           {item.iconUrl ? <img src={`${import.meta.env.BASE_URL}${item.iconUrl}`} alt="" loading="eager" decoding="async" /> : <span><b>{CATEGORY_GLYPHS[item.category]}</b><em>{itemInitials(item.label)}</em></span>}
         </span>
-        <span class="item-name">{item.label}</span>
+        <span class="item-name"><span class="item-name-text">{item.label}</span></span>
         <span class="item-state">{selected ? 'Selected passive' : 'Not selected'}</span>
       </button>
     </span>

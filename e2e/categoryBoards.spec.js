@@ -53,6 +53,20 @@ for (const category of Object.keys(CATEGORY_TIER_COLUMNS)) {
   test(`${category} uses the stock tier regions, columns, prices and in-game card positions`, async ({ page }) => {
     await openShop(page, { width: 1600, height: 900 });
     const cards = await readCategory(page, category);
+    expect(await page.evaluate(async () => {
+      await document.fonts.ready;
+      return document.fonts.check('700 28px VALVEPulp') && document.fonts.check('500 12px VALVEOracle');
+    }), `${category}: stock shop fonts loaded`).toBe(true);
+    await expect(page.locator('.catalog-board .item-name').first()).toHaveCSS('font-family', /^VALVEOracle(?:,|$)/);
+    await expect(page.locator('.catalog-board .item-name').first()).toHaveCSS('font-weight', '500');
+    expect(await page.locator('.catalog-board .item-name-text').evaluateAll((names) => names.every((name) => {
+      return [...name.textContent.matchAll(/[^\s-]+/g)].every((word) => {
+        const range = document.createRange();
+        range.setStart(name.firstChild, word.index);
+        range.setEnd(name.firstChild, word.index + word[0].length);
+        return range.getClientRects().length === 1;
+      });
+    })), `${category}: names wrap between words without orphan letters`).toBe(true);
     const capture = ANCHORS.captures[`tab_${category}`];
     const firstRow = cards.filter((card) => card.tier === 1).sort((a, b) => a.icon.y - b.icon.y || a.icon.x - b.icon.x);
     const anchorFirstRow = capture.cards.filter((card) => DEADLOCK_ITEMS.find((item) => item.id === card.id)?.tier === 1)
@@ -77,6 +91,8 @@ for (const category of Object.keys(CATEGORY_TIER_COLUMNS)) {
       const tierRegion = page.locator(`.tier-section[data-tier="${tier}"]`);
       await expect(tierRegion.locator('.tier-price-label')).toHaveText(String(TIER_COSTS[tier]));
       await expect(tierRegion.locator('.tier-price-label')).toBeVisible();
+      await expect(tierRegion.locator('.tier-price-label')).toHaveCSS('font-family', /^VALVEPulp(?:,|$)/);
+      await expect(tierRegion.locator('.tier-price-label')).toHaveCSS('color', 'rgb(153, 255, 214)');
       await expect(tierRegion.locator('.tier-price')).toHaveText(String(TIER_COSTS[tier]));
       await expect(tierRegion.locator('.tier-price-sticker, .tier-price-currency')).toHaveCount(0);
     }

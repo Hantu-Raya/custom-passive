@@ -55,12 +55,14 @@ export function parseShopFilterTree(xml, rules, localization, items, oracle) {
   const tree = categories.map((node) => {
     const control = descendants(node).find((child) => child.attrs.filterGroup);
     if (!control) throw new Error('Missing stock category group control');
-    const category = label(control.attrs.text);
+    const token = control.attrs.text || descendants(control).find((child) => child.attrs.id === 'CategoryLabel')?.attrs.text;
+    if (!token) throw new Error(`Missing stock category label: ${control.attrs.filterGroup}`);
+    const category = label(token);
     const iconUrl = asset(`.FilterCategory.${category} .top_filter_img`);
     const colorName = category === 'Spirit' ? 'Magic' : category;
     const color = rules.get(`@filter-color-${colorName}`)?.color;
     if (!color) throw new Error(`Missing stock filter color: ${colorName}`);
-    return { id: category, label: category, token: control.attrs.text.slice(1), stockId: control.attrs.filterGroup, iconUrl, color, children: buildChildren(byId.get(control.attrs.filterGroup), category, iconUrl) };
+    return { id: category, label: category, token: token.replace(/^#/, ''), stockId: control.attrs.filterGroup, iconUrl, color, children: buildChildren(byId.get(control.attrs.filterGroup), category, iconUrl) };
   });
   const categoryOrder = ['Physical', 'Spirit', 'Defense', 'Mobility', 'Disruption', 'Misc'];
   if (tree.length !== categoryOrder.length || tree.some((node, index) => node.id !== categoryOrder[index])) throw new Error('Unexpected stock filter category order');

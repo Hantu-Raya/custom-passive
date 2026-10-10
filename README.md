@@ -81,7 +81,7 @@ The supplied archive must match the SHA-256 in generated metadata. This mode sti
 
 Never copy a GameBanana filter or template VData directly into `public/templates/`. A newly published archive can omit passive-flag fields for catalog items. The browser would then either fail to patch selections or fall back to an older complete template. Rebuild from current local sources so every catalog item has a writable flag, then run the validation below.
 
-GitHub Pages uses `-- --allow-stale-metadata` only when GameBanana's API or an archive download remains unavailable after retries. It deploys the last verified metadata and templates without changing either; the next hourly run retries the live sync. Do not use this mode for a manual update that must capture the latest batch.
+GitHub Pages uses `-- --allow-stale-metadata` only when GameBanana's API or an archive download remains unavailable after retries. It deploys the last verified metadata and templates without changing either. Do not use this mode for a manual update that must capture the latest batch.
 
 After a template rebuild, run:
 
@@ -119,7 +119,7 @@ Astro is configured with:
 
 Build output is written to `dist/`.
 
-GitHub Pages deploys from `.github/workflows/deploy.yml`. The workflow runs hourly and on pushes to `main`. Each run retries cache-busted GameBanana API requests and archive downloads, syncs fresh metadata when possible, then runs tests and builds. If either external step remains unavailable, it deploys the last verified metadata and templates and retries the live sync on the next hourly run.
+GitHub Pages deploys from `.github/workflows/deploy.yml` by manual dispatch only; pushing to `main` does not publish. After committing and pushing a verified update, run `gh workflow run deploy.yml -R Hantu-Raya/custom-passive --ref main`. The workflow retries GameBanana requests, syncs fresh metadata when possible, then runs tests and builds. If GameBanana remains unavailable, it uses the last verified metadata and templates.
 
 ## License
 

@@ -4,6 +4,7 @@ import test from 'node:test';
 import { DEADLOCK_ITEMS } from '../src/data/deadlockItems.generated.js';
 import { deriveShopFilters, parseShopFilterRecord } from '../scripts/lib/shopFilters.mjs';
 import { SHOP_FILTER_TREE, SHOP_FILTER_UI } from '../src/data/shopFilters.generated.js';
+import { SHOP_LAYOUT } from '../src/data/shopLayout.generated.js';
 import { filterItems, flattenFilters } from '../src/lib/shopFilterSelection.js';
 
 const oracle = JSON.parse(readFileSync(new URL('./fixtures/shop-filter-oracle.json', import.meta.url), 'utf8'));
@@ -59,7 +60,8 @@ test('generated stock filter tree preserves category, group and leaf order with 
   assert.ok(Object.isFrozen(SHOP_FILTER_TREE));
   assert.ok(Object.isFrozen(SHOP_FILTER_UI));
   assert.equal(SHOP_FILTER_UI.helpLines.length, 2);
-  assert.equal(SHOP_FILTER_UI.provenance.clientVersion, oracle.client_version);
+  assert.equal(SHOP_FILTER_UI.provenance.clientVersion, SHOP_LAYOUT.provenance.clientVersion);
+  assert.ok(SHOP_FILTER_UI.provenance.clientVersion >= oracle.client_version);
   for (const node of nodes) {
     assert.ok(Object.isFrozen(node), node.id);
     if (node.children) assert.ok(Object.isFrozen(node.children), node.id);

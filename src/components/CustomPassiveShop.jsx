@@ -299,6 +299,8 @@ function isRequiredTemplateSha256(hash) {
   return hash === REQUIRED_GAMEBANANA_TEMPLATE.sha256;
 }
 
+class TemplateMismatchError extends Error {}
+
 function loadStoredTemplateVerificationExpiry() {
   if (typeof window === 'undefined') return null;
   const raw = window.localStorage.getItem(TEMPLATE_VERIFICATION_STORAGE_KEY);
@@ -821,17 +823,41 @@ function CatalogSupportFooter() {
 }
 
 
+const WEB_CHECK_STATES = Object.freeze({
+  idle: { tone: 'idle', label: 'Not checked yet' },
+  checking: { tone: 'idle', label: 'Checking…' },
+  current: { tone: 'ok', label: 'Up to date' },
+  outdated: { tone: 'update', label: 'Newer version available' },
+  reloading: { tone: 'update', label: 'Update found, reloading…' },
+  error: { tone: 'warn', label: 'Check failed' }
+});
+
+function isWebCheckBusy(webCheck) {
+  return webCheck.status === 'checking' || webCheck.status === 'reloading';
+}
+
+function WebRefreshButton({ webCheck, onRefresh, class: className, testId }) {
+  const isChecking = isWebCheckBusy(webCheck);
+  return (
+    <button
+      type="button"
+      class={`${className}${webCheck.status === 'outdated' ? ' is-update' : ''}`}
+      data-testid={testId}
+      onClick={onRefresh}
+      disabled={isChecking}
+      aria-busy={isChecking}
+      title="Check for a newer web version and recheck the template"
+    >
+      <span class="verification-refresh-icon" aria-hidden="true">↻</span>
+      <span class="verification-refresh-label">{isChecking ? 'Checking' : webCheck.status === 'outdated' ? 'Update' : 'Refresh'}</span>
+    </button>
+  );
+}
+
 function VerificationPanel({ templateExpiresAt, now, webCheck, onRefresh }) {
   const templateTimeLeft = templateExpiresAt ? templateExpiresAt - now : 0;
   const templateVerified = templateTimeLeft > 0;
-  const isChecking = webCheck.status === 'checking' || webCheck.status === 'reloading';
-  const webState = {
-    idle: { tone: 'idle', label: 'Not checked yet' },
-    checking: { tone: 'idle', label: 'Checking…' },
-    current: { tone: 'ok', label: 'Up to date' },
-    reloading: { tone: 'update', label: 'Update found, reloading…' },
-    error: { tone: 'warn', label: 'Check failed' }
-  }[webCheck.status];
+  const webState = WEB_CHECK_STATES[webCheck.status];
 
   return (
     <section class="verification-panel" data-testid="verification-panel" aria-label="Verification">
@@ -858,18 +884,7 @@ function VerificationPanel({ templateExpiresAt, now, webCheck, onRefresh }) {
           </dd>
         </div>
       </dl>
-      <button
-        type="button"
-        class="verification-refresh"
-        data-testid="web-version-refresh"
-        onClick={onRefresh}
-        disabled={isChecking}
-        aria-busy={isChecking}
-        title="Check for a newer web version and recheck the template"
-      >
-        <span class="verification-refresh-icon" aria-hidden="true">↻</span>
-        <span class="verification-refresh-label">{isChecking ? 'Checking' : 'Refresh'}</span>
-      </button>
+      <WebRefreshButton class="verification-refresh" testId="web-version-refresh" webCheck={webCheck} onRefresh={onRefresh} />
     </section>
   );
 }
@@ -1002,8 +1017,11 @@ function TemplateGate({
   selectedPresetTemplate,
   onPresetTemplateChange,
   onTemplateFile,
+  webCheck,
+  onRefresh,
   status
 }) {
+  const webState = WEB_CHECK_STATES[webCheck.status];
   return (
     <div class="template-gate-backdrop" data-testid="template-gate">
       <section class="template-gate-dialog" role="dialog" aria-modal="true" aria-labelledby="template-gate-heading">
@@ -1060,6 +1078,15 @@ function TemplateGate({
             >
               Open GameBanana page
             </a>
+          </div>
+          <div class="template-gate-row" data-testid="template-gate-web-version">
+            <div class="template-gate-row-label">
+              <strong>Web version</strong>
+              <p class={`template-gate-hint verification-state is-${webState.tone}`} data-testid="template-gate-web-state" title={webCheck.error || `Build ${WEB_VERSION.commit}, ${formatBuildDate(WEB_VERSION.builtAt)}`}>
+                {`Batch ${formatBatch(WEB_VERSION.batch)}`}<em>{webState.label}</em>
+              </p>
+            </div>
+            <WebRefreshButton class="template-gate-refresh" testId="template-gate-refresh" webCheck={webCheck} onRefresh={onRefresh} />
           </div>
           <div class="template-gate-row">
             <div class="template-gate-row-label">
@@ -1529,7 +1556,7 @@ export default function CustomPassiveShop() {
       const fileBytes = new Uint8Array(await file.arrayBuffer());
       const fileSha256 = await sha256Hex(fileBytes);
       if (!isRequiredTemplateSha256(fileSha256)) {
-        throw new Error(`Template SHA-256 ${fileSha256} does not match ${REQUIRED_GAMEBANANA_TEMPLATE.fileName}.`);
+        throw new TemplateMismatchError(`Template SHA-256 ${fileSha256} does not match ${REQUIRED_GAMEBANANA_TEMPLATE.fileName}.`);
       }
       const didActivate = await activatePresetTemplate(selectedPresetTemplate);
       if (!didActivate) return;
@@ -1540,12 +1567,29 @@ export default function CustomPassiveShop() {
       setTemplateLinked(false);
       setTemplateState({ status: 'error', bytes: null, offsets: null });
       setTemplateGateOpen(true);
-      setStatus(error?.message || String(error));
+      const message = error?.message || String(error);
+      if (error instanceof TemplateMismatchError && !isWebCheckBusy(webCheck)) await explainTemplateMismatch(message);
+      else setStatus(message);
+    }
+  }
+
+  // Returns the deployed version when it is newer than this page, otherwise null.
+  async function checkWebVersion() {
+    setWebCheck({ status: 'checking', error: '' });
+    try {
+      const deployed = await fetchDeployedWebVersion();
+      const isNewer = isNewerWebVersion(WEB_VERSION, deployed);
+      setWebCheck({ status: isNewer ? 'outdated' : 'current', error: '' });
+      return isNewer ? deployed : null;
+    } catch (error) {
+      const reason = error?.message || String(error);
+      setWebCheck({ status: 'error', error: reason });
+      throw new Error(`Version check failed: ${reason}`);
     }
   }
 
   async function refreshVerification() {
-    if (webCheck.status === 'checking' || webCheck.status === 'reloading') return;
+    if (isWebCheckBusy(webCheck)) return;
     const expiresAt = loadStoredTemplateVerificationExpiry();
     setTemplateExpiresAt(expiresAt);
     setClockNow(Date.now());
@@ -1554,24 +1598,33 @@ export default function CustomPassiveShop() {
       setTemplateState({ status: 'needed', bytes: null, offsets: null });
       setTemplateGateOpen(true);
     }
-    setWebCheck({ status: 'checking', error: '' });
     setStatus('Checking for a newer web version...');
     try {
-      const deployed = await fetchDeployedWebVersion();
-      if (isNewerWebVersion(WEB_VERSION, deployed)) {
+      const deployed = await checkWebVersion();
+      if (deployed) {
         setWebCheck({ status: 'reloading', error: '' });
         setStatus(`Newer web version found (batch ${formatBatch(deployed.batch)}, build ${deployed.commit}). Reloading; your selection is kept.`);
         window.location.reload();
         return;
       }
-      setWebCheck({ status: 'current', error: '' });
       setStatus(expiresAt === null
-        ? `Web version is up to date. Template verification expired; upload ${REQUIRED_GAMEBANANA_TEMPLATE.fileName} again.`
+        ? `Web version is up to date (batch ${formatBatch(WEB_VERSION.batch)}). Upload ${REQUIRED_GAMEBANANA_TEMPLATE.fileName} to continue.`
         : `Web version is up to date (batch ${formatBatch(WEB_VERSION.batch)}, build ${WEB_VERSION.commit}). Template verified for ${formatTimeLeft(expiresAt - Date.now())}.`);
     } catch (error) {
-      const reason = error?.message || String(error);
-      setWebCheck({ status: 'error', error: reason });
-      setStatus(`Version check failed: ${reason}`);
+      setStatus(error?.message || String(error));
+    }
+  }
+
+  // A template that fails the SHA check is often newer than a cached page, so look for an update.
+  async function explainTemplateMismatch(mismatchMessage) {
+    setStatus(`${mismatchMessage} Checking for a newer web version...`);
+    try {
+      const deployed = await checkWebVersion();
+      setStatus(deployed
+        ? `${mismatchMessage} A newer web version (batch ${formatBatch(deployed.batch)}) is live; press Update to load it, then link the template again.`
+        : `${mismatchMessage} This page is current; download ${REQUIRED_GAMEBANANA_TEMPLATE.fileName} from GameBanana.`);
+    } catch (error) {
+      setStatus(`${mismatchMessage} ${error?.message || String(error)}`);
     }
   }
 
@@ -1640,6 +1693,8 @@ export default function CustomPassiveShop() {
           selectedPresetTemplate={selectedPresetTemplate}
           onPresetTemplateChange={changePresetTemplate}
           onTemplateFile={linkTemplateFile}
+          webCheck={webCheck}
+          onRefresh={refreshVerification}
           status={status}
         />
       )}

@@ -355,6 +355,28 @@ code { font-family: var(--font-mono); color: var(--shard); font-size: 0.9em; }
   letter-spacing: 0;
 }
 .template-gate-dialog .gamebanana-template-link:hover { border-color: #ffefd7; color: #ffefd7; box-shadow: none; }
+.template-gate-refresh {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 4px 18px 4px 16px;
+  border: 1px solid #ffefd766;
+  border-radius: 22px;
+  background: none;
+  color: #ffefd7cc;
+  font-family: var(--font-oracle);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.template-gate-refresh:hover:not(:disabled) { border-color: #ffefd7; color: #ffefd7; }
+.template-gate-refresh:disabled { opacity: 0.6; cursor: progress; }
+.template-gate-refresh[aria-busy="true"] .verification-refresh-icon { animation: verification-spin 900ms linear infinite; }
+.template-gate-refresh.is-update,
+.verification-refresh.is-update { border-color: var(--deadlock-brass); color: var(--deadlock-brass); }
+.template-gate-hint.verification-state { font-size: 12px; white-space: normal; }
 .template-gate-dropzone {
   position: relative;
   display: grid;
@@ -393,7 +415,8 @@ code { font-family: var(--font-mono); color: var(--shard); font-size: 0.9em; }
   .template-gate-body { padding: 6px 16px 16px; }
   .template-gate-row { grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 10px 0; }
   .template-gate-details .template-gate-row { grid-template-columns: 104px minmax(0, 1fr); gap: 12px; }
-  .template-gate-dialog .gamebanana-template-link { justify-self: start; }
+  .template-gate-dialog .gamebanana-template-link,
+  .template-gate-refresh { justify-self: start; }
 }
 .build-actions { display: flex; flex-direction: column; align-items: start; gap: 6px; margin-top: 16px; }
 .verification-panel {
@@ -463,7 +486,7 @@ code { font-family: var(--font-mono); color: var(--shard); font-size: 0.9em; }
 /* Narrow desktop panels keep the status text readable by showing only the icon. */
 @media (min-width: 961px) and (max-width: 1440px) {
   .verification-refresh { justify-content: center; width: 30px; min-height: 30px; padding: 0; border-radius: 50%; }
-  .verification-refresh-label {
+  .verification-refresh .verification-refresh-label {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -473,7 +496,8 @@ code { font-family: var(--font-mono); color: var(--shard); font-size: 0.9em; }
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .verification-refresh[aria-busy="true"] .verification-refresh-icon { animation: none; }
+  .verification-refresh[aria-busy="true"] .verification-refresh-icon,
+  .template-gate-refresh[aria-busy="true"] .verification-refresh-icon { animation: none; }
 }
 .build-secondary-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .build-actions button {

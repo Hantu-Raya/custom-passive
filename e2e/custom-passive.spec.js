@@ -806,3 +806,48 @@ test('refresh reports a failed version check without reloading', async ({ page }
   await expect(page.getByTestId('web-version-state')).toContainText('Check failed');
   await expect(page.getByRole('status')).toContainText('Version check failed with HTTP 503.');
 });
+
+test('template gate shows the web version and Refresh confirms it is current', async ({ page }) => {
+  await page.goto('./');
+  await page.waitForLoadState('networkidle');
+  const gate = page.getByTestId('template-gate');
+  await expect(gate).toBeVisible();
+  const webState = gate.getByTestId('template-gate-web-state');
+  await expect(webState).toContainText(`Batch ${GAMEBANANA_MOD_SOURCE.batchDateTag.replace('_', '/')}`);
+  await expect(webState).toContainText('Not checked yet');
+  await gate.getByTestId('template-gate-refresh').click();
+  await expect(webState).toContainText('Up to date');
+  await expect(gate.getByTestId('template-gate-status')).toContainText(`Upload ${REQUIRED_GAMEBANANA_TEMPLATE.fileName} to continue.`);
+  await expect(gate).toBeVisible();
+});
+
+test('a mismatched template on a stale page offers Update, which reloads the newer version', async ({ page }) => {
+  await page.route('**/version.json?*', (route) => route.fulfill({
+    json: { buildId: 'newer-build', commit: 'abc1234', builtAt: '2026-10-12T00:00:00.000Z', batch: '10_12' }
+  }));
+  await page.goto('./');
+  await page.waitForLoadState('networkidle');
+  const gate = page.getByTestId('template-gate');
+  await gate.getByTestId('template-gate-file').setInputFiles({ name: 'templete_10_12.7z', mimeType: 'application/x-7z-compressed', buffer: Buffer.from('not the required template') });
+  await expect(gate.getByTestId('template-gate-status')).toContainText(`does not match ${REQUIRED_GAMEBANANA_TEMPLATE.fileName}.`);
+  await expect(gate.getByTestId('template-gate-status')).toContainText('A newer web version (batch 10/12) is live; press Update');
+  await expect(gate.getByTestId('template-gate-web-state')).toContainText('Newer version available');
+  const refresh = gate.getByTestId('template-gate-refresh');
+  await expect(refresh).toHaveText(/Update/);
+  await expect(refresh).toHaveClass(/is-update/);
+
+  const reloaded = page.waitForEvent('framenavigated');
+  await refresh.click();
+  await reloaded;
+  await expect(page.getByTestId('template-gate-web-state')).toContainText('Not checked yet');
+});
+
+test('a mismatched template on a current page points to the required download', async ({ page }) => {
+  await page.goto('./');
+  await page.waitForLoadState('networkidle');
+  const gate = page.getByTestId('template-gate');
+  await gate.getByTestId('template-gate-file').setInputFiles({ name: 'old.7z', mimeType: 'application/x-7z-compressed', buffer: Buffer.from('stale template') });
+  await expect(gate.getByTestId('template-gate-status')).toContainText(`This page is current; download ${REQUIRED_GAMEBANANA_TEMPLATE.fileName} from GameBanana.`);
+  await expect(gate.getByTestId('template-gate-web-state')).toContainText('Up to date');
+  await expect(gate.getByTestId('template-gate-refresh')).toHaveText(/Refresh/);
+});

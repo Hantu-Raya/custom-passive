@@ -875,3 +875,26 @@ test('a slow mismatch check does not overwrite the status of a later upload', as
   await expect(gate.getByTestId('template-gate-web-state')).toContainText('Newer version available');
   await expect(status).toHaveText(secondStatus);
 });
+
+test('a slow Refresh does not overwrite the status of an upload made while it ran', async ({ page }) => {
+  let releaseVersion;
+  const versionHeld = new Promise((resolve) => { releaseVersion = resolve; });
+  await page.route('**/version.json?*', async (route) => {
+    await versionHeld;
+    await route.fulfill({ status: 503, body: '' });
+  });
+  await page.goto('./');
+  await page.waitForLoadState('networkidle');
+  const gate = page.getByTestId('template-gate');
+  const status = gate.getByTestId('template-gate-status');
+  await gate.getByTestId('template-gate-refresh').click();
+  await expect(status).toHaveText('Checking for a newer web version...');
+
+  await gate.getByTestId('template-gate-file').setInputFiles({ name: 'other.7z', mimeType: 'application/x-7z-compressed', buffer: Buffer.from('other upload') });
+  await expect(status).toContainText(`does not match ${REQUIRED_GAMEBANANA_TEMPLATE.fileName}.`);
+  const uploadStatus = await status.textContent();
+
+  releaseVersion();
+  await expect(gate.getByTestId('template-gate-web-state')).toContainText('Check failed');
+  await expect(status).toHaveText(uploadStatus);
+});

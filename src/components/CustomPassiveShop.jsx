@@ -1289,7 +1289,7 @@ export default function CustomPassiveShop() {
   const [predictedHoverItemId, setPredictedHoverItemId] = useState(null);
   const [directHoverItemId, setDirectHoverItemId] = useState(null);
   const pointerSampleRef = useRef(null);
-  const templateUploadSeqRef = useRef(0);
+  const verificationActionSeqRef = useRef(0);
   const selectedPresetTemplate = useMemo(() => getPresetTemplate(presetTemplateId), [presetTemplateId]);
   const supportedItemIds = useMemo(() => new Set(selectedPresetTemplate.supportedItemIds), [selectedPresetTemplate]);
 
@@ -1552,7 +1552,7 @@ export default function CustomPassiveShop() {
 
   async function linkTemplateFile(file) {
     if (!file) return;
-    const uploadSeq = ++templateUploadSeqRef.current;
+    const actionSeq = ++verificationActionSeqRef.current;
     setStatus(`Checking ${file.name || 'template'} SHA-256...`);
     try {
       const fileBytes = new Uint8Array(await file.arrayBuffer());
@@ -1570,7 +1570,7 @@ export default function CustomPassiveShop() {
       setTemplateState({ status: 'error', bytes: null, offsets: null });
       setTemplateGateOpen(true);
       const message = error?.message || String(error);
-      if (error instanceof TemplateMismatchError && !isWebCheckBusy(webCheck)) await explainTemplateMismatch(message, uploadSeq);
+      if (error instanceof TemplateMismatchError && !isWebCheckBusy(webCheck)) await explainTemplateMismatch(message, actionSeq);
       else setStatus(message);
     }
   }
@@ -1586,12 +1586,14 @@ export default function CustomPassiveShop() {
     } catch (error) {
       const reason = error?.message || String(error);
       setWebCheck({ status: 'error', error: reason });
-      throw new Error(`Version check failed: ${reason}`);
+      throw new Error(reason.startsWith('Version check') ? reason : `Version check failed: ${reason}`);
     }
   }
 
   async function refreshVerification() {
     if (isWebCheckBusy(webCheck)) return;
+    const actionSeq = ++verificationActionSeqRef.current;
+    const isLatestAction = () => actionSeq === verificationActionSeqRef.current;
     const expiresAt = loadStoredTemplateVerificationExpiry();
     setTemplateExpiresAt(expiresAt);
     setClockNow(Date.now());
@@ -1603,33 +1605,36 @@ export default function CustomPassiveShop() {
     setStatus('Checking for a newer web version...');
     try {
       const deployed = await checkWebVersion();
+      if (!isLatestAction()) return;
       if (deployed) {
         setWebCheck({ status: 'reloading', error: '' });
         setStatus(`Newer web version found (batch ${formatBatch(deployed.batch)}, build ${deployed.commit}). Reloading; your selection is kept.`);
         window.location.reload();
         return;
       }
-      setStatus(expiresAt === null
+      // Re-read so the message reflects a template linked while the check ran.
+      const currentExpiresAt = loadStoredTemplateVerificationExpiry();
+      setStatus(currentExpiresAt === null
         ? `Web version is up to date (batch ${formatBatch(WEB_VERSION.batch)}). Upload ${REQUIRED_GAMEBANANA_TEMPLATE.fileName} to continue.`
-        : `Web version is up to date (batch ${formatBatch(WEB_VERSION.batch)}, build ${WEB_VERSION.commit}). Template verified for ${formatTimeLeft(expiresAt - Date.now())}.`);
+        : `Web version is up to date (batch ${formatBatch(WEB_VERSION.batch)}, build ${WEB_VERSION.commit}). Template verified for ${formatTimeLeft(currentExpiresAt - Date.now())}.`);
     } catch (error) {
-      setStatus(error?.message || String(error));
+      if (isLatestAction()) setStatus(error?.message || String(error));
     }
   }
 
   // A template that fails the SHA check is often newer than a cached page, so look for an update.
-  // Only the latest upload may write the status; a later upload supersedes a slow check.
-  async function explainTemplateMismatch(mismatchMessage, uploadSeq) {
-    const isLatestUpload = () => uploadSeq === templateUploadSeqRef.current;
+  // Only the latest upload or Refresh may write the status; a later one supersedes a slow check.
+  async function explainTemplateMismatch(mismatchMessage, actionSeq) {
+    const isLatestAction = () => actionSeq === verificationActionSeqRef.current;
     setStatus(`${mismatchMessage} Checking for a newer web version...`);
     try {
       const deployed = await checkWebVersion();
-      if (!isLatestUpload()) return;
+      if (!isLatestAction()) return;
       setStatus(deployed
         ? `${mismatchMessage} A newer web version (batch ${formatBatch(deployed.batch)}) is live; press Update to load it, then link the template again.`
         : `${mismatchMessage} This page is current; download ${REQUIRED_GAMEBANANA_TEMPLATE.fileName} from GameBanana.`);
     } catch (error) {
-      if (isLatestUpload()) setStatus(`${mismatchMessage} ${error?.message || String(error)}`);
+      if (isLatestAction()) setStatus(`${mismatchMessage} ${error?.message || String(error)}`);
     }
   }
 

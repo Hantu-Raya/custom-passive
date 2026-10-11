@@ -1566,6 +1566,8 @@ export default function CustomPassiveShop() {
       setClockNow(Date.now());
       setTemplateLinked(true);
     } catch (error) {
+      // A newer upload or Refresh owns the gate now; a superseded failure changes nothing.
+      if (actionSeq !== verificationActionSeqRef.current) return;
       setTemplateLinked(false);
       setTemplateState({ status: 'error', bytes: null, offsets: null });
       setTemplateGateOpen(true);

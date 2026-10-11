@@ -898,3 +898,27 @@ test('a slow Refresh does not overwrite the status of an upload made while it ra
   await expect(gate.getByTestId('template-gate-web-state')).toContainText('Check failed');
   await expect(status).toHaveText(uploadStatus);
 });
+
+test('an upload still hashing when Refresh starts does not overwrite the Refresh status', async ({ page }) => {
+  await page.addInitScript(() => {
+    const digest = crypto.subtle.digest.bind(crypto.subtle);
+    const held = new Promise((resolve) => { window.__releaseDigest = resolve; });
+    crypto.subtle.digest = async (...args) => { await held; return digest(...args); };
+  });
+  await page.goto('./');
+  await page.waitForLoadState('networkidle');
+  const gate = page.getByTestId('template-gate');
+  const status = gate.getByTestId('template-gate-status');
+  await gate.getByTestId('template-gate-file').setInputFiles({ name: 'slow.7z', mimeType: 'application/x-7z-compressed', buffer: Buffer.from('slow upload') });
+  await expect(status).toContainText('Checking slow.7z SHA-256...');
+
+  await gate.getByTestId('template-gate-refresh').click();
+  await expect(gate.getByTestId('template-gate-web-state')).toContainText('Up to date');
+  await expect(status).toContainText('Web version is up to date');
+  const refreshStatus = await status.textContent();
+
+  await page.evaluate(() => window.__releaseDigest());
+  await page.waitForTimeout(500);
+  await expect(status).toHaveText(refreshStatus);
+  await expect(gate.getByTestId('template-gate-web-state')).toContainText('Up to date');
+});

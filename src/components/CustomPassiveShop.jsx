@@ -838,18 +838,19 @@ function isWebCheckBusy(webCheck) {
 
 function WebRefreshButton({ webCheck, onRefresh, class: className, testId }) {
   const isChecking = isWebCheckBusy(webCheck);
+  const isUpdate = webCheck.status === 'outdated';
   return (
     <button
       type="button"
-      class={`${className}${webCheck.status === 'outdated' ? ' is-update' : ''}`}
+      class={`${className}${isUpdate ? ' is-update' : ''}`}
       data-testid={testId}
       onClick={onRefresh}
       disabled={isChecking}
       aria-busy={isChecking}
-      title="Check for a newer web version and recheck the template"
+      title={isUpdate ? 'Load the newer web version; your selection is kept' : 'Check for a newer web version and recheck the template'}
     >
       <span class="verification-refresh-icon" aria-hidden="true">↻</span>
-      <span class="verification-refresh-label">{isChecking ? 'Checking' : webCheck.status === 'outdated' ? 'Update' : 'Refresh'}</span>
+      <span class="verification-refresh-label">{isChecking ? 'Checking' : isUpdate ? 'Update' : 'Refresh'}</span>
     </button>
   );
 }
@@ -1079,15 +1080,6 @@ function TemplateGate({
               Open GameBanana page
             </a>
           </div>
-          <div class="template-gate-row" data-testid="template-gate-web-version">
-            <div class="template-gate-row-label">
-              <strong>Web version</strong>
-              <p class={`template-gate-hint verification-state is-${webState.tone}`} data-testid="template-gate-web-state" title={webCheck.error || `Build ${WEB_VERSION.commit}, ${formatBuildDate(WEB_VERSION.builtAt)}`}>
-                {`Batch ${formatBatch(WEB_VERSION.batch)}`}<em>{webState.label}</em>
-              </p>
-            </div>
-            <WebRefreshButton class="template-gate-refresh" testId="template-gate-refresh" webCheck={webCheck} onRefresh={onRefresh} />
-          </div>
           <div class="template-gate-row">
             <div class="template-gate-row-label">
               <strong>Link template</strong>
@@ -1118,6 +1110,15 @@ function TemplateGate({
                 }}
               />
             </label>
+          </div>
+          <div class="template-gate-row" data-testid="template-gate-web-version">
+            <div class="template-gate-row-label">
+              <strong>Web version</strong>
+              <p class={`template-gate-hint verification-state is-${webState.tone}`} data-testid="template-gate-web-state" title={webCheck.error || `Build ${WEB_VERSION.commit}, ${formatBuildDate(WEB_VERSION.builtAt)}`}>
+                {`Batch ${formatBatch(WEB_VERSION.batch)}`}<em>{webState.label}</em>
+              </p>
+            </div>
+            <WebRefreshButton class="template-gate-refresh" testId="template-gate-refresh" webCheck={webCheck} onRefresh={onRefresh} />
           </div>
           <p class="template-gate-status" data-testid="template-gate-status" aria-live="polite">{status}</p>
         </div>
@@ -1558,7 +1559,7 @@ export default function CustomPassiveShop() {
       const fileBytes = new Uint8Array(await file.arrayBuffer());
       const fileSha256 = await sha256Hex(fileBytes);
       if (!isRequiredTemplateSha256(fileSha256)) {
-        throw new TemplateMismatchError(`Template SHA-256 ${fileSha256} does not match ${REQUIRED_GAMEBANANA_TEMPLATE.fileName}.`);
+        throw new TemplateMismatchError(`SHA-256 of ${file.name || 'this archive'} does not match ${REQUIRED_GAMEBANANA_TEMPLATE.fileName}.`);
       }
       const didActivate = await activatePresetTemplate(selectedPresetTemplate);
       if (!didActivate) return;

@@ -54,6 +54,8 @@ const shopFontBase = `${import.meta.env.BASE_URL}assets/deadlock/panorama/fonts/
         font-weight: 600;
         font-style: normal;
         font-display: swap;
+        /* The semibold underscore is a 3-unit sliver; let file names fall back to a visible one. */
+        unicode-range: U+0000-005E, U+0060-10FFFF;
       }
     `} />
   </head>

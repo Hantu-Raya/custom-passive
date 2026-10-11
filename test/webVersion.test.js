@@ -49,4 +49,6 @@ test('version labels format batches and remaining verification time', () => {
   assert.equal(formatBatch('10_10'), '10/10');
   assert.equal(formatTimeLeft(11 * 3600e3 + 5 * 60e3), '11h 05m');
   assert.equal(formatTimeLeft(30e3), '1m');
+  assert.equal(formatTimeLeft(12 * 3600e3 - 5), '12h 00m');
+  assert.equal(formatTimeLeft(11 * 3600e3 + 5 * 60e3 + 1), '11h 06m');
 });

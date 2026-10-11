@@ -60,8 +60,9 @@ export function formatBatch(batch) {
   return String(batch).replace(/_/g, '/');
 }
 
+// Rounds up, like a countdown: a fresh 12-hour verification reads 12h 00m, not 11h 59m.
 export function formatTimeLeft(ms) {
-  const minutes = Math.max(0, Math.floor(ms / 60000));
+  const minutes = Math.max(0, Math.ceil(ms / 60000));
   const hours = Math.floor(minutes / 60);
   if (hours > 0) return `${hours}h ${String(minutes % 60).padStart(2, '0')}m`;
   return `${Math.max(1, minutes)}m`;

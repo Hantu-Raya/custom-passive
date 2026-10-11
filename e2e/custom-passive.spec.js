@@ -806,3 +806,119 @@ test('refresh reports a failed version check without reloading', async ({ page }
   await expect(page.getByTestId('web-version-state')).toContainText('Check failed');
   await expect(page.getByRole('status')).toContainText('Version check failed with HTTP 503.');
 });
+
+test('template gate shows the web version and Refresh confirms it is current', async ({ page }) => {
+  await page.goto('./');
+  await page.waitForLoadState('networkidle');
+  const gate = page.getByTestId('template-gate');
+  await expect(gate).toBeVisible();
+  const webState = gate.getByTestId('template-gate-web-state');
+  await expect(webState).toContainText(`Batch ${GAMEBANANA_MOD_SOURCE.batchDateTag.replace('_', '/')}`);
+  await expect(webState).toContainText('Not checked yet');
+  await gate.getByTestId('template-gate-refresh').click();
+  await expect(webState).toContainText('Up to date');
+  await expect(gate.getByTestId('template-gate-status')).toContainText(`Upload ${REQUIRED_GAMEBANANA_TEMPLATE.fileName} to continue.`);
+  await expect(gate).toBeVisible();
+});
+
+test('a mismatched template on a stale page offers Update, which reloads the newer version', async ({ page }) => {
+  await page.route('**/version.json?*', (route) => route.fulfill({
+    json: { buildId: 'newer-build', commit: 'abc1234', builtAt: '2026-10-12T00:00:00.000Z', batch: '10_12' }
+  }));
+  await page.goto('./');
+  await page.waitForLoadState('networkidle');
+  const gate = page.getByTestId('template-gate');
+  await gate.getByTestId('template-gate-file').setInputFiles({ name: 'templete_10_12.7z', mimeType: 'application/x-7z-compressed', buffer: Buffer.from('not the required template') });
+  await expect(gate.getByTestId('template-gate-status')).toContainText(`does not match ${REQUIRED_GAMEBANANA_TEMPLATE.fileName}.`);
+  await expect(gate.getByTestId('template-gate-status')).toContainText('A newer web version (batch 10/12) is live; press Update');
+  await expect(gate.getByTestId('template-gate-web-state')).toContainText('Newer version available');
+  const refresh = gate.getByTestId('template-gate-refresh');
+  await expect(refresh).toHaveText(/Update/);
+  await expect(refresh).toHaveClass(/is-update/);
+
+  const reloaded = page.waitForEvent('framenavigated');
+  await refresh.click();
+  await reloaded;
+  await expect(page.getByTestId('template-gate-web-state')).toContainText('Not checked yet');
+});
+
+test('a mismatched template on a current page points to the required download', async ({ page }) => {
+  await page.goto('./');
+  await page.waitForLoadState('networkidle');
+  const gate = page.getByTestId('template-gate');
+  await gate.getByTestId('template-gate-file').setInputFiles({ name: 'old.7z', mimeType: 'application/x-7z-compressed', buffer: Buffer.from('stale template') });
+  await expect(gate.getByTestId('template-gate-status')).toContainText(`This page is current; download ${REQUIRED_GAMEBANANA_TEMPLATE.fileName} from GameBanana.`);
+  await expect(gate.getByTestId('template-gate-web-state')).toContainText('Up to date');
+  await expect(gate.getByTestId('template-gate-refresh')).toHaveText(/Refresh/);
+});
+
+test('a slow mismatch check does not overwrite the status of a later upload', async ({ page }) => {
+  let releaseVersion;
+  const versionHeld = new Promise((resolve) => { releaseVersion = resolve; });
+  await page.route('**/version.json?*', async (route) => {
+    await versionHeld;
+    await route.fulfill({ json: { buildId: 'newer-build', commit: 'abc1234', builtAt: '2026-10-12T00:00:00.000Z', batch: '10_12' } });
+  });
+  await page.goto('./');
+  await page.waitForLoadState('networkidle');
+  const gate = page.getByTestId('template-gate');
+  const status = gate.getByTestId('template-gate-status');
+  await gate.getByTestId('template-gate-file').setInputFiles({ name: 'first.7z', mimeType: 'application/x-7z-compressed', buffer: Buffer.from('first upload') });
+  await expect(status).toContainText('Checking for a newer web version...');
+
+  await gate.getByTestId('template-gate-file').setInputFiles({ name: 'second.7z', mimeType: 'application/x-7z-compressed', buffer: Buffer.from('second upload') });
+  await expect(status).not.toContainText('Checking for a newer web version...');
+  const secondStatus = await status.textContent();
+  expect(secondStatus).toContain(`does not match ${REQUIRED_GAMEBANANA_TEMPLATE.fileName}.`);
+
+  releaseVersion();
+  await expect(gate.getByTestId('template-gate-web-state')).toContainText('Newer version available');
+  await expect(status).toHaveText(secondStatus);
+});
+
+test('a slow Refresh does not overwrite the status of an upload made while it ran', async ({ page }) => {
+  let releaseVersion;
+  const versionHeld = new Promise((resolve) => { releaseVersion = resolve; });
+  await page.route('**/version.json?*', async (route) => {
+    await versionHeld;
+    await route.fulfill({ status: 503, body: '' });
+  });
+  await page.goto('./');
+  await page.waitForLoadState('networkidle');
+  const gate = page.getByTestId('template-gate');
+  const status = gate.getByTestId('template-gate-status');
+  await gate.getByTestId('template-gate-refresh').click();
+  await expect(status).toHaveText('Checking for a newer web version...');
+
+  await gate.getByTestId('template-gate-file').setInputFiles({ name: 'other.7z', mimeType: 'application/x-7z-compressed', buffer: Buffer.from('other upload') });
+  await expect(status).toContainText(`does not match ${REQUIRED_GAMEBANANA_TEMPLATE.fileName}.`);
+  const uploadStatus = await status.textContent();
+
+  releaseVersion();
+  await expect(gate.getByTestId('template-gate-web-state')).toContainText('Check failed');
+  await expect(status).toHaveText(uploadStatus);
+});
+
+test('an upload still hashing when Refresh starts does not overwrite the Refresh status', async ({ page }) => {
+  await page.addInitScript(() => {
+    const digest = crypto.subtle.digest.bind(crypto.subtle);
+    const held = new Promise((resolve) => { window.__releaseDigest = resolve; });
+    crypto.subtle.digest = async (...args) => { await held; return digest(...args); };
+  });
+  await page.goto('./');
+  await page.waitForLoadState('networkidle');
+  const gate = page.getByTestId('template-gate');
+  const status = gate.getByTestId('template-gate-status');
+  await gate.getByTestId('template-gate-file').setInputFiles({ name: 'slow.7z', mimeType: 'application/x-7z-compressed', buffer: Buffer.from('slow upload') });
+  await expect(status).toContainText('Checking slow.7z SHA-256...');
+
+  await gate.getByTestId('template-gate-refresh').click();
+  await expect(gate.getByTestId('template-gate-web-state')).toContainText('Up to date');
+  await expect(status).toContainText('Web version is up to date');
+  const refreshStatus = await status.textContent();
+
+  await page.evaluate(() => window.__releaseDigest());
+  await page.waitForTimeout(500);
+  await expect(status).toHaveText(refreshStatus);
+  await expect(gate.getByTestId('template-gate-web-state')).toContainText('Up to date');
+});

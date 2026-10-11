@@ -1289,6 +1289,7 @@ export default function CustomPassiveShop() {
   const [predictedHoverItemId, setPredictedHoverItemId] = useState(null);
   const [directHoverItemId, setDirectHoverItemId] = useState(null);
   const pointerSampleRef = useRef(null);
+  const templateUploadSeqRef = useRef(0);
   const selectedPresetTemplate = useMemo(() => getPresetTemplate(presetTemplateId), [presetTemplateId]);
   const supportedItemIds = useMemo(() => new Set(selectedPresetTemplate.supportedItemIds), [selectedPresetTemplate]);
 
@@ -1551,6 +1552,7 @@ export default function CustomPassiveShop() {
 
   async function linkTemplateFile(file) {
     if (!file) return;
+    const uploadSeq = ++templateUploadSeqRef.current;
     setStatus(`Checking ${file.name || 'template'} SHA-256...`);
     try {
       const fileBytes = new Uint8Array(await file.arrayBuffer());
@@ -1568,7 +1570,7 @@ export default function CustomPassiveShop() {
       setTemplateState({ status: 'error', bytes: null, offsets: null });
       setTemplateGateOpen(true);
       const message = error?.message || String(error);
-      if (error instanceof TemplateMismatchError && !isWebCheckBusy(webCheck)) await explainTemplateMismatch(message);
+      if (error instanceof TemplateMismatchError && !isWebCheckBusy(webCheck)) await explainTemplateMismatch(message, uploadSeq);
       else setStatus(message);
     }
   }
@@ -1616,15 +1618,18 @@ export default function CustomPassiveShop() {
   }
 
   // A template that fails the SHA check is often newer than a cached page, so look for an update.
-  async function explainTemplateMismatch(mismatchMessage) {
+  // Only the latest upload may write the status; a later upload supersedes a slow check.
+  async function explainTemplateMismatch(mismatchMessage, uploadSeq) {
+    const isLatestUpload = () => uploadSeq === templateUploadSeqRef.current;
     setStatus(`${mismatchMessage} Checking for a newer web version...`);
     try {
       const deployed = await checkWebVersion();
+      if (!isLatestUpload()) return;
       setStatus(deployed
         ? `${mismatchMessage} A newer web version (batch ${formatBatch(deployed.batch)}) is live; press Update to load it, then link the template again.`
         : `${mismatchMessage} This page is current; download ${REQUIRED_GAMEBANANA_TEMPLATE.fileName} from GameBanana.`);
     } catch (error) {
-      setStatus(`${mismatchMessage} ${error?.message || String(error)}`);
+      if (isLatestUpload()) setStatus(`${mismatchMessage} ${error?.message || String(error)}`);
     }
   }
 

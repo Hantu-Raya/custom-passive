@@ -23,11 +23,13 @@ const SUPPORTER_LEADERBOARD = Object.freeze([
   Object.freeze({ rank: 2, displayName: 'www.skillnshred.com', totalUsd: 20 }),
   Object.freeze({ rank: 2, displayName: 'dacooder', totalUsd: 20 }),
   Object.freeze({ rank: 4, displayName: 'DimpuMudit', totalUsd: 17 }),
+  Object.freeze({ rank: 5, displayName: 'Kaku', totalUsd: 10 }),
   Object.freeze({ rank: 5, displayName: 'oOBansh33', totalUsd: 10 }),
   Object.freeze({ rank: 5, displayName: 'Ko-fi Supporter', totalUsd: 10 }),
-  Object.freeze({ rank: 7, displayName: 'Ko-fi Supporter', totalUsd: 5 }),
-  Object.freeze({ rank: 7, displayName: 'greggey', totalUsd: 5 }),
-  Object.freeze({ rank: 7, displayName: 'Timmcd', totalUsd: 5 })
+  Object.freeze({ rank: 8, displayName: 'GaryGolem', totalUsd: 5 }),
+  Object.freeze({ rank: 8, displayName: 'Ko-fi Supporter', totalUsd: 5 }),
+  Object.freeze({ rank: 8, displayName: 'greggey', totalUsd: 5 }),
+  Object.freeze({ rank: 8, displayName: 'Timmcd', totalUsd: 5 })
 ]);
 
 async function seedTemplateVerification(page, expiresAt) {

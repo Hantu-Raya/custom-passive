@@ -9,6 +9,7 @@ import { assertCompletePassiveFlagOffsets, readPassiveFlagTemplate } from '../li
 import { PRESET_TEMPLATE_IDS, PRESET_TEMPLATES, REQUIRED_GAMEBANANA_TEMPLATE, getPresetTemplate } from '../lib/presetTemplates.js';
 import { CATEGORY_TIER_COLUMNS, TIER_BOARD_COLUMNS, groupTierBoard } from '../lib/tierBoard.js';
 import { createLatestPopularRequest, createPopularItemsClient, getPopularItems, popularityLabel } from '../lib/popularItems.js';
+import { WEB_VERSION, fetchDeployedWebVersion, formatBatch, formatBuildDate, formatTimeLeft, isNewerWebVersion } from '../lib/webVersion.js';
 
 const STORAGE_KEY = 'custom-passive:selected-items:v2';
 const TEMPLATE_VERIFICATION_STORAGE_KEY = 'custom-passive:template-verification:v1';
@@ -298,27 +299,33 @@ function isRequiredTemplateSha256(hash) {
   return hash === REQUIRED_GAMEBANANA_TEMPLATE.sha256;
 }
 
-function loadStoredTemplateVerification() {
-  if (typeof window === 'undefined') return false;
+function loadStoredTemplateVerificationExpiry() {
+  if (typeof window === 'undefined') return null;
   const raw = window.localStorage.getItem(TEMPLATE_VERIFICATION_STORAGE_KEY);
-  if (!raw) return false;
+  if (!raw) return null;
   try {
     const parsed = JSON.parse(raw);
     const expiresAt = Number(parsed?.expiresAt);
-    if (parsed?.sha256 === REQUIRED_GAMEBANANA_TEMPLATE.sha256 && Number.isFinite(expiresAt) && expiresAt > Date.now()) return true;
+    if (parsed?.sha256 === REQUIRED_GAMEBANANA_TEMPLATE.sha256 && Number.isFinite(expiresAt) && expiresAt > Date.now()) return expiresAt;
   } catch {
     // Bad localStorage data should behave like an expired verification.
   }
   window.localStorage.removeItem(TEMPLATE_VERIFICATION_STORAGE_KEY);
-  return false;
+  return null;
+}
+
+function loadStoredTemplateVerification() {
+  return loadStoredTemplateVerificationExpiry() !== null;
 }
 
 function storeTemplateVerification() {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined') return null;
+  const expiresAt = Date.now() + TEMPLATE_VERIFICATION_TTL_MS;
   window.localStorage.setItem(TEMPLATE_VERIFICATION_STORAGE_KEY, JSON.stringify({
     sha256: REQUIRED_GAMEBANANA_TEMPLATE.sha256,
-    expiresAt: Date.now() + TEMPLATE_VERIFICATION_TTL_MS
+    expiresAt
   }));
+  return expiresAt;
 }
 
 function loadStoredSelection() {
@@ -814,6 +821,59 @@ function CatalogSupportFooter() {
 }
 
 
+function VerificationPanel({ templateExpiresAt, now, webCheck, onRefresh }) {
+  const templateTimeLeft = templateExpiresAt ? templateExpiresAt - now : 0;
+  const templateVerified = templateTimeLeft > 0;
+  const isChecking = webCheck.status === 'checking' || webCheck.status === 'reloading';
+  const webState = {
+    idle: { tone: 'idle', label: 'Not checked yet' },
+    checking: { tone: 'idle', label: 'Checking…' },
+    current: { tone: 'ok', label: 'Up to date' },
+    reloading: { tone: 'update', label: 'Update found, reloading…' },
+    error: { tone: 'warn', label: 'Check failed' }
+  }[webCheck.status];
+
+  return (
+    <section class="verification-panel" data-testid="verification-panel" aria-label="Verification">
+      <dl class="verification-rows">
+        <div class="verification-row">
+          <dt>Template</dt>
+          <dd data-testid="verification-template">
+            <span class={`verification-state is-${templateVerified ? 'ok' : 'warn'}`} title={REQUIRED_GAMEBANANA_TEMPLATE.fileName}>
+              {templateVerified ? 'Verified' : 'Not verified'}
+              <em>{templateVerified ? `${formatTimeLeft(templateTimeLeft)} left` : 'Upload to build'}</em>
+            </span>
+          </dd>
+        </div>
+        <div class="verification-row">
+          <dt>Web</dt>
+          <dd data-testid="web-version">
+            <span
+              class={`verification-state is-${webState.tone}`}
+              data-testid="web-version-state"
+              title={webCheck.error || `Build ${WEB_VERSION.commit}, ${formatBuildDate(WEB_VERSION.builtAt)}`}
+            >
+              {`Batch ${formatBatch(WEB_VERSION.batch)}`}<em>{webState.label}</em>
+            </span>
+          </dd>
+        </div>
+      </dl>
+      <button
+        type="button"
+        class="verification-refresh"
+        data-testid="web-version-refresh"
+        onClick={onRefresh}
+        disabled={isChecking}
+        aria-busy={isChecking}
+        title="Check for a newer web version and recheck the template"
+      >
+        <span class="verification-refresh-icon" aria-hidden="true">↻</span>
+        <span class="verification-refresh-label">{isChecking ? 'Checking' : 'Refresh'}</span>
+      </button>
+    </section>
+  );
+}
+
 function BuildDownloadPanel({
   selectedCount,
   visibleCount,
@@ -825,6 +885,7 @@ function BuildDownloadPanel({
   onClear,
   onSelectVisible,
   onBuild,
+  verification,
   status
 }) {
   const [showPresetDetails, setShowPresetDetails] = useState(false);
@@ -870,6 +931,7 @@ function BuildDownloadPanel({
           <span aria-hidden="true">↓</span>
         </div>
       </div>
+      <VerificationPanel {...verification} />
       <div class="build-actions">
         <button type="button" class="primary-build" data-testid="build-download" onClick={onBuild} disabled={!templateReady}>Build &amp; Download</button>
         <div class="build-secondary-actions">
@@ -895,6 +957,10 @@ function BuildDownloadPanel({
         <div>
           <dt>Required archive</dt>
           <dd>{REQUIRED_GAMEBANANA_TEMPLATE.fileName}</dd>
+        </div>
+        <div>
+          <dt>Web build</dt>
+          <dd data-testid="web-version-build">{WEB_VERSION.commit}, {formatBuildDate(WEB_VERSION.builtAt)}</dd>
         </div>
         <div>
           <dt>Archive SHA-256</dt>
@@ -1185,6 +1251,9 @@ export default function CustomPassiveShop() {
   const popularRequest = useMemo(() => createLatestPopularRequest(popularClient), [popularClient]);
   const [presetTemplateId, setPresetTemplateId] = useState(PRESET_TEMPLATE_IDS.PASSIVE_ONLY);
   const [templateLinked, setTemplateLinked] = useState(loadStoredTemplateVerification);
+  const [templateExpiresAt, setTemplateExpiresAt] = useState(null);
+  const [clockNow, setClockNow] = useState(() => Date.now());
+  const [webCheck, setWebCheck] = useState({ status: 'idle', error: '' });
   const [templateState, setTemplateState] = useState({ status: 'needed', bytes: null, offsets: null });
   const [templateGateOpen, setTemplateGateOpen] = useState(() => !templateLinked);
   const [status, setStatus] = useState(() => templateLinked
@@ -1217,6 +1286,13 @@ export default function CustomPassiveShop() {
     return () => {
       for (const image of preloadedImages) image.src = '';
     };
+  }, []);
+
+  useEffect(() => {
+    // Read after hydration so the server-rendered state classes get replaced.
+    setTemplateExpiresAt(loadStoredTemplateVerificationExpiry());
+    const intervalId = window.setInterval(() => setClockNow(Date.now()), 30000);
+    return () => window.clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -1457,13 +1533,45 @@ export default function CustomPassiveShop() {
       }
       const didActivate = await activatePresetTemplate(selectedPresetTemplate);
       if (!didActivate) return;
-      storeTemplateVerification();
+      setTemplateExpiresAt(storeTemplateVerification());
+      setClockNow(Date.now());
       setTemplateLinked(true);
     } catch (error) {
       setTemplateLinked(false);
       setTemplateState({ status: 'error', bytes: null, offsets: null });
       setTemplateGateOpen(true);
       setStatus(error?.message || String(error));
+    }
+  }
+
+  async function refreshVerification() {
+    if (webCheck.status === 'checking' || webCheck.status === 'reloading') return;
+    const expiresAt = loadStoredTemplateVerificationExpiry();
+    setTemplateExpiresAt(expiresAt);
+    setClockNow(Date.now());
+    if (expiresAt === null && templateLinked) {
+      setTemplateLinked(false);
+      setTemplateState({ status: 'needed', bytes: null, offsets: null });
+      setTemplateGateOpen(true);
+    }
+    setWebCheck({ status: 'checking', error: '' });
+    setStatus('Checking for a newer web version...');
+    try {
+      const deployed = await fetchDeployedWebVersion();
+      if (isNewerWebVersion(WEB_VERSION, deployed)) {
+        setWebCheck({ status: 'reloading', error: '' });
+        setStatus(`Newer web version found (batch ${formatBatch(deployed.batch)}, build ${deployed.commit}). Reloading; your selection is kept.`);
+        window.location.reload();
+        return;
+      }
+      setWebCheck({ status: 'current', error: '' });
+      setStatus(expiresAt === null
+        ? `Web version is up to date. Template verification expired; upload ${REQUIRED_GAMEBANANA_TEMPLATE.fileName} again.`
+        : `Web version is up to date (batch ${formatBatch(WEB_VERSION.batch)}, build ${WEB_VERSION.commit}). Template verified for ${formatTimeLeft(expiresAt - Date.now())}.`);
+    } catch (error) {
+      const reason = error?.message || String(error);
+      setWebCheck({ status: 'error', error: reason });
+      setStatus(`Version check failed: ${reason}`);
     }
   }
 
@@ -1546,6 +1654,7 @@ export default function CustomPassiveShop() {
         onClear={clearSelection}
         onSelectVisible={selectVisible}
         onBuild={performBuild}
+        verification={{ templateExpiresAt, now: clockNow, webCheck, onRefresh: refreshVerification }}
         status={status}
       />
       <section class="catalog-shell" aria-label="Item catalog">

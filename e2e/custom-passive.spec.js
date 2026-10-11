@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { zstdDecompressSync } from 'node:zlib';
 import { DEADLOCK_ITEMS } from '../src/data/deadlockItems.generated.js';
+import { GAMEBANANA_MOD_SOURCE } from '../src/data/gamebananaSources.generated.js';
 import { PRESET_TEMPLATE_IDS, REQUIRED_GAMEBANANA_TEMPLATE, getPresetTemplate } from '../src/lib/presetTemplates.js';
 import { extractArchiveMember } from '../src/lib/archiveExtractor.js';
 import { readPassiveFlagTemplate } from '../src/lib/source2PassiveFlags.js';
@@ -771,4 +772,37 @@ test('does not expose debug guide controls or overlays', async ({ page }) => {
   await expect(page.getByTestId('debug-guides')).toHaveCount(0);
   await expect(page.locator('[data-testid^="debug-tier-"]')).toHaveCount(0);
   await expect(page.getByTestId('item-card-upgrade_close_range')).toBeVisible();
+});
+
+test('verification panel shows the web version and refresh checks the deployed build', async ({ page }) => {
+  await seedTemplateVerification(page, Date.now() + TEMPLATE_VERIFICATION_TTL_MS);
+  await page.goto('./');
+  await expect(page.getByTestId('template-gate')).toHaveCount(0);
+  const panel = page.getByTestId('verification-panel');
+  await expect(panel.getByTestId('verification-template')).toContainText('Verified');
+  await expect(panel.getByTestId('verification-template')).toContainText(/\d+h \d{2}m left/);
+  await expect(panel.getByTestId('web-version-state')).toContainText(`Batch ${GAMEBANANA_MOD_SOURCE.batchDateTag.replace('_', '/')}`);
+  await expect(panel.getByTestId('web-version-state')).toContainText('Not checked yet');
+
+  await page.getByTestId('web-version-refresh').click();
+  await expect(panel.getByTestId('web-version-state')).toContainText('Up to date');
+  await expect(page.getByRole('status')).toContainText('Web version is up to date');
+
+  await page.route('**/version.json?*', (route) => route.fulfill({
+    json: { buildId: 'newer-build', commit: 'abc1234', builtAt: '2026-10-12T00:00:00.000Z', batch: GAMEBANANA_MOD_SOURCE.batchDateTag }
+  }));
+  const reloaded = page.waitForEvent('framenavigated');
+  await page.getByTestId('web-version-refresh').click();
+  await reloaded;
+  await expect(page.getByTestId('web-version-state')).toContainText('Not checked yet');
+  await expect(page.getByTestId('template-gate')).toHaveCount(0);
+});
+
+test('refresh reports a failed version check without reloading', async ({ page }) => {
+  await seedTemplateVerification(page, Date.now() + TEMPLATE_VERIFICATION_TTL_MS);
+  await page.route('**/version.json?*', (route) => route.fulfill({ status: 503, body: '' }));
+  await page.goto('./');
+  await page.getByTestId('web-version-refresh').click();
+  await expect(page.getByTestId('web-version-state')).toContainText('Check failed');
+  await expect(page.getByRole('status')).toContainText('Version check failed with HTTP 503.');
 });

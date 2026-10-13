@@ -9,3 +9,6 @@ test-results/
 custom-passive/
 *.log
 .DS_Store
+
+# Source2Viewer-CLI decompile failure log (written to cwd)
+exceptions.txt

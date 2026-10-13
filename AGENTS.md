@@ -37,10 +37,11 @@ src/pages/index.astro (imports src/styles/global.css)
 - `source2BinaryKv3.js` parses and rebuilds Source 2 resources; `source2PassiveFlags.js` scans passive-flag offsets; `passiveFlagTemplate.js` patches and reads flag bytes.
 - `vpkWriter.js`/`vpkReader.js` write and read browser-safe VPK v2. `archiveWriter.js`/`archiveExtractor.js`/`sevenZipWasm.js` wrap `7z-wasm` and depend on `public/7zz.wasm`.
 - `scripts/generate-custom-passive-data.mjs` is the authoritative catalog, default test template and WebP asset generator. `scripts/generate-preset-templates.mjs` generates the preset templates and verifies archive selections. `scripts/sync-gamebanana-mod.mjs` syncs GameBanana metadata. `scripts/inject-stock-external-refs.mjs` restores the stock RERL block after each compile.
+- Source2Viewer cannot decode some 6779 textures (KV3 value type 26 in their RED2 edit-info block). `generate:data` recovers any referenced PNG that is still missing by extracting the raw `vtex_c`, dropping the RED2 block entry and decoding that copy; it logs which textures it recovered. Source2Viewer writes `exceptions.txt` to the working directory on such failures (gitignored).
 
 ## Template gate and build flow
 
-- Startup gate: the user uploads or links the required template (currently `templete_10_07.7z`). The browser checks its SHA-256 against `REQUIRED_GAMEBANANA_TEMPLATE.sha256` and caches success for 12 hours under `custom-passive:template-verification:v1`. The gate and build-panel links open `downloadPageUrl`, not the mod page.
+- Startup gate: the user uploads or links the required template (currently `templete_10_14.7z`). The browser checks its SHA-256 against `REQUIRED_GAMEBANANA_TEMPLATE.sha256` and caches success for 12 hours under `custom-passive:template-verification:v1`. The gate and build-panel links open `downloadPageUrl`, not the mod page.
 - Build: the selected preset names a public binary template in `public/templates/gamebanana/**/scripts/abilities.vdata_c.template`.
   1. `loadTemplateBytes()` fetches `${import.meta.env.BASE_URL}${templatePath}` and verifies its SHA-256. Preset templates download only when the user clicks Build.
   2. `source2PassiveFlags.js` scans the Binary KV3 bytes; `assertCompletePassiveFlagOffsets()` rejects incomplete templates.

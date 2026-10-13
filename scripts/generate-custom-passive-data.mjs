@@ -390,6 +390,56 @@ async function optimizeExtractedAssets(assetRoot, pngPaths) {
   console.log(`Optimized ${converted} Deadlock PNG assets to WebP.`);
 }
 
+// Source2Viewer (19.2 through 20.0 and master as of 2026-10-14) cannot read KV3 value type 26, which
+// Deadlock 6779 textures use in their RED2 edit-info block, so it skips those textures. The pixels live
+// in DATA and the streamed tail, so a copy with the RED2 entry dropped from the block table decodes.
+function stripResourceEditInfo(bytes) {
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  const tableStart = 8 + view.getUint32(8, true);
+  const count = view.getUint32(12, true);
+  const out = bytes.slice();
+  const outView = new DataView(out.buffer);
+  let kept = 0;
+  for (let index = 0; index < count; index += 1) {
+    const entry = tableStart + index * 12;
+    if (String.fromCharCode(...bytes.subarray(entry, entry + 4)) === 'RED2') continue;
+    const target = tableStart + kept * 12;
+    const absoluteOffset = entry + 4 + view.getUint32(entry + 4, true);
+    out.set(bytes.subarray(entry, entry + 4), target);
+    outView.setUint32(target + 4, absoluteOffset - (target + 4), true);
+    outView.setUint32(target + 8, view.getUint32(entry + 8, true), true);
+    kept += 1;
+  }
+  if (kept === count) return null;
+  outView.setUint32(12, kept, true);
+  return out;
+}
+
+async function recoverUndecodedTextures(assetRoot, pngPaths) {
+  const missing = [...pngPaths].filter((pngPath) => pngPath.endsWith('.png') && !existsSync(path.join(assetRoot, pngPath)));
+  if (missing.length === 0) return;
+  const scratch = path.resolve('.tmp/vtex-recovery');
+  await rm(scratch, { recursive: true, force: true });
+  await mkdir(scratch, { recursive: true });
+  const recovered = [];
+  for (const pngPath of missing) {
+    const rawPath = path.join(scratch, path.basename(pngPath, '.png') + '.vtex_c');
+    const extract = await runProcess(VPKEDIT_CLI, ['--no-progress', '--extract', pngPath.replace(/\.png$/, '.vtex_c'), '--output', rawPath, PAK01], { timeoutMs: 120000 });
+    if (extract.code !== 0 || !existsSync(rawPath)) continue;
+    const stripped = stripResourceEditInfo(new Uint8Array(await readFile(rawPath)));
+    if (!stripped) continue;
+    await writeFile(rawPath, stripped);
+    await runProcess(SOURCE2_VIEWER_CLI, ['-i', rawPath, '-o', scratch, '-d'], { timeoutMs: 120000 });
+    const decoded = path.join(scratch, path.basename(pngPath));
+    if (!existsSync(decoded)) continue;
+    await mkdir(path.dirname(path.join(assetRoot, pngPath)), { recursive: true });
+    await copyFile(decoded, path.join(assetRoot, pngPath));
+    recovered.push(pngPath);
+  }
+  await rm(scratch, { recursive: true, force: true });
+  if (recovered.length > 0) console.log(`Recovered ${recovered.length} texture(s) Source2Viewer could not decode: ${recovered.join(', ')}`);
+}
+
 async function maybeExtractAssets(items, filterAssets) {
   const assetRoot = path.resolve('public/assets/deadlock');
   await rm(assetRoot, { recursive: true, force: true });
@@ -416,6 +466,7 @@ async function maybeExtractAssets(items, filterAssets) {
   }
   const assetPaths = referencedAssetPaths(items, filterAssets);
   await pruneUnreferencedAssets(assetRoot, assetPaths);
+  await recoverUndecodedTextures(assetRoot, assetPaths);
   await optimizeExtractedAssets(assetRoot, assetPaths);
   const missingSurfaces = [...referencedShopSurfacePaths(filterAssets)].map(webpPath).filter((surfacePath) => !existsSync(path.join(assetRoot, surfacePath)));
   if (missingSurfaces.length > 0) fail(`Missing required shop surface WebP(s): ${missingSurfaces.join(', ')}`);

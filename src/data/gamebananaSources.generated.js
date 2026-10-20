@@ -1,37 +1,37 @@
 export const GAMEBANANA_MOD_SOURCE = Object.freeze({
   apiUrl: "https://api.gamebanana.com/Core/Item/Data?itemtype=Mod&itemid=601444&fields=name,udate,mdate,Files().aFiles(),Updates().aLatestUpdates(),Url().sProfileUrl()&return_keys=1&format=json_min",
-  batchDateTag: "10_17",
+  batchDateTag: "10_21",
   id: 601444,
-  mdate: 1792185472,
+  mdate: 1792531328,
   name: "Always Show Passive Items and Actives Icons",
-  syncedAt: "2026-10-16T21:17:28.764Z",
-  udate: 1792185499,
+  syncedAt: "2026-10-20T21:21:48.557Z",
+  udate: 1792531377,
   url: "https://gamebanana.com/mods/601444"
 });
 
 export const REQUIRED_GAMEBANANA_TEMPLATE_SOURCE = Object.freeze({
   archiveMember: "pak02_dir.vpk",
-  dateTag: "10_17",
-  downloadUrl: "https://gamebanana.com/dl/1850918",
-  fileId: "1850918",
-  fileName: "templete_10_17.7z",
-  md5: "c5d32585369f66c407e45f0521454996",
+  dateTag: "10_21",
+  downloadUrl: "https://gamebanana.com/dl/1857133",
+  fileId: "1857133",
+  fileName: "templete_10_21.7z",
+  md5: "50686f57833b66e0ab0ca44544c36826",
   role: "required-template",
-  sha256: "d43d43bd02527ed9b5f8b0b7c62d9e2bf2e1594697dbf8d4cd78eba1565ccb44",
-  size: 409763
+  sha256: "e5cdc2fc58374be9c8f1651a9c7ec64b4d0bed7b65f4e34fe96625346a0109c9",
+  size: 418529
 });
 
 export const GAMEBANANA_PRESET_SOURCES = Object.freeze({
   passiveOnly: Object.freeze({
     archiveMember: "pak04_dir.vpk",
-    archiveOutputFileName: "filter_for_passive_items_10_17.7z",
-    dateTag: "10_17",
-    downloadUrl: "https://gamebanana.com/dl/1850915",
-    fileId: "1850915",
-    fileName: "filter_for_passive_items_10_17.7z",
+    archiveOutputFileName: "filter_for_passive_items_10_21.7z",
+    dateTag: "10_21",
+    downloadUrl: "https://gamebanana.com/dl/1857132",
+    fileId: "1857132",
+    fileName: "filter_for_passive_items_10_21.7z",
     id: "passive-only",
     label: "Passive Only",
-    md5: "e85368f8e3ef3730b990013ca596ef68",
+    md5: "299a5dab5510bb57d2c579c377fff70f",
     outputFileName: "pak04_dir.vpk",
     presetItemIds: Object.freeze([
       "upgrade_acolytes_glove",
@@ -69,21 +69,21 @@ export const GAMEBANANA_PRESET_SOURCES = Object.freeze({
       "upgrade_weapon_shielding"
     ]),
     role: "passive-only",
-    sha256: "bd538459c8eabd193969c3987f9779b7f47193265bd2540a3cdb980b4ee069de",
-    size: 409856,
+    sha256: "77874fe4252fa5146f40abf0a3507cdf96d924a148f62e5389362670174a079a",
+    size: 418610,
     templatePath: "templates/gamebanana/passive-only/scripts/abilities.vdata_c.template",
-    templateSha256: "e3cb26819217ed3ca45837cd997aaaba8efa6afbe3a57b047d4784aa8663bde8"
+    templateSha256: "add60bd242a010a1b450ddfedfe3e9b9806aac61488650caa97b1579241b4bd4"
   }),
   passiveAndActive: Object.freeze({
     archiveMember: "pak03_dir.vpk",
-    archiveOutputFileName: "filter_for_passive_and_active_items_yesbehaviour_10_17.7z",
-    dateTag: "10_17",
-    downloadUrl: "https://gamebanana.com/dl/1850916",
-    fileId: "1850916",
-    fileName: "filter_for_passive_and_active_items_yesbehaviour_10_17.7z",
+    archiveOutputFileName: "filter_for_passive_and_active_items_yesbehaviour_10_21.7z",
+    dateTag: "10_21",
+    downloadUrl: "https://gamebanana.com/dl/1857135",
+    fileId: "1857135",
+    fileName: "filter_for_passive_and_active_items_yesbehaviour_10_21.7z",
     id: "passive-and-active",
     label: "Passive + Actives",
-    md5: "9a8435d4b106dcc456d16bcda61afc9d",
+    md5: "b1874f4053196971377958659b382a7b",
     outputFileName: "pak03_dir.vpk",
     presetItemIds: Object.freeze([
       "upgrade_ability_power_shard",
@@ -162,21 +162,21 @@ export const GAMEBANANA_PRESET_SOURCES = Object.freeze({
       "upgrade_withering_whip"
     ]),
     role: "passive-and-active",
-    sha256: "c38e644d2f6bf9656126e2fa3745f1baa371bc269e39f03932dff9c3fa1c5070",
-    size: 410287,
+    sha256: "c87f16b472b1afe89a45d08b7455680e4849e36c1a31e774871020236d27475b",
+    size: 418864,
     templatePath: "templates/gamebanana/passive-and-active/scripts/abilities.vdata_c.template",
-    templateSha256: "8211d20fde5cb3c1ee72c4cc0b9aec4f32b414dadeae7d98ec64d40485e8b958"
+    templateSha256: "8bf8450a6c85fb16c4f25620a0fbc4d6b9c5ba31386f8faf84ffbe9df6c9ac9a"
   }),
   passiveAndActiveNoBehavior: Object.freeze({
     archiveMember: "pak05_dir.vpk",
-    archiveOutputFileName: "filter_for_passive_and_active_items_10_17.7z",
-    dateTag: "10_17",
-    downloadUrl: "https://gamebanana.com/dl/1850917",
-    fileId: "1850917",
-    fileName: "filter_for_passive_and_active_items_10_17.7z",
+    archiveOutputFileName: "filter_for_passive_and_active_items_10_21.7z",
+    dateTag: "10_21",
+    downloadUrl: "https://gamebanana.com/dl/1857134",
+    fileId: "1857134",
+    fileName: "filter_for_passive_and_active_items_10_21.7z",
     id: "passive-and-active-no-behavior",
     label: "Passive + Actives (No Behavior)",
-    md5: "ec7146523ca2d6a24d928381f041f3c4",
+    md5: "09b917d9d2387d689816dbf45dcd67dc",
     outputFileName: "pak05_dir.vpk",
     presetItemIds: Object.freeze([
       "upgrade_ability_power_shard",
@@ -255,9 +255,9 @@ export const GAMEBANANA_PRESET_SOURCES = Object.freeze({
       "upgrade_withering_whip"
     ]),
     role: "passive-and-active-no-behavior",
-    sha256: "4acb740d3edfbc0227cba8d1e2a874baeda6bd0abf956d148d49cf9c64220a63",
-    size: 410054,
+    sha256: "e462319080e336a9fba76800f65e626947344b48eabc4a601414cb9f53b2549a",
+    size: 418794,
     templatePath: "templates/gamebanana/passive-and-active-no-behavior/scripts/abilities.vdata_c.template",
-    templateSha256: "880afee9e307fcfa533ac421c59d9e2ef1aed0fc2d35248718b3715d84c4f1ae"
+    templateSha256: "0bebc95808d0c2ff805c5f74a22d7c21d3b26387c979ec50bcf9c7ee0bf99ac8"
   })
 });

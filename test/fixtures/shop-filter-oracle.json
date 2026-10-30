@@ -6,11 +6,12 @@
  "mode_note": "Left click selects one filter, right click adds; multiple filters combine with OR only. #FilterAndOrSwitch is visibility: collapse in citadel_ui_shop_filters.css, so AND mode is not reachable.",
  "combo_checked": {
   "Physical/Weapon Damage OR Defense/HP": {
-   "count": 71,
+   "count": 72,
    "equals_union": true
   }
  },
  "group_check": "Every group filter equals the union of its child filters.",
+ "rebased_6828": "2026-10-31: membership updated from the 6828 VData, not recaptured in game. Cloaking Device ambush now gives weapon damage instead of fire rate and melee damage; Healing Booster lost BonusHealthRegen; Return Fire gained innate BulletResist.",
  "filters": {
   "Physical/Gun Improvements": [
    "upgrade_active_reload",
@@ -73,6 +74,7 @@
    "upgrade_bullet_resist_shredder",
    "upgrade_bulletshredimbue",
    "upgrade_clip_size",
+   "upgrade_cloaking_device_active",
    "upgrade_close_quarter_combat",
    "upgrade_close_range",
    "upgrade_colossus",
@@ -122,7 +124,6 @@
    "upgrade_blood_tribute",
    "upgrade_burst_fire",
    "upgrade_capacitor",
-   "upgrade_cloaking_device_active",
    "upgrade_dps_aura",
    "upgrade_enchanted_holsters",
    "upgrade_ethereal_bullets",
@@ -156,7 +157,6 @@
   "Physical/Melee": [
    "upgrade_acolytes_glove",
    "upgrade_boxing_glove",
-   "upgrade_cloaking_device_active",
    "upgrade_colossus",
    "upgrade_crushing_fists",
    "upgrade_lifestrike_gauntlets",
@@ -479,7 +479,6 @@
   "Defense/Regen": [
    "upgrade_endurance",
    "upgrade_healbuff",
-   "upgrade_healing_booster",
    "upgrade_health_stimpak",
    "upgrade_juggernaut",
    "upgrade_mystic_regeneration",
@@ -601,6 +600,7 @@
    "upgrade_regenerating_bullet_shield",
    "upgrade_reinforcing_casings",
    "upgrade_restorative_locket",
+   "upgrade_return_fire",
    "upgrade_self_bubble",
    "upgrade_siphon_bullets",
    "upgrade_spellbreaker",
@@ -635,6 +635,7 @@
    "upgrade_non_player_bonus_sacrifice",
    "upgrade_regenerating_bullet_shield",
    "upgrade_reinforcing_casings",
+   "upgrade_return_fire",
    "upgrade_siphon_bullets",
    "upgrade_spirit_bubble",
    "upgrade_suppressor",

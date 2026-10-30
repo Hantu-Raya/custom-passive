@@ -41,12 +41,12 @@ for (const [key, expected] of Object.entries(oracle.filters)) {
   });
 }
 
-test('Weapon Damage OR HP matches the captured 71-item union', () => {
+test('Weapon Damage OR HP matches the 72-item union (71 captured on 6763, plus Cloaking Device on 6828)', () => {
   const expected = [...new Set([...oracle.filters['Physical/Weapon Damage'], ...oracle.filters['Defense/HP']])].sort();
   const combination = idsMatching(['Physical/Weapon Damage', 'Defense/HP']);
   assert.deepEqual(combination, expected);
-  assert.equal(combination.length, 71);
-  assert.deepEqual(oracle.combo_checked['Physical/Weapon Damage OR Defense/HP'], { count: 71, equals_union: true });
+  assert.equal(combination.length, 72);
+  assert.deepEqual(oracle.combo_checked['Physical/Weapon Damage OR Defense/HP'], { count: 72, equals_union: true });
 });
 
 test('generated stock filter tree preserves category, group and leaf order with frozen localized metadata', () => {
@@ -90,9 +90,9 @@ test('filterItems expands the literal Gun Improvements group into its leaf union
   assert.deepEqual(categoryResult, DEADLOCK_ITEMS.filter((item) => item.shopFilters.some((id) => id.startsWith('Physical/'))));
 });
 
-test('filterItems ORs Weapon Damage and HP into the literal 71-id oracle union', () => {
-  const expected = ['upgrade_aprounds', 'upgrade_banshee_slugs', 'upgrade_berserker', 'upgrade_boundless_spirit', 'upgrade_boxing_glove', 'upgrade_bullet_armor_reduction_aura', 'upgrade_bullet_resist_shredder', 'upgrade_bulletshredimbue', 'upgrade_cheat_death', 'upgrade_chonky', 'upgrade_clip_size', 'upgrade_close_quarter_combat', 'upgrade_close_range', 'upgrade_colossus', 'upgrade_counterspell', 'upgrade_damage_recycler', 'upgrade_debuff_reducer', 'upgrade_deflecting_armor', 'upgrade_discord', 'upgrade_express_shot', 'upgrade_fervor', 'upgrade_fleetfoot_boots', 'upgrade_fury_trance', 'upgrade_glass_cannon', 'upgrade_greater_withering_whip', 'upgrade_headhunter', 'upgrade_headshot_booster', 'upgrade_headshot_booster2', 'upgrade_health', 'upgrade_health_stealing_magic', 'upgrade_high_velocity_mag', 'upgrade_hollow_point_rounds', 'upgrade_infuser', 'upgrade_inhibitor', 'upgrade_intensifying_clip', 'upgrade_long_range', 'upgrade_magic_carpet', 'upgrade_magic_shock', 'upgrade_magic_slow', 'upgrade_medic_bullets', 'upgrade_melee_rebuttal', 'upgrade_mystic_regeneration', 'upgrade_non_player_bonus', 'upgrade_non_player_bonus_sacrifice', 'upgrade_phantom_strike', 'upgrade_pristine_emblem', 'upgrade_rechargingbullets', 'upgrade_regenerating_bullet_shield', 'upgrade_reinforcing_casings', 'upgrade_resonant_healing', 'upgrade_rupture', 'upgrade_sharpshooter', 'upgrade_siphon_bullets', 'upgrade_spellbreaker', 'upgrade_spellslinger_headshots', 'upgrade_spirit_sap', 'upgrade_spirit_snatch', 'upgrade_split_shot', 'upgrade_surging_power', 'upgrade_target_stun', 'upgrade_targeted_silence', 'upgrade_tech_damage_pulse', 'upgrade_tech_overflow', 'upgrade_titan_round', 'upgrade_ultimate_burst', 'upgrade_unstoppable', 'upgrade_vampire', 'upgrade_veil_walker', 'upgrade_weapon_backstabber', 'upgrade_weighted_shots', 'upgrade_withering_whip'];
-  assert.equal(expected.length, 71);
+test('filterItems ORs Weapon Damage and HP into the literal 72-id oracle union', () => {
+  const expected = ['upgrade_aprounds', 'upgrade_banshee_slugs', 'upgrade_berserker', 'upgrade_boundless_spirit', 'upgrade_boxing_glove', 'upgrade_bullet_armor_reduction_aura', 'upgrade_bullet_resist_shredder', 'upgrade_bulletshredimbue', 'upgrade_cheat_death', 'upgrade_chonky', 'upgrade_clip_size', 'upgrade_cloaking_device_active', 'upgrade_close_quarter_combat', 'upgrade_close_range', 'upgrade_colossus', 'upgrade_counterspell', 'upgrade_damage_recycler', 'upgrade_debuff_reducer', 'upgrade_deflecting_armor', 'upgrade_discord', 'upgrade_express_shot', 'upgrade_fervor', 'upgrade_fleetfoot_boots', 'upgrade_fury_trance', 'upgrade_glass_cannon', 'upgrade_greater_withering_whip', 'upgrade_headhunter', 'upgrade_headshot_booster', 'upgrade_headshot_booster2', 'upgrade_health', 'upgrade_health_stealing_magic', 'upgrade_high_velocity_mag', 'upgrade_hollow_point_rounds', 'upgrade_infuser', 'upgrade_inhibitor', 'upgrade_intensifying_clip', 'upgrade_long_range', 'upgrade_magic_carpet', 'upgrade_magic_shock', 'upgrade_magic_slow', 'upgrade_medic_bullets', 'upgrade_melee_rebuttal', 'upgrade_mystic_regeneration', 'upgrade_non_player_bonus', 'upgrade_non_player_bonus_sacrifice', 'upgrade_phantom_strike', 'upgrade_pristine_emblem', 'upgrade_rechargingbullets', 'upgrade_regenerating_bullet_shield', 'upgrade_reinforcing_casings', 'upgrade_resonant_healing', 'upgrade_rupture', 'upgrade_sharpshooter', 'upgrade_siphon_bullets', 'upgrade_spellbreaker', 'upgrade_spellslinger_headshots', 'upgrade_spirit_sap', 'upgrade_spirit_snatch', 'upgrade_split_shot', 'upgrade_surging_power', 'upgrade_target_stun', 'upgrade_targeted_silence', 'upgrade_tech_damage_pulse', 'upgrade_tech_overflow', 'upgrade_titan_round', 'upgrade_ultimate_burst', 'upgrade_unstoppable', 'upgrade_vampire', 'upgrade_veil_walker', 'upgrade_weapon_backstabber', 'upgrade_weighted_shots', 'upgrade_withering_whip'];
+  assert.equal(expected.length, 72);
   assert.deepEqual(filterItems(DEADLOCK_ITEMS, ['Physical/Weapon Damage', 'Defense/HP'], '').map((item) => item.id).sort(), expected);
   assert.deepEqual(filterItems(DEADLOCK_ITEMS, ['Defense/HP', 'Physical/Weapon Damage', 'Defense/HP'], '').map((item) => item.id).sort(), expected);
 });

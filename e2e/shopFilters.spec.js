@@ -60,7 +60,7 @@ test('single filters replace, right click ORs, breadcrumbs remove and Clear rest
   await choose(page, 'Physical/Weapon Damage');
   await choose(page, 'Defense/HP', 'right');
   const union = [...new Set([...oracle.filters['Physical/Weapon Damage'], ...oracle.filters['Defense/HP']])];
-  expect(union).toHaveLength(71);
+  expect(union).toHaveLength(72);
   await expectIds(page, union);
   await expect(page.getByTestId('active-filters').getByText('OR', { exact: true })).toBeVisible();
   await capture(page, testInfo, 'or');
@@ -91,7 +91,7 @@ test('hover switches directly after clicking a filter, then right click adds the
   await expect(page.getByTestId('filter-category-defense')).toHaveAttribute('aria-expanded', 'true');
   await page.getByTestId('filter-option-defense-hp').click({ button: 'right' });
   const union = [...new Set([...oracle.filters['Physical/Weapon Damage'], ...oracle.filters['Defense/HP']])];
-  expect(union).toHaveLength(71);
+  expect(union).toHaveLength(72);
   await expectIds(page, union);
   await expect(page.getByTestId('active-filter-physical-weapon-damage')).toBeVisible();
   await expect(page.getByTestId('active-filter-defense-hp')).toBeVisible();

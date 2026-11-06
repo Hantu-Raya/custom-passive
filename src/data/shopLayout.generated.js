@@ -1,6 +1,6 @@
 export const SHOP_LAYOUT = Object.freeze({
   "provenance": {
-    "clientVersion": 6828,
+    "clientVersion": 6860,
     "files": [
       {
         "path": "panorama/styles/citadel_hud_hero_shop.vcss_c",
@@ -20,7 +20,7 @@ export const SHOP_LAYOUT = Object.freeze({
       },
       {
         "path": "panorama/styles/citadel_shop_mod_view.vcss_c",
-        "crc": "00bbaaedf7"
+        "crc": "0003e0b6b1"
       },
       {
         "path": "panorama/layout/citadel_hud_hero_shop.vxml_c",

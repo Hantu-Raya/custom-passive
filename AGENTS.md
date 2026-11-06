@@ -80,13 +80,12 @@ Never copy a GameBanana filter or template VData into `public/templates/`: newer
 
 The nested `custom-passive/` directory is a gitignored stale copy; do not edit or grep it as source.
 
-Generators assume these local paths:
+Generators assume these local paths. `DEADLOCK_MODS_REPO` replaces the mods checkout (default `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection`; on 2026-11-06 it was `D:/Deadlock-mods-collection`) and `DEADLOCK_CITADEL` the game's `citadel` folder (default `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel`; on 2026-11-06 it was `F:/SteamLibrary/...`). The e2e specs take the template archive from `CUSTOM_PASSIVE_TEMPLATE_ARCHIVE`. If `sr2compiler` exits with "You must install or update .NET" (it targets .NET 9), set `DOTNET_ROLL_FORWARD=Major`.
 
-- `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/abilities.vdata`, `abilities2.vdata`, `passive.py`, `active.py`, `active_no_behavior.py`, `inject_stock_external_refs.py`
-- `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/sr2compiler/New folder.exe`
-- `F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/.tmp/source2viewer-cli/Source2Viewer-CLI.exe`
-- `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/pak01_dir.vpk`
-- the four current GameBanana archives in `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/` under their GameBanana filenames
+- `<mods>/abilities/scripts/abilities.vdata`, `abilities2.vdata`, `passive.py`, `active.py`, `active_no_behavior.py`, `inject_stock_external_refs.py`
+- `<mods>/sr2compiler/New folder.exe`, `<mods>/.tmp/source2viewer-cli/Source2Viewer-CLI.exe`, `<mods>/vpk cli/vpkeditcli.exe`
+- `<citadel>/pak01_dir.vpk` and the English `citadel_gc_mod_names` localization under `<citadel>/resource/localization/`
+- the four current GameBanana archives in `<citadel>/addons/` under their GameBanana filenames
 - `ffmpeg` on `PATH` for WebP optimization
 
 ## Verification

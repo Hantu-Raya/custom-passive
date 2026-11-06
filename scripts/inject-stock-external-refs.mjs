@@ -4,9 +4,14 @@ import path from 'node:path';
 
 // The Dota resourcecompiler writes no RERL block for Deadlock icons. Copy the stock
 // one so ~560 ability/item icons load with the VData instead of hitching on first use.
-const INJECTOR = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/inject_stock_external_refs.py';
-const VPKEDIT_CLI = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/vpk cli/vpkeditcli.exe';
-const PAK01 = 'G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/pak01_dir.vpk';
+
+// The Deadlock-mods-collection checkout (DEADLOCK_MODS_REPO overrides it).
+const MODS_REPO = (process.env.DEADLOCK_MODS_REPO || 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection').replace(/\\/g, '/').replace(/\/$/, '');
+const INJECTOR = `${MODS_REPO}/abilities/scripts/inject_stock_external_refs.py`;
+const VPKEDIT_CLI = `${MODS_REPO}/vpk cli/vpkeditcli.exe`;
+// The game's citadel folder (DEADLOCK_CITADEL overrides it, e.g. a Steam library on another drive).
+const CITADEL = (process.env.DEADLOCK_CITADEL || 'G:/SteamLibrary/steamapps/common/Deadlock/game/citadel').replace(/\\/g, '/').replace(/\/$/, '');
+const PAK01 = `${CITADEL}/pak01_dir.vpk`;
 
 let stockVdataPath = null;
 

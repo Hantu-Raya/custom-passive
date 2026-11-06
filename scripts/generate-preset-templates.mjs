@@ -18,13 +18,17 @@ import { uncompressSource2Resource } from '../src/lib/source2BinaryKv3.js';
 import { readVpk } from '../src/lib/vpkReader.js';
 import { injectStockExternalRefs } from './inject-stock-external-refs.mjs';
 
-const ABILITIES_SOURCE = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/abilities.vdata';
-const ABILITIES_PASSIVE_SOURCE = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/abilities2.vdata';
-const SR2_COMPILER = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/sr2compiler/New folder.exe';
-const PASSIVE_TRANSFORM = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/passive.py';
-const ACTIVE_TRANSFORM = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/active.py';
-const ACTIVE_NO_BEHAVIOR_TRANSFORM = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/active_no_behavior.py';
-const DEFAULT_REQUIRED_TEMPLATE_ARCHIVE_PATH = `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/${REQUIRED_GAMEBANANA_TEMPLATE.fileName}`;
+// The Deadlock-mods-collection checkout (DEADLOCK_MODS_REPO overrides it).
+const MODS_REPO = (process.env.DEADLOCK_MODS_REPO || 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection').replace(/\\/g, '/').replace(/\/$/, '');
+const ABILITIES_SOURCE = `${MODS_REPO}/abilities/scripts/abilities.vdata`;
+const ABILITIES_PASSIVE_SOURCE = `${MODS_REPO}/abilities/scripts/abilities2.vdata`;
+const SR2_COMPILER = `${MODS_REPO}/sr2compiler/New folder.exe`;
+const PASSIVE_TRANSFORM = `${MODS_REPO}/abilities/scripts/passive.py`;
+const ACTIVE_TRANSFORM = `${MODS_REPO}/abilities/scripts/active.py`;
+const ACTIVE_NO_BEHAVIOR_TRANSFORM = `${MODS_REPO}/abilities/scripts/active_no_behavior.py`;
+// The game's citadel folder (DEADLOCK_CITADEL overrides it, e.g. a Steam library on another drive).
+const CITADEL = (process.env.DEADLOCK_CITADEL || 'G:/SteamLibrary/steamapps/common/Deadlock/game/citadel').replace(/\\/g, '/').replace(/\/$/, '');
+const DEFAULT_REQUIRED_TEMPLATE_ARCHIVE_PATH = `${CITADEL}/addons/${REQUIRED_GAMEBANANA_TEMPLATE.fileName}`;
 const GENERATED_METADATA_PATH = 'src/data/gamebananaSources.generated.js';
 const TEMPLATE_ARCHIVE_OPTION = '--template-archive';
 const SKIP_SOURCE_ARCHIVE_VERIFICATION = process.argv.includes('--skip-source-archive-verification');
@@ -188,7 +192,7 @@ async function verifyRequiredTemplateArchive() {
 async function verifyPresetSelection(preset) {
   const metadata = PRESET_TEMPLATE_BY_ID.get(preset.id);
   if (!metadata) fail(`Missing preset metadata for ${preset.id}`);
-  const archivePath = `G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/addons/${metadata.sourceArchive.fileName}`;
+  const archivePath = `${CITADEL}/addons/${metadata.sourceArchive.fileName}`;
   const archiveBytes = new Uint8Array(await readFile(archivePath));
   const archiveSha256 = sha256(archiveBytes);
   if (archiveSha256 !== metadata.sourceArchive.sha256) {

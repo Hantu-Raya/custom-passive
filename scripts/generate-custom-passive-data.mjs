@@ -11,11 +11,15 @@ import { murmurHash2 } from './lib/murmurhash2.mjs';
 import { deriveShopFilters, parseShopFilterRecord } from './lib/shopFilters.mjs';
 import { frozenSource, parseShopFilterTree } from './lib/shopFilterTree.mjs';
 
-const ABILITIES_SOURCE = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/abilities/scripts/abilities.vdata';
-const SR2_COMPILER = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/sr2compiler/New folder.exe';
-const PAK01 = 'G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/pak01_dir.vpk';
-const SOURCE2_VIEWER_CLI = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/.tmp/source2viewer-cli/Source2Viewer-CLI.exe';
-const VPKEDIT_CLI = 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection/vpk cli/vpkeditcli.exe';
+// The Deadlock-mods-collection checkout (DEADLOCK_MODS_REPO overrides it).
+const MODS_REPO = (process.env.DEADLOCK_MODS_REPO || 'F:/Users/FoxOS_User/Desktop/Deadlock-mods-collection').replace(/\\/g, '/').replace(/\/$/, '');
+const ABILITIES_SOURCE = `${MODS_REPO}/abilities/scripts/abilities.vdata`;
+const SR2_COMPILER = `${MODS_REPO}/sr2compiler/New folder.exe`;
+// The game's citadel folder (DEADLOCK_CITADEL overrides it, e.g. a Steam library on another drive).
+const CITADEL = (process.env.DEADLOCK_CITADEL || 'G:/SteamLibrary/steamapps/common/Deadlock/game/citadel').replace(/\\/g, '/').replace(/\/$/, '');
+const PAK01 = `${CITADEL}/pak01_dir.vpk`;
+const SOURCE2_VIEWER_CLI = `${MODS_REPO}/.tmp/source2viewer-cli/Source2Viewer-CLI.exe`;
+const VPKEDIT_CLI = `${MODS_REPO}/vpk cli/vpkeditcli.exe`;
 const SHOP_FONT_ROOT = path.join(path.dirname(PAK01), 'panorama/fonts');
 const SHOP_FONT_NAMES = Object.freeze(['valvepulp-bold.ttf', 'valveoracle-semibold.ttf', 'valveoracle-medium.ttf', 'radiance-regular.otf', 'radiance-bold.otf', 'radiance-semibold.otf']);
 const SHOP_LAYOUT_PATHS = Object.freeze([
@@ -31,7 +35,7 @@ const SHOP_LAYOUT_PATHS = Object.freeze([
 ]);
 
 const MODS_LOCALIZATION_URL = 'https://raw.githubusercontent.com/SteamTracking/GameTracking-Deadlock/master/game/citadel/resource/localization/citadel_mods/citadel_mods_english.txt';
-const GC_MOD_NAMES_LOCALIZATION = 'G:/SteamLibrary/steamapps/common/Deadlock/game/citadel/resource/localization/citadel_gc_mod_names/citadel_gc_mod_names_english.txt';
+const GC_MOD_NAMES_LOCALIZATION = `${CITADEL}/resource/localization/citadel_gc_mod_names/citadel_gc_mod_names_english.txt`;
 const GC_MOD_NAMES_LOCALIZATION_URL = 'https://raw.githubusercontent.com/SteamTracking/GameTracking-Deadlock/master/game/citadel/resource/localization/citadel_gc_mod_names/citadel_gc_mod_names_english.txt';
 const SHOP_LOCALIZATION = path.join(path.dirname(PAK01), 'resource/localization/citadel_main/citadel_main_english.txt');
 const INCLUDE_PATTERN = /^\s*_include\s*=\s*\r?\n\s*\[\s*\r?\n(?:\s*resource_name:"[^"]+",?\s*\r?\n)+\s*\]\s*\r?\n/ms;
